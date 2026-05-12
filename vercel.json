@@ -1,0 +1,33 @@
+{
+  "cleanUrls": false,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/adopt", "destination": "/Adopt.html" },
+    { "source": "/adopt.html", "destination": "/Adopt.html" },
+    { "source": "/foster", "destination": "/Foster.html" },
+    { "source": "/foster.html", "destination": "/Foster.html" },
+    { "source": "/sponsor", "destination": "/Sponsor.html" },
+    { "source": "/sponsor.html", "destination": "/Sponsor.html" },
+    { "source": "/donate", "destination": "/Donate.html" },
+    { "source": "/donate.html", "destination": "/Donate.html" },
+    { "source": "/news", "destination": "/News.html" },
+    { "source": "/news.html", "destination": "/News.html" },
+    { "source": "/contact", "destination": "/Contact.html" },
+    { "source": "/contact.html", "destination": "/Contact.html" }
+  ],
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=604800, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+      ]
+    }
+  ]
+}

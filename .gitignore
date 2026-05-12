@@ -1,0 +1,5 @@
+.DS_Store
+.vercel/
+assets/incoming/
+*.mp4
+node_modules/
