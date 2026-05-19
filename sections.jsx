@@ -176,11 +176,13 @@ function Survivors({ onSponsor }) {
 function Journey() {
   // Real R2R survivors. Story copy uses the brand's transformation phrases as placeholders
   // until the team provides real per-dog stories. Swap freely.
+  // beforeFocal / afterFocal control CSS object-position when the photo's subject isn't centered.
+  // Defaults to "center". Use "center top", "center 25%", etc. to keep faces in frame.
   const items = [
     { name: "Kronk",  before: IMG.kronkBefore,  after: IMG.kronkAfter,  story: "Pulled from a holding pen in Yulin. Featured in People Magazine." },
     { name: "Alfie",  before: IMG.alfieBefore,  after: IMG.alfieAfter,  story: "From trauma to trust. Pulled from the trade and finding his way home." },
     { name: "Gertie", before: IMG.gertieBefore, after: IMG.gertieAfter, story: "From fear to faith. Rescued from the trade and finding her people." },
-    { name: "Honey",  before: IMG.honeyBefore,  after: IMG.honeyAfter,  story: "From forgotten to forever. A second chance, fully claimed." },
+    { name: "Honey",  before: IMG.honeyBefore,  after: IMG.honeyAfter,  story: "From forgotten to forever. A second chance, fully claimed.", beforeFocal: "center 25%" },
   ];
   return (
     <section className="section-light" style={{ padding: "64px 0 80px", position: "relative" }}>
@@ -200,7 +202,7 @@ function Journey() {
             }}>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2, background: "var(--line-light)", aspectRatio: "2/1" }}>
                 <div style={{ position: "relative", background: "var(--plum-700)", overflow: "hidden" }}>
-                  <Img src={it.before} alt="Before" style={{ filter: "saturate(0.5) brightness(0.85)" }} />
+                  <Img src={it.before} alt="Before" style={{ filter: "saturate(0.5) brightness(0.85)", objectPosition: it.beforeFocal || "center" }} />
                   <span style={{
                     position: "absolute", top: 10, left: 10,
                     background: "var(--plum-900)", color: "#fff", fontSize: 10,
@@ -209,7 +211,7 @@ function Journey() {
                   }}>Before</span>
                 </div>
                 <div style={{ position: "relative", overflow: "hidden" }}>
-                  <Img src={it.after} alt="After" />
+                  <Img src={it.after} alt="After" style={{ objectPosition: it.afterFocal || "center" }} />
                   <span style={{
                     position: "absolute", top: 10, left: 10,
                     background: "#fff", color: "var(--ink)", fontSize: 10,
