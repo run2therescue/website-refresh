@@ -52,23 +52,30 @@ const PressLogos = {
 };
 
 function Press() {
+  // Real press coverage — each wordmark links to the published story.
   const items = [
-    { key: "People",  C: PressLogos.People },
-    { key: "TODAY",   C: PressLogos.TODAY },
-    { key: "ABC7",    C: PressLogos.ABC7 },
-    { key: "TheDodo", C: PressLogos.TheDodo },
-    { key: "GMT",     C: PressLogos.GMT },
-    { key: "NPR",     C: PressLogos.NPR },
+    { name: "People", href: "https://people.com/injured-malamute-with-crooked-head-transforms-after-dog-meat-farm-rescue-11904110" },
+    { name: "New York Post", href: "https://nypost.com/2026/04/26/us-news/meet-the-nyers-saving-hundreds-of-adorable-dogs-from-ending-up-on-the-menu/" },
+    { name: "Long Island Press", href: "https://www.longislandpress.com/2026/01/27/how-a-long-island-advocate-is-rescuing-dogs-from-the-global-meat-trade/" },
+    { name: "The Dodo", href: "https://www.thedodo.com/daily-dodo/broken-dog-who-spent-his-life-in-a-cage-has-no-idea-hes-a-little-different" },
   ];
   return (
     <section id="press" className="press-section section-light" style={{ padding: "32px 0", borderBottom: "1px solid var(--line-light)" }}>
       <div className="wrap">
-        <div className="press-row" style={{ display: "flex", alignItems: "center", gap: "clamp(20px, 3vw, 44px)", justifyContent: "center", flexWrap: "wrap", rowGap: 16 }}>
+        <div className="press-row" style={{ display: "flex", alignItems: "center", gap: "clamp(20px, 3vw, 44px)", justifyContent: "center", flexWrap: "wrap", rowGap: 14 }}>
           <span className="eyebrow-dark" style={{ color: "var(--ink-3)", fontSize: 11, whiteSpace: "nowrap" }}>As Featured In</span>
-          {items.map(({ key, C }) => (
-            <span key={key} className="press-logo" style={{ color: "var(--ink-2)", opacity: 0.75, transition: "opacity .2s" }}>
-              <C />
-            </span>
+          {items.map(({ name, href }) => (
+            <a key={name} href={href} target="_blank" rel="noopener noreferrer"
+              className="press-logo"
+              style={{
+                fontFamily: "var(--font-display)", fontWeight: 600,
+                fontSize: "clamp(15px, 1.7vw, 20px)", color: "var(--ink-2)",
+                whiteSpace: "nowrap", textDecoration: "none", opacity: 0.78,
+                transition: "opacity .2s ease, color .2s ease",
+              }}
+              onMouseEnter={e => { e.currentTarget.style.opacity = 1; e.currentTarget.style.color = "var(--purple-600)"; }}
+              onMouseLeave={e => { e.currentTarget.style.opacity = 0.78; e.currentTarget.style.color = "var(--ink-2)"; }}
+            >{name}</a>
           ))}
         </div>
       </div>
@@ -516,8 +523,11 @@ function Footer() {
           paddingTop: 24, display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 16,
           fontSize: 13, color: "var(--on-dark-3)",
         }}>
-          <div>© 2026 Run 2 The Rescue. All rights reserved. 501(c)(3) Nonprofit Organization.</div>
-          <a href="#" style={{ color: "var(--on-dark-2)" }}>Privacy Policy</a>
+          <div>© 2026 Run 2 The Rescue · 501(c)(3) Nonprofit · EIN 99-4240461</div>
+          <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
+            <a href="assets/r2r-501c3-determination.pdf" target="_blank" rel="noopener noreferrer" style={{ color: "var(--on-dark-2)" }}>501(c)(3) Determination Letter</a>
+            <a href="#" style={{ color: "var(--on-dark-2)" }}>Privacy Policy</a>
+          </div>
         </div>
       </div>
     </footer>
@@ -536,6 +546,46 @@ function FooterCol({ title, links }) {
         ))}
       </div>
     </div>
+  );
+}
+
+/* Adopter testimonials — real verbatim quotes from R2TR families */
+function Testimonials() {
+  const quotes = [
+    {
+      quote: "Fig and Coal have brought so much love and joy into our home since adopting them from R2TR. They are sweet, fun little poodles who bonded beautifully with our family and our other dogs — we absolutely adore them.",
+      name: "Megan Elizabeth",
+      detail: "Adopted Fig & Coal",
+    },
+  ];
+  return (
+    <section className="section-light" style={{ padding: "80px 0", position: "relative", overflow: "hidden" }}>
+      <Paw className="paw-light" style={{ top: 36, right: "6%", width: 44, height: 44 }} />
+      <Paw className="paw-light" style={{ bottom: 36, left: "5%", width: 38, height: 38 }} />
+      <div className="wrap" style={{ maxWidth: 860, margin: "0 auto", textAlign: "center", position: "relative", zIndex: 1 }}>
+        <div className="eyebrow" style={{ justifyContent: "center", marginBottom: 16, color: "var(--ink-3)" }}>
+          <span style={{ color: "var(--purple-500)" }}>✦ </span>From families who said yes
+        </div>
+        <h2 className="display" style={{ fontSize: "clamp(30px, 4vw, 52px)", margin: "0 0 40px", color: "var(--ink)" }}>
+          A second chance, in their own words
+        </h2>
+        {quotes.map((q, i) => (
+          <figure key={i} className="reveal" style={{ margin: 0 }}>
+            <blockquote style={{
+              fontFamily: "var(--font-display)", fontWeight: 500,
+              fontSize: "clamp(20px, 2.6vw, 30px)", lineHeight: 1.42,
+              color: "var(--ink)", margin: "0 0 24px",
+            }}>
+              &ldquo;{q.quote}&rdquo;
+            </blockquote>
+            <figcaption style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+              <span style={{ fontWeight: 600, fontSize: 15, color: "var(--ink)" }}>{q.name}</span>
+              <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--purple-500)" }}>{q.detail}</span>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -563,4 +613,4 @@ function RealityTeaser() {
   );
 }
 
-Object.assign(window, { Press, Mission, Survivors, Journey, Feature, Reality, RealityTeaser, Ways, Voices, Team, FinalCTA, Footer });
+Object.assign(window, { Press, Mission, Survivors, Journey, Feature, Reality, RealityTeaser, Testimonials, Ways, Voices, Team, FinalCTA, Footer });
