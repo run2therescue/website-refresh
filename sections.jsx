@@ -134,7 +134,7 @@ function Survivors({ onSponsor }) {
             <Magnetic><button className="btn btn-accent" onClick={() => onSponsor()}>Adopt Today <span className="arrow">→</span></button></Magnetic>
           </div>
           <div style={{ aspectRatio: "5/4", borderRadius: 20, overflow: "hidden", background: "var(--lav-200)", maxHeight: 320 }}>
-            <Img src={IMG.hero} alt="Rescued puppies" />
+            <Img src={IMG.kronkAfter} alt="Kronk, a rescued survivor, leaping through fresh snow" />
           </div>
         </div>
 
