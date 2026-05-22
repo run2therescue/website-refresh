@@ -119,7 +119,7 @@
   outline: none;
   border-color: var(--purple-400);
 }
-.input-dark::placeholder { color: var(--on-dark-3); }
+.input-dark::placeholder { color: var(--on-dark-2); }
 
 .pay-methods {
   display: grid;

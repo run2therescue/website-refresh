@@ -205,7 +205,7 @@
   transition: border-color .2s;
 }
 .input-dark:focus { outline: none; border-color: var(--purple-400); }
-.input-dark::placeholder { color: var(--on-dark-3); }
+.input-dark::placeholder { color: var(--on-dark-2); }
 
 @media (max-width: 640px) {
   .newsletter-box { grid-template-columns: 1fr; padding: 32px; }

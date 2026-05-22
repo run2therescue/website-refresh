@@ -196,10 +196,10 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 /* Focus */
 :focus-visible { outline: 2px solid var(--purple-400); outline-offset: 2px; border-radius: 4px; }
 
-/* Scroll reveal — blur-to-sharp rise */
-.reveal.pre { opacity: 0; transform: translateY(22px) scale(0.985); filter: blur(6px); }
-.reveal { transition: opacity .8s cubic-bezier(0.16, 1, 0.3, 1), transform .8s cubic-bezier(0.16, 1, 0.3, 1), filter .8s ease; }
-.reveal.in { opacity: 1; transform: none; filter: none; }
+/* Scroll reveal — clean rise + fade on a soft spring */
+.reveal.pre { opacity: 0; transform: translateY(24px); }
+.reveal { transition: opacity .7s cubic-bezier(0.16, 1, 0.3, 1), transform .7s cubic-bezier(0.16, 1, 0.3, 1); }
+.reveal.in { opacity: 1; transform: none; }
 
 /* Tweaks panel */
 .tweaks {
@@ -463,4 +463,14 @@ html { scroll-behavior: smooth; }
     transition-duration: 0.01ms !important;
   }
   .reveal.pre { opacity: 1 !important; transform: none !important; filter: none !important; }
+}
+
+/* Final-CTA email field — readable placeholder on the purple panel + focus ring */
+.cta-email::placeholder { color: rgba(255, 255, 255, 0.72); }
+.cta-email:focus-visible { outline: 2px solid #fff !important; outline-offset: 2px; }
+
+/* Journey pinned section — collapse to one column on narrow screens */
+@media (max-width: 900px) {
+  .journey-pinned { grid-template-columns: minmax(0, 1fr) !important; gap: 32px !important; }
+  .journey-sticky { position: static !important; }
 }

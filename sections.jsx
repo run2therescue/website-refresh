@@ -187,58 +187,86 @@ function Survivors({ onSponsor }) {
 }
 
 function Journey() {
-  // Real R2R survivors. Story copy uses the brand's transformation phrases as placeholders
-  // until the team provides real per-dog stories. Swap freely.
-  // beforeFocal / afterFocal control CSS object-position when the photo's subject isn't centered.
-  // Defaults to "center". Use "center top", "center 25%", etc. to keep faces in frame.
+  // Real R2R survivors. beforeFocal / afterFocal control CSS object-position.
   const items = [
     { name: "Kronk",  before: IMG.kronkBefore,  after: IMG.kronkAfter,  story: "Pulled from a holding pen in Yulin. Featured in People Magazine." },
     { name: "Alfie",  before: IMG.alfieBefore,  after: IMG.alfieAfter,  story: "From trauma to trust. Pulled from the trade and finding his way home." },
     { name: "Gertie", before: IMG.gertieBefore, after: IMG.gertieAfter, story: "From fear to faith. Rescued from the trade and finding her people." },
     { name: "Honey",  before: IMG.honeyBefore,  after: IMG.honeyAfter,  story: "From forgotten to forever. A second chance, fully claimed.", beforeFocal: "20% center" },
   ];
+  // Scroll-velocity reactive: the card track lags a few pixels with scroll
+  // speed, then settles — gentle "this page responds to you" motion.
+  const trackRef = useRef(null);
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let lastY = window.scrollY, vel = 0, smooth = 0, raf = 0;
+    const onScroll = () => { const y = window.scrollY; vel = y - lastY; lastY = y; };
+    const tick = () => {
+      smooth += (vel - smooth) * 0.1;
+      vel *= 0.8;
+      const shift = Math.max(-7, Math.min(7, smooth * 0.4));
+      if (trackRef.current) trackRef.current.style.transform = `translate3d(0, ${shift}px, 0)`;
+      raf = requestAnimationFrame(tick);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    raf = requestAnimationFrame(tick);
+    return () => { window.removeEventListener("scroll", onScroll); cancelAnimationFrame(raf); };
+  }, []);
   return (
-    <section className="section-light" style={{ padding: "64px 0 80px", position: "relative" }}>
-      <Paw className="paw-light" style={{ top: 40, left: "6%", width: 44, height: 44 }} />
-      <Paw className="paw-light" style={{ bottom: 40, right: "6%", width: 44, height: 44 }} />
+    <section className="section-light" style={{ padding: "72px 0 96px", position: "relative" }}>
+      <Paw className="paw-light" style={{ top: 40, left: "5%", width: 44, height: 44 }} />
       <div className="wrap">
-        <div style={{ textAlign: "center", marginBottom: 36 }}>
-          <h2 className="display" style={{ fontSize: "clamp(34px, 4.4vw, 56px)", margin: "0 0 10px", color: "var(--ink)" }}>
-            Their Journey to a New Life
-          </h2>
-          <p style={{ color: "var(--ink-2)", fontSize: 15, margin: 0 }}>From trauma to trust, from fear to faith.</p>
-        </div>
-        <div className="ways-grid journey-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 20 }}>
-          {items.map(it => (
-            <article key={it.name} className="reveal" style={{
-              background: "#fff", borderRadius: 18, overflow: "hidden", boxShadow: "0 2px 0 var(--line-light)",
-            }}>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2, background: "var(--line-light)", aspectRatio: "2/1" }}>
-                <div style={{ position: "relative", background: "var(--plum-700)", overflow: "hidden" }}>
-                  <Img src={it.before} alt="Before" style={{ filter: "saturate(0.5) brightness(0.85)", objectPosition: it.beforeFocal || "center" }} />
-                  <span style={{
-                    position: "absolute", top: 10, left: 10,
-                    background: "var(--plum-900)", color: "#fff", fontSize: 10,
-                    padding: "4px 10px", borderRadius: 999,
-                    fontFamily: "var(--font-mono)", letterSpacing: "0.1em", textTransform: "uppercase",
-                  }}>Before</span>
+        <div className="journey-pinned" style={{
+          display: "grid", gridTemplateColumns: "minmax(0, 0.8fr) minmax(0, 1.2fr)",
+          gap: 56, alignItems: "start",
+        }}>
+          <div className="journey-sticky" style={{ position: "sticky", top: 128, alignSelf: "start" }}>
+            <div className="eyebrow-dark" style={{ marginBottom: 14 }}>
+              <span style={{ color: "var(--purple-500)" }}>✦ </span>From trauma to trust
+            </div>
+            <h2 className="display" style={{ fontSize: "clamp(34px, 4.2vw, 60px)", margin: "0 0 16px", color: "var(--ink)" }}>
+              Their Journey to a New Life
+            </h2>
+            <p style={{ color: "var(--ink-2)", fontSize: 16, lineHeight: 1.6, margin: 0, maxWidth: 360 }}>
+              From trauma to trust, from fear to faith. Four survivors — scroll through the moment each one's story turned.
+            </p>
+          </div>
+          <div ref={trackRef} style={{ display: "flex", flexDirection: "column", gap: 28, willChange: "transform" }}>
+            {items.map((it, i) => (
+              <article key={it.name} className="reveal" style={{
+                background: "#fff", borderRadius: 22, overflow: "hidden",
+                boxShadow: "0 2px 6px oklch(0.4 0.05 310 / 0.06), 0 16px 38px oklch(0.4 0.05 310 / 0.10)",
+              }}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2, background: "var(--line-light)", aspectRatio: "2/1" }}>
+                  <div style={{ position: "relative", background: "var(--plum-700)", overflow: "hidden" }}>
+                    <Img src={it.before} alt={`${it.name} before rescue`} style={{ filter: "saturate(0.5) brightness(0.85)", objectPosition: it.beforeFocal || "center" }} />
+                    <span style={{
+                      position: "absolute", top: 12, left: 12,
+                      background: "var(--plum-900)", color: "#fff", fontSize: 10,
+                      padding: "4px 10px", borderRadius: 999,
+                      fontFamily: "var(--font-mono)", letterSpacing: "0.1em", textTransform: "uppercase",
+                    }}>Before</span>
+                  </div>
+                  <div style={{ position: "relative", overflow: "hidden" }}>
+                    <Img src={it.after} alt={`${it.name} after rescue`} style={{ objectPosition: it.afterFocal || "center" }} />
+                    <span style={{
+                      position: "absolute", top: 12, left: 12,
+                      background: "#fff", color: "var(--ink)", fontSize: 10,
+                      padding: "4px 10px", borderRadius: 999,
+                      fontFamily: "var(--font-mono)", letterSpacing: "0.1em", textTransform: "uppercase",
+                    }}>After</span>
+                  </div>
                 </div>
-                <div style={{ position: "relative", overflow: "hidden" }}>
-                  <Img src={it.after} alt="After" style={{ objectPosition: it.afterFocal || "center" }} />
-                  <span style={{
-                    position: "absolute", top: 10, left: 10,
-                    background: "#fff", color: "var(--ink)", fontSize: 10,
-                    padding: "4px 10px", borderRadius: 999,
-                    fontFamily: "var(--font-mono)", letterSpacing: "0.1em", textTransform: "uppercase",
-                  }}>After</span>
+                <div style={{ padding: "22px 24px", display: "flex", alignItems: "baseline", gap: 14 }}>
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 12, fontWeight: 600, color: "var(--purple-500)", flexShrink: 0 }}>0{i + 1}</span>
+                  <div>
+                    <div className="display" style={{ fontSize: 26, marginBottom: 4, color: "var(--ink)" }}>{it.name}</div>
+                    <p style={{ margin: 0, color: "var(--ink-2)", fontSize: 14, lineHeight: 1.55 }}>{it.story}</p>
+                  </div>
                 </div>
-              </div>
-              <div style={{ padding: 18 }}>
-                <div className="display" style={{ fontSize: 22, marginBottom: 6, color: "var(--ink)" }}>{it.name}</div>
-                <p style={{ margin: 0, color: "var(--ink-2)", fontSize: 13, lineHeight: 1.5 }}>{it.story}</p>
-              </div>
-            </article>
-          ))}
+              </article>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -491,7 +519,8 @@ function FinalCTA({ onDonate, onSubscribe }) {
           <form onSubmit={(e) => { e.preventDefault(); if (/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { setSubbed(true); setEmail(""); } }}
             style={{ display: "flex", gap: 8 }}>
             <input
-              type="email" placeholder={subbed ? "Subscribed ♡" : "Email address"}
+              type="email" className="cta-email"
+              placeholder={subbed ? "Subscribed ♡" : "Email address"}
               value={email} onChange={e => setEmail(e.target.value)}
               style={{
                 flex: 1, padding: "14px 18px", borderRadius: 999,

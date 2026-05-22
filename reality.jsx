@@ -168,6 +168,24 @@ function RealityGallery({ revealed }) {
       heading: "Counted by the dozen",
       body: "Holding pens crowd dozens of dogs together, surviving on borrowed time. The scale is hard to hold in your mind. So we don't try to save ‘the dozens’ — we save Kronk, then Honey, then the next one. One dog, one flight, one forever home at a time.",
     },
+    {
+      img: "assets/reality-beagle.png",
+      alt: "A beagle looking out from a wire crate",
+      heading: "Every breed, every kind",
+      body: "Beagles, retrievers, huskies — the trade takes family breeds of every kind, and many still wear the tag of a home they were taken from. This one waited inside a wire crate until a rescuer reached him.",
+    },
+    {
+      img: "assets/reality-puppies.png",
+      alt: "Two puppies behind a wire fence in a dirt yard",
+      heading: "Born into it",
+      body: "Some survivors were stolen pets; others were born inside the trade and have known nothing else. Puppies are lifted out of these yards and given the start they should have had.",
+    },
+    {
+      img: "assets/reality-cages.png",
+      alt: "Dogs crammed into stacked, rusted wire cages",
+      heading: "Stacked past capacity",
+      body: "Cages stacked four and five high, each one crammed well past capacity — no room to turn around, no room to lie down. Every rescue flight we fund empties cages exactly like these.",
+    },
   ];
   return (
     <section className="section-dark" style={{ padding: "8px 0 80px", position: "relative" }}>
