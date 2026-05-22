@@ -26,6 +26,22 @@ const PRESS = [
     href: "https://people.com/injured-malamute-with-crooked-head-transforms-after-dog-meat-farm-rescue-11904110",
     date: "2025",
   },
+  {
+    id: "nypost-nyers",
+    source: "New York Post",
+    title: "Meet the NYers Saving Hundreds of Adorable Dogs From Ending Up on the Menu",
+    excerpt: "The New York Post profiles the New Yorkers behind Run 2 The Rescue and their mission to pull dogs out of the East Asia meat trade and into forever homes.",
+    href: "https://nypost.com/2026/04/26/us-news/meet-the-nyers-saving-hundreds-of-adorable-dogs-from-ending-up-on-the-menu/",
+    date: "Apr 26, 2026",
+  },
+  {
+    id: "lipress-advocate",
+    source: "Long Island Press",
+    title: "How a Long Island Advocate Is Rescuing Dogs From the Global Meat Trade",
+    excerpt: "Long Island Press features the local advocate driving Run 2 The Rescue's work against the global dog meat trade.",
+    href: "https://www.longislandpress.com/2026/01/27/how-a-long-island-advocate-is-rescuing-dogs-from-the-global-meat-trade/",
+    date: "Jan 27, 2026",
+  },
 ];
 
 function NewsPage() {

@@ -51,32 +51,43 @@ const PressLogos = {
   ),
 };
 
+/* One press mark — shows the publication logo from assets/press/,
+   falls back to a styled wordmark until the logo file is added. */
+function PressMark({ name, slug, href }) {
+  const [failed, setFailed] = React.useState(false);
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer" className="press-logo"
+      style={{ display: "inline-flex", alignItems: "center", opacity: 0.72, transition: "opacity .2s ease" }}
+      onMouseEnter={e => { e.currentTarget.style.opacity = 1; }}
+      onMouseLeave={e => { e.currentTarget.style.opacity = 0.72; }}
+    >
+      {failed ? (
+        <span style={{
+          fontFamily: "var(--font-display)", fontWeight: 600,
+          fontSize: "clamp(15px, 1.7vw, 20px)", color: "var(--ink-2)", whiteSpace: "nowrap",
+        }}>{name}</span>
+      ) : (
+        <img src={`assets/press/${slug}.png`} alt={name}
+          style={{ height: 30, width: "auto", display: "block" }}
+          onError={() => setFailed(true)} />
+      )}
+    </a>
+  );
+}
+
 function Press() {
-  // Real press coverage — each wordmark links to the published story.
   const items = [
-    { name: "People", href: "https://people.com/injured-malamute-with-crooked-head-transforms-after-dog-meat-farm-rescue-11904110" },
-    { name: "New York Post", href: "https://nypost.com/2026/04/26/us-news/meet-the-nyers-saving-hundreds-of-adorable-dogs-from-ending-up-on-the-menu/" },
-    { name: "Long Island Press", href: "https://www.longislandpress.com/2026/01/27/how-a-long-island-advocate-is-rescuing-dogs-from-the-global-meat-trade/" },
-    { name: "The Dodo", href: "https://www.thedodo.com/daily-dodo/broken-dog-who-spent-his-life-in-a-cage-has-no-idea-hes-a-little-different" },
+    { name: "People", slug: "people", href: "https://people.com/injured-malamute-with-crooked-head-transforms-after-dog-meat-farm-rescue-11904110" },
+    { name: "New York Post", slug: "nypost", href: "https://nypost.com/2026/04/26/us-news/meet-the-nyers-saving-hundreds-of-adorable-dogs-from-ending-up-on-the-menu/" },
+    { name: "Long Island Press", slug: "longislandpress", href: "https://www.longislandpress.com/2026/01/27/how-a-long-island-advocate-is-rescuing-dogs-from-the-global-meat-trade/" },
+    { name: "The Dodo", slug: "thedodo", href: "https://www.thedodo.com/daily-dodo/broken-dog-who-spent-his-life-in-a-cage-has-no-idea-hes-a-little-different" },
   ];
   return (
     <section id="press" className="press-section section-light" style={{ padding: "32px 0", borderBottom: "1px solid var(--line-light)" }}>
       <div className="wrap">
         <div className="press-row" style={{ display: "flex", alignItems: "center", gap: "clamp(20px, 3vw, 44px)", justifyContent: "center", flexWrap: "wrap", rowGap: 14 }}>
           <span className="eyebrow-dark" style={{ color: "var(--ink-3)", fontSize: 11, whiteSpace: "nowrap" }}>As Featured In</span>
-          {items.map(({ name, href }) => (
-            <a key={name} href={href} target="_blank" rel="noopener noreferrer"
-              className="press-logo"
-              style={{
-                fontFamily: "var(--font-display)", fontWeight: 600,
-                fontSize: "clamp(15px, 1.7vw, 20px)", color: "var(--ink-2)",
-                whiteSpace: "nowrap", textDecoration: "none", opacity: 0.78,
-                transition: "opacity .2s ease, color .2s ease",
-              }}
-              onMouseEnter={e => { e.currentTarget.style.opacity = 1; e.currentTarget.style.color = "var(--purple-600)"; }}
-              onMouseLeave={e => { e.currentTarget.style.opacity = 0.78; e.currentTarget.style.color = "var(--ink-2)"; }}
-            >{name}</a>
-          ))}
+          {items.map(it => <PressMark key={it.name} {...it} />)}
         </div>
       </div>
     </section>
@@ -549,41 +560,83 @@ function FooterCol({ title, links }) {
   );
 }
 
-/* Adopter testimonials — real verbatim quotes from R2TR families */
+/* Adopter testimonials — real verbatim quotes, shown as speech bubbles.
+   Add more by appending to `quotes`; each becomes another bubble. */
 function Testimonials() {
   const quotes = [
     {
-      quote: "Fig and Coal have brought so much love and joy into our home since adopting them from R2TR. They are sweet, fun little poodles who bonded beautifully with our family and our other dogs — we absolutely adore them.",
+      quote: "Fig and Coal have brought so much love and joy into our home since adopting them from R2TR… we absolutely adore them.",
       name: "Megan Elizabeth",
       detail: "Adopted Fig & Coal",
+      initials: "M",
+      rotate: -1.8,
     },
+    // Future verbatims drop in here.
   ];
   return (
-    <section className="section-light" style={{ padding: "80px 0", position: "relative", overflow: "hidden" }}>
-      <Paw className="paw-light" style={{ top: 36, right: "6%", width: 44, height: 44 }} />
-      <Paw className="paw-light" style={{ bottom: 36, left: "5%", width: 38, height: 38 }} />
-      <div className="wrap" style={{ maxWidth: 860, margin: "0 auto", textAlign: "center", position: "relative", zIndex: 1 }}>
-        <div className="eyebrow" style={{ justifyContent: "center", marginBottom: 16, color: "var(--ink-3)" }}>
-          <span style={{ color: "var(--purple-500)" }}>✦ </span>From families who said yes
+    <section className="section-light" style={{ padding: "88px 0", position: "relative", overflow: "hidden" }}>
+      <Paw className="paw-light" style={{ top: 44, left: "5%", width: 42, height: 42 }} />
+      <Paw className="paw-light" style={{ bottom: 40, right: "6%", width: 50, height: 50 }} />
+      <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
+        <div style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 48px" }}>
+          <div className="eyebrow" style={{ justifyContent: "center", marginBottom: 14, color: "var(--ink-3)" }}>
+            <span style={{ color: "var(--purple-500)" }}>✦ </span>From families who said yes
+          </div>
+          <h2 className="display" style={{ fontSize: "clamp(32px, 4.4vw, 56px)", margin: 0, color: "var(--ink)" }}>
+            A second chance, in their own words
+          </h2>
         </div>
-        <h2 className="display" style={{ fontSize: "clamp(30px, 4vw, 52px)", margin: "0 0 40px", color: "var(--ink)" }}>
-          A second chance, in their own words
-        </h2>
-        {quotes.map((q, i) => (
-          <figure key={i} className="reveal" style={{ margin: 0 }}>
-            <blockquote style={{
-              fontFamily: "var(--font-display)", fontWeight: 500,
-              fontSize: "clamp(20px, 2.6vw, 30px)", lineHeight: 1.42,
-              color: "var(--ink)", margin: "0 0 24px",
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 30, justifyContent: "center", alignItems: "flex-start" }}>
+          {quotes.map((q, i) => (
+            <figure key={i} className="reveal" style={{
+              position: "relative", flex: "1 1 360px", maxWidth: 440, margin: 0,
+              background: "var(--lav-200)", borderRadius: 28, padding: "44px 34px 30px",
+              transform: `rotate(${q.rotate}deg)`,
+              boxShadow: "0 2px 6px oklch(0.4 0.06 310 / 0.07), 0 16px 36px oklch(0.4 0.06 310 / 0.11)",
             }}>
-              &ldquo;{q.quote}&rdquo;
-            </blockquote>
-            <figcaption style={{ display: "flex", flexDirection: "column", gap: 3 }}>
-              <span style={{ fontWeight: 600, fontSize: 15, color: "var(--ink)" }}>{q.name}</span>
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--purple-500)" }}>{q.detail}</span>
-            </figcaption>
-          </figure>
-        ))}
+              <span aria-hidden="true" className="display" style={{
+                position: "absolute", top: 8, left: 26, fontSize: 110, lineHeight: 1,
+                fontWeight: 800, color: "var(--purple-400)", opacity: 0.3,
+              }}>&ldquo;</span>
+              <span aria-hidden="true" style={{
+                position: "absolute", left: 48, bottom: -12, width: 26, height: 26,
+                background: "var(--lav-200)", transform: "rotate(45deg)", borderRadius: 5,
+              }} />
+              <blockquote style={{
+                position: "relative", fontFamily: "var(--font-display)", fontWeight: 500,
+                fontSize: "clamp(19px, 1.9vw, 24px)", lineHeight: 1.5, color: "var(--ink)",
+                margin: "30px 0 28px",
+              }}>{q.quote}</blockquote>
+              <figcaption style={{ display: "flex", alignItems: "center", gap: 13 }}>
+                <span style={{
+                  width: 46, height: 46, borderRadius: "50%", flexShrink: 0,
+                  background: "var(--purple-500)", color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 19,
+                }}>{q.initials}</span>
+                <span style={{ display: "flex", flexDirection: "column", gap: 2, textAlign: "left" }}>
+                  <span style={{ fontWeight: 600, fontSize: 15, color: "var(--ink)" }}>{q.name}</span>
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--purple-600)" }}>{q.detail}</span>
+                </span>
+              </figcaption>
+            </figure>
+          ))}
+          <a href="Contact.html" className="reveal" style={{
+            flex: "1 1 360px", maxWidth: 440, minHeight: 236, boxSizing: "border-box",
+            border: "2px dashed var(--purple-400)", borderRadius: 28,
+            padding: "40px 34px", transform: "rotate(1.6deg)", textDecoration: "none",
+            display: "flex", flexDirection: "column", justifyContent: "center", gap: 10,
+          }}>
+            <span aria-hidden="true" className="display" style={{ fontSize: 60, lineHeight: 0.6, color: "var(--purple-400)" }}>&ldquo;</span>
+            <span className="display" style={{ fontSize: "clamp(20px, 2vw, 26px)", color: "var(--ink)" }}>
+              Adopted from R2TR?
+            </span>
+            <span style={{ fontSize: 14, color: "var(--ink-2)", lineHeight: 1.55 }}>
+              We'd love to add your story here. Tell us how your survivor is settling in.
+            </span>
+            <span style={{ marginTop: 4, fontWeight: 600, fontSize: 14, color: "var(--purple-600)" }}>Share your story →</span>
+          </a>
+        </div>
       </div>
     </section>
   );
