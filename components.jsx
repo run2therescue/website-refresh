@@ -133,32 +133,23 @@ function Hero({ onDonate, variant }) {
 }
 
 function HeroVideoBG() {
-  // Sandbox blocks video streaming; use a cross-fading Ken Burns still sequence
-  // of rescue photography for a cinematic "reel" feel that always loads.
-  const stills = [
-    "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=1600&q=80&auto=format",
-    "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=1600&q=80&auto=format",
-    "https://images.unsplash.com/photo-1561037404-61cd46aa615b?w=1600&q=80&auto=format",
-    "https://images.unsplash.com/photo-1507146426996-ef05306b995a?w=1600&q=80&auto=format",
-  ];
-  const [idx, setIdx] = React.useState(0);
-  React.useEffect(() => {
-    const id = setInterval(() => setIdx(i => (i + 1) % stills.length), 5000);
-    return () => clearInterval(id);
-  }, []);
+  // Cinematic hero: real footage of rescued dogs running free, darkened so the
+  // headline stays legible. Poster frame shows instantly before the video loads.
   return (
     <div aria-hidden="true" style={{
       position: "absolute", inset: 0, overflow: "hidden", zIndex: 0,
     }}>
-      {stills.map((src, i) => (
-        <img key={src} src={src} alt="" style={{
-          position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover",
-          filter: "saturate(0.75) brightness(0.55)",
-          opacity: i === idx ? 1 : 0,
-          transform: i === idx ? "scale(1.08)" : "scale(1.0)",
-          transition: "opacity 1.6s ease, transform 6s ease-out",
-        }} />
-      ))}
+      <video
+        autoPlay muted loop playsInline
+        poster="assets/hero-meadow-poster.jpg"
+        style={{
+          position: "absolute", inset: 0, width: "100%", height: "100%",
+          objectFit: "cover",
+          filter: "saturate(0.82) brightness(0.55)",
+        }}
+      >
+        <source src="assets/hero-meadow.mp4" type="video/mp4" />
+      </video>
       <div style={{
         position: "absolute", inset: 0,
         background: "linear-gradient(180deg, oklch(0.18 0.035 310 / 0.55) 0%, oklch(0.18 0.035 310 / 0.65) 50%, oklch(0.18 0.035 310 / 0.95) 100%)",

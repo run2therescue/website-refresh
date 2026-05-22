@@ -303,13 +303,27 @@ function Reality() {
             { c: "span 7", r: "span 2", img: imgs[0], label: labels[0] },
             { c: "span 5", r: "span 1", img: imgs[1], label: labels[1] },
             { c: "span 5", r: "span 1", img: imgs[2], label: labels[2] },
+            { c: "span 12", r: "span 2", video: "assets/reality-cage-clip.mp4", poster: "assets/reality-cage-poster.jpg", label: "Dozens crowd a single kennel, waiting — this is what every rescue interrupts" },
           ].map((it, i) => (
             <div key={i} style={{
               gridColumn: it.c, gridRow: it.r,
               borderRadius: 20, overflow: "hidden", background: "var(--plum-700)",
               position: "relative",
             }}>
-              <Img src={it.img} alt={it.label} style={{ filter: "saturate(0.4) brightness(0.75)" }} />
+              {it.video ? (
+                <video
+                  autoPlay muted loop playsInline preload="metadata"
+                  poster={it.poster}
+                  style={{
+                    width: "100%", height: "100%", objectFit: "cover",
+                    display: "block", filter: "saturate(0.4) brightness(0.75)",
+                  }}
+                >
+                  <source src={it.video} type="video/mp4" />
+                </video>
+              ) : (
+                <Img src={it.img} alt={it.label} style={{ filter: "saturate(0.4) brightness(0.75)" }} />
+              )}
               <div style={{
                 position: "absolute", inset: 0,
                 background: "linear-gradient(180deg, transparent 50%, oklch(0.14 0.03 310 / 0.7))",

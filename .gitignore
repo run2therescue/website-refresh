@@ -2,4 +2,7 @@
 .vercel/
 assets/incoming/
 *.mp4
+# Hero + Reality videos are committed (used in production)
+!assets/hero-meadow.mp4
+!assets/reality-cage-clip.mp4
 node_modules/
