@@ -95,19 +95,19 @@ function Press() {
 }
 
 function Mission() {
-  // Scroll parallax — the giant stat drifts gently as the section scrolls.
+  // Scroll-scrubbed counter: the number's value is tied 1:1 to scroll position —
+  // it climbs as you scroll down and counts back down as you scroll up.
   const numRef = useRef(null);
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const el = numRef.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { el.textContent = "30M"; return; }
     let ticking = false;
     const update = () => {
-      if (el) {
-        const r = el.getBoundingClientRect();
-        const p = ((r.top + r.height / 2) - window.innerHeight / 2) / window.innerHeight;
-        const shift = Math.max(-18, Math.min(18, p * 50));
-        el.style.transform = `translate3d(0, ${shift}px, 0)`;
-      }
+      const r = el.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const progress = Math.max(0, Math.min(1, (vh - r.top) / (vh * 0.7)));
+      el.textContent = Math.round(progress * 30) + "M";
       ticking = false;
     };
     const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
@@ -124,7 +124,7 @@ function Mission() {
           background: "#fff", borderRadius: 20, padding: "clamp(28px, 4vw, 56px)",
           boxShadow: "0 2px 0 var(--line-light)",
           borderLeft: "4px solid var(--purple-500)",
-          display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)", gap: 48, alignItems: "center",
+          display: "grid", gridTemplateColumns: "minmax(0, 1.2fr) minmax(0, 1fr)", gap: 40, alignItems: "center",
         }}>
           <div>
             <h2 className="display display-serif-em" style={{ fontSize: "clamp(26px, 3.2vw, 42px)", margin: 0, color: "var(--ink)", lineHeight: 1.15 }}>
@@ -133,19 +133,13 @@ function Mission() {
           </div>
           <div>
             <div className="eyebrow-dark" style={{ marginBottom: 6 }}>The scale of it</div>
-            <div ref={numRef} className="display" style={{
-              fontSize: "clamp(86px, 12vw, 168px)", lineHeight: 0.86, color: "var(--ink)",
-              letterSpacing: "-0.04em", margin: "12px 0 14px", willChange: "transform",
-            }}>
-              <CountUp to={30} suffix="M" />
-            </div>
-            <div style={{ fontSize: 16, color: "var(--ink-2)", marginBottom: 12, maxWidth: 340 }}>
+            <div ref={numRef} className="display" style={{ fontSize: 68, lineHeight: 1, color: "var(--ink)", marginBottom: 6 }}>0M</div>
+            <div style={{ fontSize: 15, color: "var(--ink-2)", marginBottom: 8 }}>
               dogs are killed in Asia's meat trade every year.
             </div>
             <div style={{
-              fontFamily: "var(--font-display)", fontWeight: 600,
-              fontSize: "clamp(17px, 1.7vw, 21px)", lineHeight: 1.35,
-              color: "var(--purple-600)", marginBottom: 14, maxWidth: 360,
+              fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 18, lineHeight: 1.35,
+              color: "var(--purple-600)", marginBottom: 14, maxWidth: 340,
             }}>
               That's roughly one dog — every second of every day.
             </div>
@@ -153,7 +147,7 @@ function Mission() {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, borderTop: "1px solid var(--line-light)", paddingTop: 16 }}>
               {[[10, "M", "", "in China alone"], [1, "M", "+", "in South Korea annually"], [5, "M", "", "in Vietnam annually"]].map(([n, unit, plus, l]) => (
                 <div key={l}>
-                  <div className="display" style={{ fontSize: 26, color: "var(--ink)" }}><CountUp to={n} suffix={unit + plus} /></div>
+                  <div className="display" style={{ fontSize: 24, color: "var(--ink)" }}><CountUp to={n} suffix={unit + plus} /></div>
                   <div style={{ fontSize: 11, color: "var(--ink-3)", marginTop: 3 }}>{l}</div>
                 </div>
               ))}
