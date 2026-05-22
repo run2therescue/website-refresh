@@ -1,4 +1,4 @@
-/* Contact page — consolidated */
+/* Contact page, consolidated */
 const { useState: cUS } = React;
 
 function ContactPage() {
@@ -26,7 +26,7 @@ function ContactPage() {
       <section className="contact-section">
         <PawS className="paw paw-light" style={{ bottom: 40, right: "4%", width: 56, height: 56 }} />
         <div className="wrap contact-grid">
-          {/* LEFT — Reach out copy + email card */}
+          {/* LEFT, Reach out copy + email card */}
           <div className="contact-copy">
             <div className="reach-rule">
               <div className="eyebrow-dark" style={{ marginBottom: 16 }}>Reach out</div>
@@ -55,7 +55,7 @@ function ContactPage() {
             </a>
           </div>
 
-          {/* RIGHT — Form */}
+          {/* RIGHT, Form */}
           <div className="contact-form-card reveal">
             {sent ? (
               <div style={{ textAlign: "center", padding: "40px 10px" }}>

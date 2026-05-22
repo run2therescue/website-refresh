@@ -20,7 +20,7 @@ function FosterHeroNarrative() {
           fontSize: "clamp(48px, 7.8vw, 108px)", margin: "0 0 24px", color: "#fff",
         }}>Fostering saves <em>lives.</em></h1>
         <p style={{ fontSize: 18, color: "var(--on-dark-2)", margin: "0 auto 40px", maxWidth: 620, lineHeight: 1.6 }}>
-          Our dogs are flown in periodically to JFK and LAX. We're always looking for kind people to join our Run&nbsp;2&nbsp;The&nbsp;Rescue Foster Team — because every survivor deserves a soft landing on the way to forever.
+          Our dogs are flown in periodically to JFK and LAX. We're always looking for kind people to join our Run&nbsp;2&nbsp;The&nbsp;Rescue Foster Team, because every survivor deserves a soft landing on the way to forever.
         </p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginBottom: 56 }}>
           <MagneticS><a href="#apply" className="btn btn-accent">Apply to foster <span className="arrow">→</span></a></MagneticS>
@@ -63,7 +63,7 @@ function FosterHeroSplit() {
               fontSize: "clamp(44px, 6.4vw, 88px)", margin: "0 0 20px", color: "#fff",
             }}>Open your home. <em>Save a life.</em></h1>
             <p style={{ fontSize: 16, color: "var(--on-dark-2)", margin: "0 0 28px", lineHeight: 1.6, maxWidth: 460 }}>
-              Our dogs are flown in periodically to JFK and LAX. Your home is the next stop on their journey — and the difference between a kennel and a soft bed.
+              Our dogs are flown in periodically to JFK and LAX. Your home is the next stop on their journey, and the difference between a kennel and a soft bed.
             </p>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
               <MagneticS><a href="#apply" className="btn btn-accent">Apply to foster</a></MagneticS>
@@ -98,7 +98,7 @@ function FosterHeroSplit() {
 function WhyFoster() {
   const items = [
     { icon: "🏠", title: "You're the first home they know", copy: "Many of our dogs have never slept on a bed, been called by a name, or felt safe. You're the one who teaches them that home is real." },
-    { icon: "✈️", title: "Fostering is time-bound, not forever", copy: "Fosters typically last 2–8 weeks, from airport pickup to adoption match. We provide food, supplies, and medical care — you provide the couch." },
+    { icon: "✈️", title: "Fostering is time-bound, not forever", copy: "Fosters typically last 2 to 8 weeks, from airport pickup to adoption match. We provide food, supplies, and medical care, you provide the couch." },
     { icon: "💜", title: "Every foster creates space for the next rescue", copy: "Every dog you foster opens a spot for the next survivor waiting in Seoul or Yulin. You save two lives for every one in your home." },
   ];
   return (
@@ -111,7 +111,7 @@ function WhyFoster() {
             It takes a very <em style={{ color: "var(--purple-600)" }}>special</em> person to be a foster parent.
           </h2>
           <p style={{ color: "var(--ink-2)", fontSize: 15, margin: 0, lineHeight: 1.6 }}>
-            By fostering, you're helping be a part of one of our dogs' journey home. This is truly a precious gift — it saves lives and brings hope.
+            By fostering, you're helping be a part of one of our dogs' journey home. This is truly a precious gift, it saves lives and brings hope.
           </p>
         </div>
         <div className="why-grid">
@@ -133,7 +133,7 @@ function FosterJourney() {
     { t: "Dog arrives", d: "We match you with an incoming dog and schedule airport pickup (or delivery)." },
     { t: "Decompression", d: "A quiet first week. We guide you through what to expect." },
     { t: "Care & updates", d: "You share photos + notes that help us match them. We cover vet bills and supplies." },
-    { t: "Adoption match", d: "We place them with their forever family. You celebrate — or foster another." },
+    { t: "Adoption match", d: "We place them with their forever family. You celebrate, or foster another." },
   ];
   return (
     <section className="journey-section">
@@ -146,7 +146,7 @@ function FosterJourney() {
             Four stops, one journey home.
           </h2>
           <p style={{ color: "var(--on-dark-2)", fontSize: 15, margin: 0 }}>
-            A typical foster lasts 2–8 weeks. We support you every step of the way.
+            A typical foster lasts 2 to 8 weeks. We support you every step of the way.
           </p>
         </div>
         <div className="journey-flow">
@@ -177,7 +177,7 @@ function FosterTestimonial() {
           Fostering saved my life <em>just as much as</em> it saved theirs.
         </p>
         <div style={{ textAlign: "center", fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--on-dark-3)" }}>
-          — A Run 2 The Rescue Foster Parent
+          A Run 2 The Rescue Foster Parent
         </div>
       </div>
     </section>
@@ -256,8 +256,8 @@ function FosterForm() {
                 <div>
                   <label className="f-label">Closest airport</label>
                   <select className="f-input" value={form.home === "house" ? "JFK" : "LAX"} onChange={e => setForm({ ...form, airport: e.target.value })}>
-                    <option>JFK — New York</option>
-                    <option>LAX — Los Angeles</option>
+                    <option>JFK, New York</option>
+                    <option>LAX, Los Angeles</option>
                     <option>Other</option>
                   </select>
                 </div>
@@ -297,14 +297,14 @@ function FosterForm() {
 
               <div style={{ marginBottom: 20 }}>
                 <label className="f-label">Tell us about yourself and your home</label>
-                <textarea className="f-input" rows={4} placeholder="Family, other pets, yard/outdoor space, work schedule — whatever you'd like us to know."
+                <textarea className="f-input" rows={4} placeholder="Family, other pets, yard/outdoor space, work schedule, whatever you'd like us to know."
                   value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} />
               </div>
 
               <MagneticS><button type="submit" className="btn btn-accent" style={{ width: "100%", justifyContent: "center" }}>Submit foster application <span className="arrow">→</span></button></MagneticS>
 
               <p style={{ margin: "16px 0 0", fontSize: 12, color: "var(--ink-3)", textAlign: "center", lineHeight: 1.5 }}>
-                By submitting, you agree to be contacted by our foster coordinator. No obligation — this just starts the conversation.
+                By submitting, you agree to be contacted by our foster coordinator. No obligation, this just starts the conversation.
               </p>
             </form>
           )}

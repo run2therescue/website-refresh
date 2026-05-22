@@ -1,8 +1,8 @@
-/* Shared across every page — Nav, Footer, image bank, helpers */
+/* Shared across every page, Nav, Footer, image bank, helpers */
 
 const { useState: useStateS, useEffect: useEffectS, useRef: useRefS, useMemo: useMemoS } = React;
 
-/* Image bank — reused across pages */
+/* Image bank, reused across pages */
 const IMG_BANK = {
   hero: "https://images.unsplash.com/photo-1561037404-61cd46aa615b?w=1200&q=80&auto=format",
   kronk: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=900&q=80&auto=format",
@@ -45,7 +45,7 @@ function ImgS({ src, alt, style = {}, ...rest }) {
   );
 }
 
-/* Shared Nav — active link aware, with Donate button + mobile hamburger */
+/* Shared Nav, active link aware, with Donate button + mobile hamburger */
 function NavS({ active = "home", onDonate }) {
   const [scrolled, setScrolled] = useStateS(false);
   const [menuOpen, setMenuOpen] = useStateS(false);

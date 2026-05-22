@@ -1,6 +1,6 @@
 /* Sections */
 
-/* Press logos — stylized wordmarks for each outlet. Rendered at 
+/* Press logos, stylized wordmarks for each outlet. Rendered at 
    common visual weight, desaturated to sit quietly under the hero. */
 const PressLogos = {
   People: () => (
@@ -51,7 +51,7 @@ const PressLogos = {
   ),
 };
 
-/* One press mark — shows the publication logo from assets/press/,
+/* One press mark, shows the publication logo from assets/press/,
    falls back to a styled wordmark until the logo file is added. */
 function PressMark({ name, slug, href }) {
   const [failed, setFailed] = React.useState(false);
@@ -95,7 +95,7 @@ function Press() {
 }
 
 function Mission() {
-  // Scroll-scrubbed counter: the number's value is tied 1:1 to scroll position —
+  // Scroll-scrubbed counter: the number's value is tied 1:1 to scroll position,
   // it climbs as you scroll down and counts back down as you scroll up.
   const numRef = useRef(null);
   useEffect(() => {
@@ -141,7 +141,7 @@ function Mission() {
               fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 18, lineHeight: 1.35,
               color: "var(--purple-600)", marginBottom: 14, maxWidth: 340,
             }}>
-              That's roughly one dog — every second of every day.
+              That's roughly one dog, every second of every day.
             </div>
             <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--ink-3)", letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 18 }}>Source: Humane Society International</div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, borderTop: "1px solid var(--line-light)", paddingTop: 16 }}>
@@ -175,7 +175,7 @@ function Survivors({ onSponsor }) {
             Hopeful Survivors in Search of a Loving Home
           </h2>
           <p style={{ fontSize: 15, color: "var(--ink-2)", marginBottom: 20, maxWidth: 520 }}>
-            Our team rescues dogs from the meat trade, provides critical medical treatment, and places them into loving homes — giving every survivor a second chance at a happy, healthy life.
+            Our team rescues dogs from the meat trade, provides critical medical treatment, and places them into loving homes, giving every survivor a second chance at a happy, healthy life.
           </p>
           <Magnetic><button className="btn btn-accent" onClick={() => onSponsor()}>Adopt Today <span className="arrow">→</span></button></Magnetic>
         </div>
@@ -224,7 +224,7 @@ function Journey() {
     { name: "Honey",  before: IMG.honeyBefore,  after: IMG.honeyAfter,  story: "From forgotten to forever. A second chance, fully claimed.", beforeFocal: "20% center" },
   ];
   // Scroll-velocity reactive: the card track lags a few pixels with scroll
-  // speed, then settles — gentle "this page responds to you" motion.
+  // speed, then settles, gentle "this page responds to you" motion.
   const trackRef = useRef(null);
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -257,7 +257,7 @@ function Journey() {
               Their Journey to a New Life
             </h2>
             <p style={{ color: "var(--ink-2)", fontSize: 16, lineHeight: 1.6, margin: 0, maxWidth: 360 }}>
-              From trauma to trust, from fear to faith. Four survivors — scroll through the moment each one's story turned.
+              From trauma to trust, from fear to faith. Four survivors, scroll through the moment each one's story turned.
             </p>
           </div>
           <div ref={trackRef} style={{ display: "flex", flexDirection: "column", gap: 28, willChange: "transform" }}>
@@ -348,7 +348,7 @@ function Reality() {
   const imgs = [IMG.reality1, IMG.reality2, IMG.reality3];
   const labels = [
     "Dogs crammed into stacked wire cages, awaiting the meat trade",
-    "A dog presses toward the wire — one of dozens waiting",
+    "A dog presses toward the wire, one of dozens waiting",
     "Crowded behind chain-link, surviving on borrowed time",
   ];
   return (
@@ -373,7 +373,7 @@ function Reality() {
             { c: "span 7", r: "span 2", img: imgs[0], label: labels[0] },
             { c: "span 5", r: "span 1", img: imgs[1], label: labels[1] },
             { c: "span 5", r: "span 1", img: imgs[2], label: labels[2] },
-            { c: "span 12", r: "span 2", video: "assets/reality-cage-clip.mp4", poster: "assets/reality-cage-poster.jpg", label: "Dozens crowd a single kennel, waiting — this is what every rescue interrupts" },
+            { c: "span 12", r: "span 2", video: "assets/reality-cage-clip.mp4", poster: "assets/reality-cage-poster.jpg", label: "Dozens crowd a single kennel, waiting, this is what every rescue interrupts" },
           ].map((it, i) => (
             <div key={i} style={{
               gridColumn: it.c, gridRow: it.r,
@@ -454,7 +454,7 @@ function Voices() {
       <div className="wrap" style={{ maxWidth: 900 }}>
         <div style={{ textAlign: "center" }}>
           <p style={{ fontSize: 16, color: "var(--on-dark-2)", maxWidth: 620, margin: "0 auto 32px", lineHeight: 1.65 }}>
-            Our mission is straightforward: be a beacon of hope for these courageous activists and the voiceless victims they protect. We fund rescue missions, medical care, and international transport to place survivors in safe, loving forever homes — while continuing to educate and advocate against animal cruelty worldwide.
+            Our mission is straightforward: be a beacon of hope for these courageous activists and the voiceless victims they protect. We fund rescue missions, medical care, and international transport to place survivors in safe, loving forever homes, while continuing to educate and advocate against animal cruelty worldwide.
           </p>
           <div style={{
             borderLeft: "3px solid var(--purple-500)", paddingLeft: 20,
@@ -463,7 +463,7 @@ function Voices() {
             <div style={{ fontStyle: "italic", fontSize: 19, color: "#fff", marginBottom: 10 }}>
               "Run to the rescue with love, and peace will follow."
             </div>
-            <div style={{ fontSize: 13, color: "var(--purple-400)" }}>— River Phoenix</div>
+            <div style={{ fontSize: 13, color: "var(--purple-400)" }}>River Phoenix</div>
           </div>
           <div className="display" style={{ fontSize: "clamp(36px, 6vw, 72px)", color: "var(--purple-400)", letterSpacing: "0.02em" }}>
             RUN. RESCUE. REPEAT.
@@ -475,7 +475,7 @@ function Voices() {
 }
 
 function Team() {
-  // Leadership grid — add more team members here and the grid scales/centers.
+  // Leadership grid, add more team members here and the grid scales/centers.
   const people = [
     { name: "Brandy Cherven", role: "Chief Executive Officer", tag: "Co-Founder", img: IMG.teamBrandy, copy: "Driven by an unwavering love for animals and a commitment to ending the dog meat trade, Brandy cofounded R2TR to be a beacon of hope for voiceless victims and the courageous activists who rescue them." },
     { name: "Bonnie Klapper", role: "Chief Operating Officer", tag: "Co-Founder", img: IMG.teamBonnie, copy: "With firsthand experience witnessing the overwhelming challenges of rescue efforts in China and South Korea, Bonnie cofounded R2TR to give every survivor a second chance at a loving forever home." },
@@ -491,7 +491,7 @@ function Team() {
             The team behind the mission
           </h2>
           <p style={{ color: "var(--on-dark-2)", fontSize: 15, margin: 0 }}>
-            The founders — and the growing team — driving Run 2 The Rescue forward.
+            The founders, and the growing team, driving Run 2 The Rescue forward.
           </p>
         </div>
 
@@ -636,7 +636,7 @@ function FooterCol({ title, links }) {
   );
 }
 
-/* Adopter testimonials — real verbatim quotes, shown as speech bubbles.
+/* Adopter testimonials, real verbatim quotes, shown as speech bubbles.
    Add more by appending to `quotes`; each becomes another bubble. */
 function Testimonials() {
   const quotes = [
@@ -732,7 +732,7 @@ function RealityTeaser() {
           Every survivor comes from somewhere
         </h2>
         <p style={{ fontSize: 15, lineHeight: 1.65, color: "var(--on-dark-2)", margin: "0 auto 26px", maxWidth: 520 }}>
-          The dogs we rescue are pulled from the meat trade in East Asia — caged,
+          The dogs we rescue are pulled from the meat trade in East Asia, caged,
           crowded, and waiting. It is hard to look at, so we've given it its own
           page with a content notice. See it when you're ready.
         </p>

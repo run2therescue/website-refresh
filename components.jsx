@@ -1,4 +1,4 @@
-/* Run 2 The Rescue — plum/lavender theme */
+/* Run 2 The Rescue, plum/lavender theme */
 const { useState, useEffect, useRef, useMemo } = React;
 
 /* Image dictionary. Real R2R photography where available, Unsplash stock fallback elsewhere. */
@@ -11,7 +11,7 @@ const IMG = {
   survivor2: "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?w=700&q=80&auto=format",
   survivor3: "https://images.unsplash.com/photo-1535930891776-0c2dfb7fda1a?w=700&q=80&auto=format",
   survivor4: "https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?w=700&q=80&auto=format",
-  // Before/after pairs — real R2R survivors (Journey section)
+  // Before/after pairs, real R2R survivors (Journey section)
   kronkBefore: "assets/kronk-before-rescue.jpg",
   kronkAfter:  "assets/kronk-after-snow.jpg",
   alfieBefore: "assets/alfie-before-rescue.jpg",
@@ -260,7 +260,7 @@ function HeroSplit({ onDonate }) {
             <img src="assets/r2r-logo.png" alt="" style={{ width: 36, height: 36 }} />
             <div>
               <div style={{ fontSize: 12, color: "var(--ink-3)" }}>Today's featured</div>
-              <div style={{ fontWeight: 600, fontSize: 14 }}>Kronk — in People</div>
+              <div style={{ fontWeight: 600, fontSize: 14 }}>Kronk, in People</div>
             </div>
           </div>
         </div>

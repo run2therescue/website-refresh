@@ -56,7 +56,7 @@ function CountUp({ to, suffix = "", duration = 1600, prefix = "" }) {
   return <span ref={ref}>{prefix}{n.toLocaleString()}{suffix}</span>;
 }
 
-/* Magnetic button — gently pulls toward the cursor */
+/* Magnetic button, gently pulls toward the cursor */
 function Magnetic({ children, strength = 0.25, ...rest }) {
   const ref = React.useRef(null);
   const onMove = (e) => {

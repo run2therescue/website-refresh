@@ -1,4 +1,4 @@
-/* News page — In The Press */
+/* News page, In The Press */
 
 const FEATURED = {
   eyebrow: "Featured Story",
@@ -14,7 +14,7 @@ const PRESS = [
     id: "patch-forgotten-dogs",
     source: "Patch",
     title: "ARF Hamptons Welcomes Abandoned, 'Forgotten Dogs Of China'",
-    excerpt: "Patch covers the \"Forgotten Dogs of China\" — four French Bulldogs rescued from a slaughterhouse outside Wuhan, stranded for years mid-rescue, and finally brought to safety at ARF Hamptons through a partnership led by Run 2 The Rescue.",
+    excerpt: "Patch covers the \"Forgotten Dogs of China\", four French Bulldogs rescued from a slaughterhouse outside Wuhan, stranded for years mid-rescue, and finally brought to safety at ARF Hamptons through a partnership led by Run 2 The Rescue.",
     href: "https://patch.com/new-york/easthampton/arf-hamptons-welcomes-abandoned-forgotten-dogs-china",
     date: "Apr 16, 2025",
   },
@@ -56,7 +56,7 @@ function NewsPage() {
             In <em>The Press.</em>
           </h1>
           <p style={{ fontSize: 17, color: "var(--on-dark-2)", margin: "0 auto", lineHeight: 1.55, maxWidth: 580 }}>
-            Stories from our rescue work — as told by the journalists covering the dog meat trade and the dogs who made it home.
+            Stories from our rescue work, as told by the journalists covering the dog meat trade and the dogs who made it home.
           </p>
         </div>
       </header>

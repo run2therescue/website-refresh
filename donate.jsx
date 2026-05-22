@@ -194,7 +194,7 @@ function DirectedGiving({ onPick, active }) {
     {
       id: "medical",
       title: "Provide Urgent Medical Care",
-      body: "Emergency vet care, diagnostics, medications, and recovery support for courageous souls rescued from the dog meat trade — help them heal safely and quickly.",
+      body: "Emergency vet care, diagnostics, medications, and recovery support for courageous souls rescued from the dog meat trade, help them heal safely and quickly.",
       icon: (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
@@ -258,10 +258,10 @@ function ImpactRow({ num, label, suffix = "" }) {
 function DonateFAQ() {
   const [open, setOpen] = dUS(0);
   const qs = [
-    { q: "Is my donation tax-deductible?", a: "Yes — Run 2 The Rescue is a 501(c)(3) nonprofit. You'll receive an automatic receipt within minutes of donating. For gifts over $250, the receipt meets IRS substantiation requirements." },
+    { q: "Is my donation tax-deductible?", a: "Yes, Run 2 The Rescue is a 501(c)(3) nonprofit. You'll receive an automatic receipt within minutes of donating. For gifts over $250, the receipt meets IRS substantiation requirements." },
     { q: "How is my money used?", a: "Roughly 72% to direct medical care and food, 18% to transport and foster stipends, and 10% to operations (insurance, software, licensing). Our audited financials are published annually." },
     { q: "Can I cancel my monthly gift?", a: "Anytime. You'll get a management link in every receipt email, or you can reply to any message from us and we'll handle it within one business day." },
-    { q: "Do you accept international donations?", a: "Yes — we accept cards and PayPal from any country. International donors should check with their local tax authority about deductibility." },
+    { q: "Do you accept international donations?", a: "Yes, we accept cards and PayPal from any country. International donors should check with their local tax authority about deductibility." },
   ];
   return (
     <section style={{ background: "var(--plum-900)", color: "#fff", padding: "96px 0 120px" }}>

@@ -2,7 +2,7 @@
 
 const { useState: spS, useEffect: spE } = React;
 
-// Three tiers — these are now both the "impact" cards AND the sponsorship choices.
+// Three tiers, these are now both the "impact" cards AND the sponsorship choices.
 const TIERS = [
   {
     id: "paw", name: "Paw", price: 15,
@@ -67,7 +67,7 @@ function SponsorStart({ selectedDogName, onSubmit }) {
     <section id="start" className="sponsor-start">
       <PawS className="paw paw-light" style={{ bottom: 24, right: "4%", width: 56, height: 56 }} />
       <div className="wrap sp-start-grid">
-        {/* LEFT — How it works */}
+        {/* LEFT, How it works */}
         <div className="sp-start-copy">
           <div className="sp-rule">
             <div className="eyebrow-dark" style={{ marginBottom: 16 }}>How it works</div>
@@ -91,7 +91,7 @@ function SponsorStart({ selectedDogName, onSubmit }) {
           </a>
         </div>
 
-        {/* RIGHT — Form */}
+        {/* RIGHT, Form */}
         <div className="sp-form-card">
           <div className="eyebrow-dark" style={{ marginBottom: 10 }}>Choose your dog</div>
           <h2 className="display sp-form-title">Start Sponsoring</h2>
@@ -144,7 +144,7 @@ function SponsorPicker({ selected, setSelected }) {
       <PawS className="paw paw-light" style={{ top: 40, right: "5%", width: 48, height: 48 }} />
       <div className="wrap">
         <div style={{ textAlign: "center", maxWidth: 620, margin: "0 auto 8px" }}>
-          <div className="eyebrow-dark" style={{ marginBottom: 12 }}>Optional — Pick a dog</div>
+          <div className="eyebrow-dark" style={{ marginBottom: 12 }}>Optional, Pick a dog</div>
           <h2 className="display" style={{ fontSize: "clamp(28px, 3.8vw, 44px)", margin: "0 0 12px", color: "var(--ink)" }}>
             Sponsor <em style={{ color: "var(--purple-600)" }}>someone specific</em>, or let us match you.
           </h2>
@@ -182,7 +182,7 @@ function SponsorTiers({ onPick }) {
             Every dollar has a <em style={{ color: "var(--purple-400)" }}>job</em>.
           </h2>
           <p style={{ color: "var(--on-dark-2)", fontSize: 15, margin: 0, lineHeight: 1.6 }}>
-            97¢ of every dollar goes directly to dogs. The other 3¢ keeps the lights on. Pick a tier — cancel anytime.
+            97¢ of every dollar goes directly to dogs. The other 3¢ keeps the lights on. Pick a tier, cancel anytime.
           </p>
         </div>
 
@@ -251,7 +251,7 @@ function SponsorCheckout({ tier, dog, onClose }) {
           <form onSubmit={submit}>
             <div className="eyebrow-dark" style={{ marginBottom: 12 }}>Become a sponsor</div>
             <h2 className="display" style={{ fontSize: 32, margin: "0 0 8px", color: "var(--ink)", lineHeight: 1.15 }}>
-              ${tier.price}/mo — {tier.name} tier
+              ${tier.price}/mo, {tier.name} tier
             </h2>
             <p style={{ color: "var(--ink-2)", fontSize: 14, margin: "0 0 20px" }}>
               {dog ? <>Supporting <strong style={{ color: "var(--ink)" }}>{dog}</strong>. </> : ""}{tier.desc}

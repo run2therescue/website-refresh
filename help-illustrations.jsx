@@ -24,7 +24,7 @@ function HelpIllustration({ kind }) {
   }
 }
 
-/* Shared — subtle floor shadow, decorative dots */
+/* Shared, subtle floor shadow, decorative dots */
 function Dots({ color = "#ffffff30" }) {
   return (
     <g>
@@ -37,7 +37,7 @@ function Dots({ color = "#ffffff30" }) {
   );
 }
 
-/* ADOPT — a friendly dog face inside a heart. Simple, front-facing, clearly
+/* ADOPT, a friendly dog face inside a heart. Simple, front-facing, clearly
    a dog. Warm lavender background with a coral heart behind. */
 function IllustAdopt() {
   return (
@@ -47,7 +47,7 @@ function IllustAdopt() {
         {/* Heart backdrop */}
         <path d="M160 210 C 70 148, 42 82, 98 58 C 128 46, 152 66, 160 86 C 168 66, 192 46, 222 58 C 278 82, 250 148, 160 210 Z"
           fill="oklch(0.65 0.15 35 / 0.95)" />
-        {/* Dog face — front view */}
+        {/* Dog face, front view */}
         <g transform="translate(160 128)">
           {/* left ear */}
           <path d="M -56 -24 Q -72 -10 -62 26 Q -48 10 -42 -14 Z"
@@ -84,7 +84,7 @@ function IllustAdopt() {
   );
 }
 
-/* FOSTER — a cozy house/tent shape with a dog peeking inside.
+/* FOSTER, a cozy house/tent shape with a dog peeking inside.
    Warmest of the four. Purple tent, cream window, tiny paw on the ground. */
 function IllustFoster() {
   return (
@@ -152,7 +152,7 @@ function IllustFoster() {
   );
 }
 
-/* SPONSOR — a dog tag/medal with a ribbon. Symbolic of ongoing
+/* SPONSOR, a dog tag/medal with a ribbon. Symbolic of ongoing
    commitment. Lavender base, cream + purple tag. */
 function IllustSponsor() {
   return (
@@ -196,7 +196,7 @@ function IllustSponsor() {
   );
 }
 
-/* DONATE — coins dropping into a jar, with a heart on the jar.
+/* DONATE, coins dropping into a jar, with a heart on the jar.
    Deep plum background, gold coins (accent). */
 function IllustDonate() {
   return (

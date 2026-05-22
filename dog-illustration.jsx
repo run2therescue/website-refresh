@@ -1,4 +1,4 @@
-/* Custom SVG dog illustration — procedurally parameterized per dog.
+/* Custom SVG dog illustration, procedurally parameterized per dog.
    Side-view friendly cartoon. Each dog looks distinct via palette,
    ear, tail, snout + accent.
    
@@ -18,7 +18,7 @@ const COAT_PALETTES = {
   tricolor:{ body: "#f5e0c2", belly: "#ffffff", accent: "#5a3a22", snout: "#1a0c06" },
 };
 
-/* Per-dog preset — deterministic, hand-tuned for personality */
+/* Per-dog preset, deterministic, hand-tuned for personality */
 const DOG_LOOKS = {
   bella:   { coat: "cream",  ears: "flop",  tail: "curl", size: "m", collar: "#9b7cc7", spot: null },
   max:     { coat: "golden", ears: "flop",  tail: "plume", size: "l", collar: "#e0a86a", spot: null },
@@ -74,7 +74,7 @@ function DogIllustration({ dogId, animate = true, style = {}, bg = "var(--lav-10
           {animate && <animate attributeName="rx" values="108;114;108" dur="3.2s" repeatCount="indefinite" />}
         </ellipse>
 
-        {/* Tail — positioned behind body */}
+        {/* Tail, positioned behind body */}
         <Tail style={look.tail} palette={p} animate={animate} />
 
         {/* Body group (breathes) */}
@@ -85,7 +85,7 @@ function DogIllustration({ dogId, animate = true, style = {}, bg = "var(--lav-10
           <ellipse cx="245" cy="245" rx="18" ry="28" fill={p.accent} />
           <ellipse cx="245" cy="265" rx="16" ry="12" fill={p.body} />
 
-          {/* Body — big rounded capsule */}
+          {/* Body, big rounded capsule */}
           <path d={`M 120 180
                     Q 120 135 170 130
                     Q 220 125 260 135

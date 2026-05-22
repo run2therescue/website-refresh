@@ -1,4 +1,4 @@
-/* Reality page — "The Reality They Face"
+/* Reality page, "The Reality They Face"
    Heavy content lives here, off the homepage, behind a content notice.
    Text/stories are always readable; imagery (hero video + photos) stays
    blurred until the visitor chooses to reveal it. */
@@ -30,13 +30,13 @@ function TriggerWarning({ open, onAccept, onDecline }) {
           A hard truth, handled with care
         </h2>
         <p style={{ fontSize: 15, lineHeight: 1.6, color: "var(--on-dark-2)", margin: "0 0 28px" }}>
-          This page shows where rescued dogs begin — caged and crowded in the meat
+          This page shows where rescued dogs begin, caged and crowded in the meat
           trade. The images and footage are not graphic, but they are distressing.
           Choose what's right for you: view everything, or keep the imagery hidden
           and still read every dog's story.
         </p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-          <button className="btn btn-accent" onClick={onAccept}>I'm ready — show me</button>
+          <button className="btn btn-accent" onClick={onAccept}>I'm ready, show me</button>
           <button className="btn btn-outline-light" onClick={onDecline}>Keep imagery hidden</button>
         </div>
       </div>
@@ -69,7 +69,7 @@ function SensitiveMedia({ revealed, label, children }) {
             <circle cx="12" cy="12" r="3" />
           </svg>
           <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase" }}>
-            Sensitive — tap to view
+            Sensitive, tap to view
           </span>
         </button>
       )}
@@ -133,7 +133,7 @@ function RealityIntro({ revealed, onReveal }) {
         </p>
         <p style={{ fontSize: 16, lineHeight: 1.7, color: "var(--on-dark-2)", margin: 0 }}>
           We don't show you this to shock you, and we'll never show cruelty for
-          its own sake. We show it because it's true — and because every
+          its own sake. We show it because it's true, and because every
           adoption, every sponsored flight, every donation reaches directly into
           this picture and lifts a life out of it.
         </p>
@@ -160,19 +160,19 @@ function RealityGallery({ revealed }) {
       img: "assets/reality-trade-context-2.jpg",
       alt: "A dog pressing its face toward the wire of a cage",
       heading: "A face at the wire",
-      body: "Every dog here is an individual — a personality, a history, a name we haven't met yet. They press toward any light, any movement, hoping it means rescue. The bravehearted survivors in our adoption pages once looked out from behind bars exactly like this.",
+      body: "Every dog here is an individual, a personality, a history, a name we haven't met yet. They press toward any light, any movement, hoping it means rescue. The bravehearted survivors in our adoption pages once looked out from behind bars exactly like this.",
     },
     {
       img: "assets/reality-trade-context-3.jpg",
       alt: "Dozens of dogs crowded together behind a chain-link fence",
       heading: "Counted by the dozen",
-      body: "Holding pens crowd dozens of dogs together, surviving on borrowed time. The scale is hard to hold in your mind. So we don't try to save ‘the dozens’ — we save Kronk, then Honey, then the next one. One dog, one flight, one forever home at a time.",
+      body: "Holding pens crowd dozens of dogs together, surviving on borrowed time. The scale is hard to hold in your mind. So we don't try to save ‘the dozens’, we save Kronk, then Honey, then the next one. One dog, one flight, one forever home at a time.",
     },
     {
       img: "assets/reality-beagle.png",
       alt: "A beagle looking out from a wire crate",
       heading: "Every breed, every kind",
-      body: "Beagles, retrievers, huskies — the trade takes family breeds of every kind, and many still wear the tag of a home they were taken from. This one waited inside a wire crate until a rescuer reached him.",
+      body: "Beagles, retrievers, huskies, the trade takes family breeds of every kind, and many still wear the tag of a home they were taken from. This one waited inside a wire crate until a rescuer reached him.",
     },
     {
       img: "assets/reality-puppies.png",
@@ -184,7 +184,7 @@ function RealityGallery({ revealed }) {
       img: "assets/reality-cages.png",
       alt: "Dogs crammed into stacked, rusted wire cages",
       heading: "Stacked past capacity",
-      body: "Cages stacked four and five high, each one crammed well past capacity — no room to turn around, no room to lie down. Every rescue flight we fund empties cages exactly like these.",
+      body: "Cages stacked four and five high, each one crammed well past capacity, no room to turn around, no room to lie down. Every rescue flight we fund empties cages exactly like these.",
     },
   ];
   return (

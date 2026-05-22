@@ -11,7 +11,7 @@ const DOGS = [
     ratio: "4/5" },
   { id: "max", name: "Max", breed: "Golden Retriever Mix", age: "Adult", ageN: 4, size: "Large", energy: "High", good: ["dogs", "kids", "cats"], location: "NY", status: "available", urgency: null, arrived: "1 month ago",
     img: IMG_BANK.dog2, gallery: [IMG_BANK.dog2, IMG_BANK.dog6],
-    bio: "A big goofball who loves everyone he meets. Max is ready for adventures and cuddles — and long hikes are his love language.",
+    bio: "A big goofball who loves everyone he meets. Max is ready for adventures and cuddles, and long hikes are his love language.",
     traits: ["Playful", "Good with cats", "Loves car rides"], weight: "65 lbs", story: "Transported from Yulin to JFK after a partner rescue operation. Max gives zoomies whenever he hears a doorbell.",
     ratio: "4/5" },
   { id: "luna", name: "Luna", breed: "Terrier Mix", age: "Young", ageN: 1, size: "Small", energy: "High", good: ["dogs"], location: "TX", status: "available", urgency: 42, arrived: "3 months ago",
@@ -26,7 +26,7 @@ const DOGS = [
     ratio: "4/5" },
   { id: "willa", name: "Willa", breed: "Lab Mix", age: "Adult", ageN: 5, size: "Large", energy: "Low", good: ["dogs"], location: "CA", status: "available", urgency: 42, arrived: "2 months ago",
     img: IMG_BANK.dog5, gallery: [IMG_BANK.dog5, IMG_BANK.dog1],
-    bio: "Shy, gentle, loves other dogs. Working through some kennel fear — needs a patient home with a calm resident dog.",
+    bio: "Shy, gentle, loves other dogs. Working through some kennel fear, needs a patient home with a calm resident dog.",
     traits: ["Gentle", "Quiet", "Needs a dog friend"], weight: "52 lbs", story: "Willa spent three years in a breeding facility before being rescued. She's slowly learning to trust.",
     ratio: "5/4" },
   { id: "daisy", name: "Daisy", breed: "Poodle Mix", age: "Senior", ageN: 8, size: "Small", energy: "Low", good: ["dogs", "kids", "cats"], location: "NY", status: "available", urgency: null, arrived: "3 weeks ago", special: true,
@@ -36,7 +36,7 @@ const DOGS = [
     ratio: "4/5" },
   { id: "rocky", name: "Rocky", breed: "Husky Mix", age: "Adult", ageN: 3, size: "Large", energy: "High", good: ["dogs"], location: "WA", status: "available", urgency: null, arrived: "6 weeks ago",
     img: IMG_BANK.dog7, gallery: [IMG_BANK.dog7, IMG_BANK.dog10],
-    bio: "Striking blue eyes and a playful personality. Rocky needs space to run and play — ideally with a securely fenced yard.",
+    bio: "Striking blue eyes and a playful personality. Rocky needs space to run and play, ideally with a securely fenced yard.",
     traits: ["Energetic", "Vocal", "Adventure-ready"], weight: "58 lbs", story: "Rocky was pulled from a crowded shelter hours before closing. He's a snow-lover at heart.",
     ratio: "4/5" },
   { id: "otis", name: "Otis", breed: "Beagle Mix", age: "Young", ageN: 2, size: "Medium", energy: "Medium", good: ["dogs", "kids"], location: "TX", status: "available", urgency: 18, arrived: "1 month ago",
@@ -82,7 +82,7 @@ const CARD_BG_PALETTE = {
   tricolor: "sage",
 };
 
-/* HERO — Variant A: Filter-led */
+/* HERO, Variant A: Filter-led */
 function AdoptHero({ variant }) {
   if (variant === "editorial") return <AdoptHeroEditorial />;
   return <AdoptHeroFilter />;
@@ -102,7 +102,7 @@ function AdoptHeroFilter() {
             fontSize: "clamp(48px, 7.6vw, 104px)", margin: "0 0 20px", color: "#fff",
           }}>Find your next <em>best friend.</em></h1>
           <p style={{ fontSize: 17, color: "var(--on-dark-2)", margin: "0 auto", maxWidth: 560, lineHeight: 1.55 }}>
-            Every dog below was pulled from the meat trade, medically cleared, and is ready to come home. Start with a filter — or scroll the whole family.
+            Every dog below was pulled from the meat trade, medically cleared, and is ready to come home. Start with a filter, or scroll the whole family.
           </p>
         </div>
 
@@ -189,7 +189,7 @@ function FilterBar() {
 
 /* Standalone filter bar for hero variant A (decorative but functional scroll target) */
 function AdoptHeroFilterWrapped() {
-  // Not actually used — FilterBar inside directory owns state.
+  // Not actually used, FilterBar inside directory owns state.
   return null;
 }
 
@@ -304,7 +304,7 @@ function AdoptDirectory() {
           }}>
             <div style={{ fontSize: 40, marginBottom: 12 }}>🐾</div>
             <div className="display" style={{ fontSize: 22, color: "var(--ink)", margin: "0 0 8px" }}>No dogs match those filters.</div>
-            <p style={{ color: "var(--ink-2)", fontSize: 14, margin: "0 0 16px" }}>Try loosening a filter — or let us know what you're looking for.</p>
+            <p style={{ color: "var(--ink-2)", fontSize: 14, margin: "0 0 16px" }}>Try loosening a filter, or let us know what you're looking for.</p>
             <button className="btn btn-accent" onClick={() => setFilters({ age: "Any", size: "Any", energy: "Any", good: "Any", location: "Any" })}>Clear filters</button>
           </div>
         ) : (
@@ -453,7 +453,7 @@ function ProfileModal({ dog, fav, onFav, onClose }) {
             <form onSubmit={submit}>
               <button type="button" onClick={() => setStep("profile")} style={{ fontSize: 13, color: "var(--purple-600)", marginBottom: 16, display: "flex", alignItems: "center", gap: 6 }}>← Back to {dog.name}'s profile</button>
               <h2 className="display" style={{ fontSize: 28, margin: "0 0 6px", color: "var(--ink)" }}>Apply to adopt {dog.name}</h2>
-              <p style={{ margin: "0 0 20px", color: "var(--ink-2)", fontSize: 13 }}>We'll review your application within 48 hours. No obligation — this just starts the conversation.</p>
+              <p style={{ margin: "0 0 20px", color: "var(--ink-2)", fontSize: 13 }}>We'll review your application within 48 hours. No obligation, this just starts the conversation.</p>
 
               <FormField label="Full name" required value={form.name} onChange={v => setForm({ ...form, name: v })} />
               <FormField label="Email" type="email" required value={form.email} onChange={v => setForm({ ...form, email: v })} />
@@ -527,7 +527,7 @@ function AdoptProcess() {
   const steps = [
     { n: "01", t: "Apply", d: "Fill out the application on any dog's profile. Takes 5 minutes." },
     { n: "02", t: "Meet", d: "We schedule a video or in-person meet-and-greet with your potential match." },
-    { n: "03", t: "Home check", d: "A quick home visit — virtual or in-person — to confirm a safe environment." },
+    { n: "03", t: "Home check", d: "A quick home visit, virtual or in-person, to confirm a safe environment." },
     { n: "04", t: "Welcome home", d: "Sign the adoption agreement, pay the fee, and bring them home. Lifetime support included." },
   ];
   return (
@@ -541,7 +541,7 @@ function AdoptProcess() {
             Four steps, one new family member.
           </h2>
           <p style={{ color: "var(--on-dark-2)", fontSize: 15, margin: 0 }}>
-            Our process is thorough because every survivor deserves a forever match. It usually takes 1–3 weeks start to finish.
+            Our process is thorough because every survivor deserves a forever match. It usually takes 1 to 3 weeks start to finish.
           </p>
         </div>
         <div className="process-grid">
