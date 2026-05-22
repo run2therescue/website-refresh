@@ -18,7 +18,7 @@ const IMG = {
   alfieAfter:  "assets/alfie-after-portrait.jpg",
   gertieBefore:"assets/gertie-before-rescue.png",
   gertieAfter: "assets/gertie-after-portrait.jpg",
-  honeyBefore: "assets/honey-before-rescue.jpg",
+  honeyBefore: "assets/honey-before-rescue.jpg?v=2",
   honeyAfter:  "assets/honey-after-portrait.png",
   voice: "https://images.unsplash.com/photo-1450778869180-41d0601e046e?w=800&q=80&auto=format",
   reality1: "assets/reality-trade-context-1.jpg",
