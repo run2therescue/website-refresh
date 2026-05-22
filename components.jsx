@@ -21,10 +21,9 @@ const IMG = {
   honeyBefore: "assets/honey-before-rescue.jpg",
   honeyAfter:  "assets/honey-after-portrait.png",
   voice: "https://images.unsplash.com/photo-1450778869180-41d0601e046e?w=800&q=80&auto=format",
-  reality1: "assets/reality-cages.png",
-  reality2: "assets/reality-beagle.png",
-  reality3: "assets/reality-puppies.png",
-  reality4: "https://images.unsplash.com/photo-1561037404-61cd46aa615b?w=600&q=80&auto=format&sat=-80",
+  reality1: "assets/reality-trade-context-1.jpg",
+  reality2: "assets/reality-trade-context-2.jpg",
+  reality3: "assets/reality-trade-context-3.jpg",
 };
 
 /* Paw print SVG */

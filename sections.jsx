@@ -275,12 +275,11 @@ function Feature() {
 }
 
 function Reality() {
-  const imgs = [IMG.reality1, IMG.reality2, IMG.reality3, IMG.reality4];
+  const imgs = [IMG.reality1, IMG.reality2, IMG.reality3];
   const labels = [
-    "Dogs crowded in metal cages at a meat market",
-    "Two scared puppies huddled behind bars",
-    "A thin, injured dog in a concrete pen",
-    "A beagle pressing its face against the wire",
+    "Dogs crammed into stacked wire cages, awaiting the meat trade",
+    "A dog presses toward the wire — one of dozens waiting",
+    "Crowded behind chain-link, surviving on borrowed time",
   ];
   return (
     <section className="section-dark" style={{ padding: "72px 0", position: "relative", overflow: "hidden" }}>
@@ -304,7 +303,6 @@ function Reality() {
             { c: "span 7", r: "span 2", img: imgs[0], label: labels[0] },
             { c: "span 5", r: "span 1", img: imgs[1], label: labels[1] },
             { c: "span 5", r: "span 1", img: imgs[2], label: labels[2] },
-            { c: "span 12", r: "span 2", img: imgs[3], label: labels[3] },
           ].map((it, i) => (
             <div key={i} style={{
               gridColumn: it.c, gridRow: it.r,
