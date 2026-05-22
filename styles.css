@@ -474,3 +474,13 @@ html { scroll-behavior: smooth; }
   .journey-pinned { grid-template-columns: minmax(0, 1fr) !important; gap: 32px !important; }
   .journey-sticky { position: static !important; }
 }
+
+/* Donate button — a heart with a gentle heartbeat (faster on hover) */
+@keyframes heartbeat {
+  0%, 42%, 100% { transform: scale(1); }
+  12% { transform: scale(1.24); }
+  24% { transform: scale(1); }
+  33% { transform: scale(1.14); }
+}
+.donate-heart { transform-origin: center; animation: heartbeat 2.6s ease-in-out infinite; }
+.btn:hover .donate-heart { animation-duration: 1.1s; }

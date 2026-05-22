@@ -95,30 +95,65 @@ function Press() {
 }
 
 function Mission() {
+  // Scroll parallax — the giant stat drifts gently as the section scrolls.
+  const numRef = useRef(null);
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const el = numRef.current;
+    let ticking = false;
+    const update = () => {
+      if (el) {
+        const r = el.getBoundingClientRect();
+        const p = ((r.top + r.height / 2) - window.innerHeight / 2) / window.innerHeight;
+        const shift = Math.max(-18, Math.min(18, p * 50));
+        el.style.transform = `translate3d(0, ${shift}px, 0)`;
+      }
+      ticking = false;
+    };
+    const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    update();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
   return (
     <section id="mission" className="section-light" style={{ padding: "72px 0", position: "relative", overflow: "hidden" }}>
       <Paw className="paw-light" style={{ top: 40, right: "6%", width: 44, height: 44 }} />
       <Paw className="paw-light" style={{ bottom: 40, left: "6%", width: 40, height: 40 }} />
       <div className="wrap">
-        <div style={{
+        <div className="mission-grid" style={{
           background: "#fff", borderRadius: 20, padding: "clamp(28px, 4vw, 56px)",
           boxShadow: "0 2px 0 var(--line-light)",
           borderLeft: "4px solid var(--purple-500)",
-          display: "grid", gridTemplateColumns: "minmax(0, 1.2fr) minmax(0, 1fr)", gap: 40, alignItems: "center",
-        }} className="mission-grid">
+          display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)", gap: 48, alignItems: "center",
+        }}>
           <div>
             <h2 className="display display-serif-em" style={{ fontSize: "clamp(26px, 3.2vw, 42px)", margin: 0, color: "var(--ink)", lineHeight: 1.15 }}>
               Our mission is to give <em>every</em> dog rescued from the meat trade a chance at a <em>loving</em>, safe life.
             </h2>
           </div>
           <div>
-            <div className="display" style={{ fontSize: 68, lineHeight: 1, color: "var(--ink)", marginBottom: 6 }}><CountUp to={30} suffix="M" /></div>
-            <div style={{ fontSize: 15, color: "var(--ink-2)", marginBottom: 4 }}>dogs killed in the Asian meat trade every year</div>
+            <div className="eyebrow-dark" style={{ marginBottom: 6 }}>The scale of it</div>
+            <div ref={numRef} className="display" style={{
+              fontSize: "clamp(86px, 12vw, 168px)", lineHeight: 0.86, color: "var(--ink)",
+              letterSpacing: "-0.04em", margin: "12px 0 14px", willChange: "transform",
+            }}>
+              <CountUp to={30} suffix="M" />
+            </div>
+            <div style={{ fontSize: 16, color: "var(--ink-2)", marginBottom: 12, maxWidth: 340 }}>
+              dogs are killed in Asia's meat trade every year.
+            </div>
+            <div style={{
+              fontFamily: "var(--font-display)", fontWeight: 600,
+              fontSize: "clamp(17px, 1.7vw, 21px)", lineHeight: 1.35,
+              color: "var(--purple-600)", marginBottom: 14, maxWidth: 360,
+            }}>
+              That's roughly one dog — every second of every day.
+            </div>
             <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--ink-3)", letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 18 }}>Source: Humane Society International</div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, borderTop: "1px solid var(--line-light)", paddingTop: 16 }}>
               {[[10, "M", "", "in China alone"], [1, "M", "+", "in South Korea annually"], [5, "M", "", "in Vietnam annually"]].map(([n, unit, plus, l]) => (
                 <div key={l}>
-                  <div className="display" style={{ fontSize: 24, color: "var(--ink)" }}><CountUp to={n} suffix={unit + plus} /></div>
+                  <div className="display" style={{ fontSize: 26, color: "var(--ink)" }}><CountUp to={n} suffix={unit + plus} /></div>
                   <div style={{ fontSize: 11, color: "var(--ink-3)", marginTop: 3 }}>{l}</div>
                 </div>
               ))}
@@ -446,9 +481,10 @@ function Voices() {
 }
 
 function Team() {
+  // Leadership grid — add more team members here and the grid scales/centers.
   const people = [
-    { name: "Brandy Cherven", role: "Owner · CEO", img: IMG.teamBrandy, copy: "Driven by an unwavering love for animals and a commitment to ending the dog meat trade, Brandy cofounded R2TR to be a beacon of hope for voiceless victims and the courageous activists who rescue them." },
-    { name: "Bonnie Klapper", role: "Owner · COO", img: IMG.teamBonnie, copy: "With firsthand experience witnessing the overwhelming challenges of rescue efforts in China and South Korea, Bonnie cofounded R2TR to give every survivor a second chance at a loving forever home." },
+    { name: "Brandy Cherven", role: "Chief Executive Officer", tag: "Co-Founder", img: IMG.teamBrandy, copy: "Driven by an unwavering love for animals and a commitment to ending the dog meat trade, Brandy cofounded R2TR to be a beacon of hope for voiceless victims and the courageous activists who rescue them." },
+    { name: "Bonnie Klapper", role: "Chief Operating Officer", tag: "Co-Founder", img: IMG.teamBonnie, copy: "With firsthand experience witnessing the overwhelming challenges of rescue efforts in China and South Korea, Bonnie cofounded R2TR to give every survivor a second chance at a loving forever home." },
   ];
   return (
     <section className="section-dark" style={{ padding: "120px 0", position: "relative", overflow: "hidden" }}>
@@ -456,24 +492,41 @@ function Team() {
       <Paw className="paw-dark" style={{ bottom: 80, left: "5%", width: 56, height: 56 }} />
       <div className="wrap">
         <div style={{ textAlign: "center", marginBottom: 56 }}>
-          <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 12 }}>✦ Our Founders</div>
+          <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 12 }}>✦ Leadership</div>
           <h2 className="display" style={{ fontSize: "clamp(36px, 5vw, 64px)", margin: "0 0 12px", color: "#fff" }}>
             The team behind the mission
           </h2>
-          <p style={{ color: "var(--on-dark-2)", fontSize: 15, margin: 0 }}>Meet Brandy and Bonnie — the two women who built R2TR.</p>
+          <p style={{ color: "var(--on-dark-2)", fontSize: 15, margin: 0 }}>
+            The founders — and the growing team — driving Run 2 The Rescue forward.
+          </p>
         </div>
 
-        <div className="team-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32, maxWidth: 1000, margin: "0 auto" }}>
+        <div className="team-grid" style={{
+          display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 300px))",
+          gap: 28, justifyContent: "center", maxWidth: 1120, margin: "0 auto",
+        }}>
           {people.map(p => (
             <div key={p.name} className="reveal" style={{
               background: "var(--plum-700)", borderRadius: 24, overflow: "hidden",
               padding: 20, border: "1px solid var(--line-dark)",
-            }}>
-              <div style={{ aspectRatio: "1/1", borderRadius: 16, overflow: "hidden", marginBottom: 20, background: "var(--plum-600)" }}>
+              transition: "transform .3s cubic-bezier(.2,.7,.3,1), box-shadow .3s ease",
+            }}
+              onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-5px)"; e.currentTarget.style.boxShadow = "0 24px 48px -22px oklch(0.1 0.04 310 / 0.7)"; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}
+            >
+              <div style={{ aspectRatio: "1/1", borderRadius: 16, overflow: "hidden", marginBottom: 18, background: "var(--plum-600)" }}>
                 <Img src={p.img} alt={p.name} />
               </div>
-              <div className="display" style={{ fontSize: 26, marginBottom: 6, color: "#fff" }}>{p.name}</div>
-              <div style={{ fontSize: 11, fontFamily: "var(--font-mono)", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--purple-400)", marginBottom: 14 }}>{p.role}</div>
+              {p.tag && (
+                <span style={{
+                  display: "inline-block", marginBottom: 10,
+                  fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase",
+                  color: "var(--purple-400)", background: "oklch(0.72 0.14 305 / 0.15)",
+                  padding: "4px 10px", borderRadius: 999,
+                }}>{p.tag}</span>
+              )}
+              <div className="display" style={{ fontSize: 24, marginBottom: 4, color: "#fff" }}>{p.name}</div>
+              <div style={{ fontSize: 11, fontFamily: "var(--font-mono)", letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--on-dark-3)", marginBottom: 14 }}>{p.role}</div>
               <p style={{ color: "var(--on-dark-2)", fontSize: 14, margin: 0, lineHeight: 1.6 }}>{p.copy}</p>
             </div>
           ))}
