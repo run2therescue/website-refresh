@@ -171,33 +171,33 @@ function HeroCentered({ onDonate }) {
       <Paw className="paw-dark" style={{ bottom: 100, left: "12%", width: 48, height: 48, color: "#fff", opacity: 0.18 }} />
       <Paw className="paw-dark" style={{ bottom: 40, right: "14%", width: 40, height: 40, color: "#fff", opacity: 0.18 }} />
 
-      <div className="wrap" style={{ textAlign: "center", position: "relative", zIndex: 1 }}>
+      <div className="wrap" style={{ textAlign: "left", position: "relative", zIndex: 1 }}>
         <div className="eyebrow" style={{ marginBottom: 32 }}>
           <span style={{ color: "var(--purple-400)" }}>✦ </span>
           Run · Rescue · Repeat
         </div>
         <h1 className="display" style={{
           fontSize: "clamp(48px, 7.5vw, 104px)",
-          margin: "0 auto 20px",
-          maxWidth: "14ch",
+          margin: "0 0 20px",
+          maxWidth: "13ch",
           color: "#fff",
         }}>
           Give Hope.<br />Change a Life.<br />Heal with <em>Love.</em>
         </h1>
         <p style={{
-          maxWidth: 540, margin: "0 auto 28px", fontSize: 17, lineHeight: 1.5,
+          maxWidth: 460, margin: "0 0 28px", fontSize: 17, lineHeight: 1.5,
           color: "var(--on-dark-2)",
         }}>
           Rescuing dogs from the meat trade in East Asia and giving them a second chance at life.
         </p>
-        <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginBottom: 48 }}>
+        <div style={{ display: "flex", gap: 12, justifyContent: "flex-start", flexWrap: "wrap", marginBottom: 48 }}>
           <Magnetic><button className="btn btn-accent" onClick={onDonate}>Donate Now</button></Magnetic>
           <a href="#survivors" className="btn btn-outline-light">Meet Our Survivors</a>
         </div>
 
         <div className="stat-row" style={{
           display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 24,
-          maxWidth: 820, margin: "0 auto", paddingTop: 32,
+          maxWidth: 820, margin: "0", paddingTop: 32,
           borderTop: "1px solid var(--line-dark)",
         }}>
           <Stat num="1,200+" label="Dogs rescued" />

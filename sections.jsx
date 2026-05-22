@@ -123,19 +123,14 @@ function Survivors({ onSponsor }) {
     <section id="survivors" className="section-light" style={{ padding: "72px 0 24px", position: "relative", overflow: "hidden" }}>
       <Paw className="paw-light" style={{ top: 40, left: "5%", width: 40, height: 40 }} />
       <div className="wrap">
-        <div className="survivors-hero" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)", gap: 40, alignItems: "center", marginBottom: 48 }}>
-          <div>
-            <h2 className="display" style={{ fontSize: "clamp(34px, 4.6vw, 60px)", margin: "0 0 16px", color: "var(--ink)" }}>
-              Hopeful Survivors in Search of a Loving Home
-            </h2>
-            <p style={{ fontSize: 15, color: "var(--ink-2)", marginBottom: 20, maxWidth: 460 }}>
-              Our team rescues dogs from the meat trade, provides critical medical treatment, and places them into loving homes — giving every survivor a second chance at a happy, healthy life.
-            </p>
-            <Magnetic><button className="btn btn-accent" onClick={() => onSponsor()}>Adopt Today <span className="arrow">→</span></button></Magnetic>
-          </div>
-          <div style={{ aspectRatio: "5/4", borderRadius: 20, overflow: "hidden", background: "var(--lav-200)", maxHeight: 320 }}>
-            <Img src={IMG.kronkAfter} alt="Kronk, a rescued survivor, leaping through fresh snow" />
-          </div>
+        <div className="survivors-hero" style={{ marginBottom: 48, maxWidth: 680 }}>
+          <h2 className="display" style={{ fontSize: "clamp(34px, 4.6vw, 60px)", margin: "0 0 16px", color: "var(--ink)" }}>
+            Hopeful Survivors in Search of a Loving Home
+          </h2>
+          <p style={{ fontSize: 15, color: "var(--ink-2)", marginBottom: 20, maxWidth: 520 }}>
+            Our team rescues dogs from the meat trade, provides critical medical treatment, and places them into loving homes — giving every survivor a second chance at a happy, healthy life.
+          </p>
+          <Magnetic><button className="btn btn-accent" onClick={() => onSponsor()}>Adopt Today <span className="arrow">→</span></button></Magnetic>
         </div>
 
         <div className="ways-grid" style={{
@@ -242,7 +237,7 @@ function Feature() {
             background: "var(--lav-200)", boxShadow: "0 20px 48px -20px oklch(0.3 0.05 310 / 0.3)",
             maxHeight: 440,
           }}>
-            <Img src={IMG.kronk} alt="Kronk" />
+            <Img src={IMG.kronkAfter} alt="Kronk, leaping through fresh snow" />
           </div>
           <div>
             <span style={{
@@ -544,4 +539,28 @@ function FooterCol({ title, links }) {
   );
 }
 
-Object.assign(window, { Press, Mission, Survivors, Journey, Feature, Reality, Ways, Voices, Team, FinalCTA, Footer });
+/* Homepage teaser linking to the standalone Reality page */
+function RealityTeaser() {
+  return (
+    <section className="section-dark" style={{ padding: "64px 0", position: "relative", overflow: "hidden" }}>
+      <Paw className="paw-dark" style={{ top: 28, left: "6%", width: 40, height: 40 }} />
+      <Paw className="paw-dark" style={{ bottom: 28, right: "7%", width: 44, height: 44 }} />
+      <div className="wrap" style={{ maxWidth: 700, margin: "0 auto", textAlign: "center", position: "relative", zIndex: 1 }}>
+        <div className="eyebrow" style={{ justifyContent: "center", marginBottom: 16 }}>
+          <span style={{ color: "var(--purple-400)" }}>✦ </span>Before the rescue
+        </div>
+        <h2 className="display" style={{ fontSize: "clamp(30px, 3.8vw, 50px)", margin: "0 0 14px", color: "#fff" }}>
+          Every survivor comes from somewhere
+        </h2>
+        <p style={{ fontSize: 15, lineHeight: 1.65, color: "var(--on-dark-2)", margin: "0 auto 26px", maxWidth: 520 }}>
+          The dogs we rescue are pulled from the meat trade in East Asia — caged,
+          crowded, and waiting. It is hard to look at, so we've given it its own
+          page with a content notice. See it when you're ready.
+        </p>
+        <a href="Reality.html" className="btn btn-outline-light">See the reality they face <span className="arrow">→</span></a>
+      </div>
+    </section>
+  );
+}
+
+Object.assign(window, { Press, Mission, Survivors, Journey, Feature, Reality, RealityTeaser, Ways, Voices, Team, FinalCTA, Footer });
