@@ -167,7 +167,7 @@ function FooterS() {
         }}>
           <div>© 2026 Run 2 The Rescue · 501(c)(3) Nonprofit · EIN 99-4240461</div>
           <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
-            <a href="assets/r2r-501c3-determination.pdf" target="_blank" rel="noopener noreferrer" style={{ color: "var(--on-dark-2)" }}>501(c)(3) Determination Letter</a>
+            <a href="assets/r2r-501c3-determination.pdf?v=1" target="_blank" rel="noopener noreferrer" style={{ color: "var(--on-dark-2)" }}>501(c)(3) Determination Letter</a>
             <a href="#" style={{ color: "var(--on-dark-2)" }}>Privacy Policy</a>
           </div>
         </div>

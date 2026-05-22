@@ -67,7 +67,7 @@ function PressMark({ name, slug, href }) {
           fontSize: "clamp(15px, 1.7vw, 20px)", color: "var(--ink-2)", whiteSpace: "nowrap",
         }}>{name}</span>
       ) : (
-        <img src={`assets/press/${slug}.png`} alt={name}
+        <img src={`assets/press/${slug}.png?v=1`} alt={name}
           style={{ height: 30, width: "auto", display: "block" }}
           onError={() => setFailed(true)} />
       )}
@@ -195,7 +195,7 @@ function Journey() {
     { name: "Kronk",  before: IMG.kronkBefore,  after: IMG.kronkAfter,  story: "Pulled from a holding pen in Yulin. Featured in People Magazine." },
     { name: "Alfie",  before: IMG.alfieBefore,  after: IMG.alfieAfter,  story: "From trauma to trust. Pulled from the trade and finding his way home." },
     { name: "Gertie", before: IMG.gertieBefore, after: IMG.gertieAfter, story: "From fear to faith. Rescued from the trade and finding her people." },
-    { name: "Honey",  before: IMG.honeyBefore,  after: IMG.honeyAfter,  story: "From forgotten to forever. A second chance, fully claimed.", beforeFocal: "center 25%" },
+    { name: "Honey",  before: IMG.honeyBefore,  after: IMG.honeyAfter,  story: "From forgotten to forever. A second chance, fully claimed.", beforeFocal: "20% center" },
   ];
   return (
     <section className="section-light" style={{ padding: "64px 0 80px", position: "relative" }}>
@@ -536,7 +536,7 @@ function Footer() {
         }}>
           <div>© 2026 Run 2 The Rescue · 501(c)(3) Nonprofit · EIN 99-4240461</div>
           <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
-            <a href="assets/r2r-501c3-determination.pdf" target="_blank" rel="noopener noreferrer" style={{ color: "var(--on-dark-2)" }}>501(c)(3) Determination Letter</a>
+            <a href="assets/r2r-501c3-determination.pdf?v=1" target="_blank" rel="noopener noreferrer" style={{ color: "var(--on-dark-2)" }}>501(c)(3) Determination Letter</a>
             <a href="#" style={{ color: "var(--on-dark-2)" }}>Privacy Policy</a>
           </div>
         </div>
