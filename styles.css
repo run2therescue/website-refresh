@@ -497,3 +497,55 @@ html { scroll-behavior: smooth; }
 }
 .donate-heart { transform-origin: center; animation: heartbeat 2.6s ease-in-out infinite; }
 .btn:hover .donate-heart { animation-duration: 1.1s; }
+
+/* ============================================================
+   Mobile optimization pass — phones & small tablets
+   ============================================================ */
+
+/* Hero headlines: keep the big display type from overflowing narrow screens */
+@media (max-width: 600px) {
+  h1.display { font-size: clamp(33px, 8.6vw, 46px) !important; }
+}
+
+/* Compact sticky nav on phones — shorter bar, smaller logo */
+@media (max-width: 560px) {
+  nav > .wrap { height: 78px !important; }
+  nav > .wrap > a[aria-label="Run 2 The Rescue"] img {
+    width: 58px !important; height: 58px !important;
+  }
+}
+
+/* Footer columns stack on small screens */
+@media (max-width: 720px) {
+  .footer-grid { grid-template-columns: 1fr !important; gap: 36px !important; }
+}
+
+/* Final-CTA newsletter block: stack the label above the form */
+@media (max-width: 620px) {
+  .cta-connect { grid-template-columns: 1fr !important; gap: 18px !important; }
+}
+@media (max-width: 440px) {
+  .cta-form { flex-direction: column !important; }
+  .cta-form .btn { width: 100%; }
+}
+
+/* Impact calculator: shrink the giant $ figure so it never clips its card */
+@media (max-width: 600px) {
+  .impact-amount { font-size: 52px !important; }
+}
+
+/* "RUN. RESCUE. REPEAT." wordmark: fit it within phone widths */
+@media (max-width: 560px) {
+  .run-repeat { font-size: clamp(24px, 7vw, 36px) !important; }
+}
+
+/* Foster hero stat row: stack on phones */
+@media (max-width: 560px) {
+  .foster-hero-stats { grid-template-columns: 1fr !important; gap: 16px !important; }
+}
+
+/* Modals never exceed the viewport height on phones */
+@media (max-width: 560px) {
+  .modal-backdrop { padding: 14px !important; }
+  .modal { max-height: calc(100vh - 28px); overflow-y: auto; }
+}

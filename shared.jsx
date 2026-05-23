@@ -142,7 +142,7 @@ function FooterS() {
   return (
     <footer className="section-dark" style={{ padding: "64px 0 36px", borderTop: "1px solid var(--line-dark)" }}>
       <div className="wrap">
-        <div style={{
+        <div className="footer-grid" style={{
           display: "grid", gridTemplateColumns: "minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1fr)", gap: 48,
           paddingBottom: 48, borderBottom: "1px solid var(--line-dark)",
         }}>

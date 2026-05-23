@@ -166,7 +166,7 @@ function ImpactCalc({ onDonate }) {
             </div>
             <div>
               <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 24 }}>
-                <span className="display" style={{ fontSize: 72, color: "#fff", lineHeight: 1 }}>
+                <span className="display impact-amount" style={{ fontSize: 72, color: "#fff", lineHeight: 1 }}>
                   $<CountUp to={amount} duration={400} key={amount} />
                 </span>
                 <span style={{ fontSize: 14, color: "var(--on-dark-3)", fontFamily: "var(--font-mono)" }}>one-time</span>

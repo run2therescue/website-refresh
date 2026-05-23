@@ -460,7 +460,7 @@ function Voices() {
             </div>
             <div style={{ fontSize: 13, color: "var(--purple-400)" }}>River Phoenix</div>
           </div>
-          <div className="display" style={{ fontSize: "clamp(36px, 6vw, 72px)", color: "var(--purple-400)", letterSpacing: "0.02em" }}>
+          <div className="display run-repeat" style={{ fontSize: "clamp(36px, 6vw, 72px)", color: "var(--purple-400)", letterSpacing: "0.02em" }}>
             RUN. RESCUE. REPEAT.
           </div>
         </div>
@@ -549,7 +549,7 @@ function FinalCTA({ onDonate, onSubscribe }) {
           <a href="#ways" className="btn btn-outline-light">Get Involved</a>
         </div>
 
-        <div style={{
+        <div className="cta-connect" style={{
           maxWidth: 640, margin: "0 auto", paddingTop: 56,
           borderTop: "1px solid rgba(255,255,255,0.25)",
           display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1.3fr)", gap: 32, alignItems: "start", textAlign: "left",
@@ -558,7 +558,7 @@ function FinalCTA({ onDonate, onSubscribe }) {
             <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 8, fontWeight: 600 }}>Stay Connected</div>
             <div style={{ fontSize: 13, color: "rgba(255,255,255,0.82)" }}>Get rescue updates and survivor stories in your inbox.</div>
           </div>
-          <form onSubmit={(e) => { e.preventDefault(); if (/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { setSubbed(true); setEmail(""); } }}
+          <form className="cta-form" onSubmit={(e) => { e.preventDefault(); if (/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { setSubbed(true); setEmail(""); } }}
             style={{ display: "flex", gap: 8 }}>
             <input
               type="email" className="cta-email"
@@ -582,7 +582,7 @@ function Footer() {
   return (
     <footer className="section-dark" style={{ padding: "72px 0 40px", borderTop: "1px solid var(--line-dark)" }}>
       <div className="wrap">
-        <div style={{
+        <div className="footer-grid" style={{
           display: "grid", gridTemplateColumns: "minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1fr)", gap: 48,
           paddingBottom: 56, borderBottom: "1px solid var(--line-dark)",
         }}>

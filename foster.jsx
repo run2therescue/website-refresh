@@ -27,7 +27,7 @@ function FosterHeroNarrative() {
           <a href="#why" className="btn btn-outline-light">Why foster?</a>
         </div>
 
-        <div style={{
+        <div className="foster-hero-stats" style={{
           display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24,
           maxWidth: 720, margin: "0 auto", paddingTop: 32,
           borderTop: "1px solid var(--line-dark)",
