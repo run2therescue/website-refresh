@@ -95,26 +95,6 @@ function Press() {
 }
 
 function Mission() {
-  // Scroll-scrubbed counter: the number's value is tied 1:1 to scroll position,
-  // it climbs as you scroll down and counts back down as you scroll up.
-  const numRef = useRef(null);
-  useEffect(() => {
-    const el = numRef.current;
-    if (!el) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { el.textContent = "30M"; return; }
-    let ticking = false;
-    const update = () => {
-      const r = el.getBoundingClientRect();
-      const vh = window.innerHeight;
-      const progress = Math.max(0, Math.min(1, (vh - r.top) / (vh * 0.7)));
-      el.textContent = Math.round(progress * 30) + "M";
-      ticking = false;
-    };
-    const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    update();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
   return (
     <section id="mission" className="section-light" style={{ padding: "72px 0", position: "relative", overflow: "hidden" }}>
       <Paw className="paw-light" style={{ top: 40, right: "6%", width: 44, height: 44 }} />
@@ -133,7 +113,7 @@ function Mission() {
           </div>
           <div>
             <div className="eyebrow-dark" style={{ marginBottom: 6 }}>The scale of it</div>
-            <div ref={numRef} className="display" style={{ fontSize: 68, lineHeight: 1, color: "var(--ink)", marginBottom: 6 }}>0M</div>
+            <div className="display" style={{ fontSize: 68, lineHeight: 1, color: "var(--ink)", marginBottom: 6 }}><CountUp to={30} suffix="M" /></div>
             <div style={{ fontSize: 15, color: "var(--ink-2)", marginBottom: 8 }}>
               dogs are killed in Asia's meat trade every year.
             </div>
@@ -171,7 +151,7 @@ function Survivors({ onSponsor }) {
       <Paw className="paw-light" style={{ top: 40, left: "5%", width: 40, height: 40 }} />
       <div className="wrap">
         <div className="survivors-hero" style={{
-          display: "grid", gridTemplateColumns: "minmax(0, 1.05fr) minmax(0, 0.95fr)",
+          display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 250px)",
           gap: 48, alignItems: "center", marginBottom: 56,
         }}>
           <div>
