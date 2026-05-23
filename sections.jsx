@@ -151,29 +151,27 @@ function Survivors({ onSponsor }) {
       <Paw className="paw-light" style={{ top: 40, left: "5%", width: 40, height: 40 }} />
       <div className="wrap">
         <div className="survivors-hero" style={{
-          display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 250px)",
-          gap: 48, alignItems: "center", marginBottom: 56,
+          display: "grid", gridTemplateColumns: "minmax(0, 1.08fr) minmax(0, 0.92fr)",
+          gap: 44, alignItems: "stretch", marginBottom: 56,
         }}>
           <div>
-            <h2 className="display" style={{ fontSize: "clamp(34px, 4.6vw, 60px)", margin: "0 0 16px", color: "var(--ink)" }}>
+            <h2 className="display" style={{ fontSize: "clamp(34px, 4.4vw, 56px)", margin: "0 0 16px", color: "var(--ink)" }}>
               Hopeful Survivors in Search of a Loving Home
             </h2>
-            <p style={{ fontSize: 15, color: "var(--ink-2)", marginBottom: 20, maxWidth: 460 }}>
+            <p style={{ fontSize: 15, color: "var(--ink-2)", margin: "0 0 22px", maxWidth: 480, lineHeight: 1.6 }}>
               Our team rescues dogs from the meat trade, provides critical medical treatment, and places them into loving homes, giving every survivor a second chance at a happy, healthy life.
             </p>
             <Magnetic><button className="btn btn-accent" onClick={() => onSponsor()}>Adopt Today <span className="arrow">→</span></button></Magnetic>
-          </div>
-          <div>
-            <div style={{ borderRadius: 20, overflow: "hidden", aspectRatio: "921 / 1094", background: "var(--lav-200)" }}>
-              <Img src="assets/sunny.jpg" alt="Sunny, the rescue that inspired Run 2 The Rescue" />
-            </div>
-            <div style={{ background: "var(--purple-500)", color: "#fff", borderRadius: 18, padding: "22px 24px", marginTop: 14 }}>
+            <div style={{ background: "var(--purple-500)", color: "#fff", borderRadius: 18, padding: "22px 26px", marginTop: 28 }}>
               <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.72)", marginBottom: 8 }}>Where it began</div>
               <div className="display" style={{ fontSize: 22, marginBottom: 6 }}>Meet Sunny</div>
               <p style={{ fontSize: 14, lineHeight: 1.6, color: "rgba(255,255,255,0.92)", margin: 0 }}>
                 Sunny's rescue is the story that started it all, the dog whose journey to safety inspired the founding of Run 2 The Rescue. Every survivor since follows the trail he opened.
               </p>
             </div>
+          </div>
+          <div style={{ borderRadius: 22, overflow: "hidden", background: "var(--lav-200)", minHeight: 380 }}>
+            <Img src="assets/sunny.jpg" alt="Sunny, the rescue that inspired Run 2 The Rescue" style={{ objectPosition: "center 30%" }} />
           </div>
         </div>
 
