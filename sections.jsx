@@ -675,9 +675,192 @@ function FooterCol({ title, links }) {
   );
 }
 
+/* "Share your story" — a dedicated adopter-testimonial submission, kept
+   separate from Contact: a story is content meant to be published, so it
+   needs explicit consent. Stories email the team; a human reviews and
+   features them — nothing here is auto-published.
+
+   TO GO LIVE: create a free Web3Forms access key at https://web3forms.com
+   for the inbox that should receive adopter stories, and paste it below.
+   While this is blank the form still works but shows a thank-you without
+   sending. The same pattern (one key per inbox) wires up the other forms. */
+const STORY_FORM_ACCESS_KEY = "";
+
+function ShareStoryModal({ open, onClose }) {
+  const [form, setForm] = useState({ name: "", email: "", dog: "", year: "", story: "", credit: "first", consent: false });
+  const [photo, setPhoto] = useState(null);
+  const [step, setStep] = useState("form"); // form | sending | done | error
+
+  useEffect(() => {
+    if (!open) return;
+    setStep("form");
+    const onKey = (e) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => { document.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
+  }, [open]);
+
+  if (!open) return null;
+
+  const emailOk = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email);
+  const canSubmit = form.name.trim().length > 1 && emailOk && form.story.trim().length > 12 && form.consent;
+  const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
+
+  const submit = async (e) => {
+    e.preventDefault();
+    if (!canSubmit || step === "sending") return;
+    if (!STORY_FORM_ACCESS_KEY) { setStep("done"); return; } // not wired to email yet
+    setStep("sending");
+    try {
+      const fd = new FormData();
+      fd.append("access_key", STORY_FORM_ACCESS_KEY);
+      fd.append("subject", `New adopter story — ${form.dog || "a survivor"}`);
+      fd.append("from_name", form.name);
+      fd.append("Adopter", form.name);
+      fd.append("Email", form.email);
+      fd.append("Dog", form.dog);
+      fd.append("Adoption year", form.year);
+      fd.append("Story", form.story);
+      fd.append("Credit as", form.credit === "full" ? "Full name" : "First name only");
+      fd.append("Consent to publish", "Yes — granted in the submission form");
+      if (photo) fd.append("photo", photo);
+      const r = await fetch("https://api.web3forms.com/submit", { method: "POST", body: fd });
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      setStep("done");
+    } catch (err) {
+      setStep("error");
+    }
+  };
+
+  const inputStyle = {
+    width: "100%", padding: "12px 14px", borderRadius: 10,
+    border: "1px solid var(--line-light)", background: "#fff",
+    fontFamily: "var(--font-ui)", fontSize: 14, color: "var(--ink)", outline: "none",
+  };
+  const labelStyle = {
+    display: "block", fontFamily: "var(--font-mono)", fontSize: 10,
+    letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--ink-3)",
+    marginBottom: 6, fontWeight: 600,
+  };
+
+  return (
+    <div className="modal-backdrop" onClick={onClose}>
+      <div onClick={(e) => e.stopPropagation()} style={{
+        background: "#fff", borderRadius: 24, maxWidth: 560, width: "100%",
+        maxHeight: "calc(100vh - 48px)", overflowY: "auto", position: "relative",
+        boxShadow: "var(--shadow)",
+      }}>
+        <button onClick={onClose} aria-label="Close" style={{
+          position: "absolute", top: 16, right: 16, width: 34, height: 34, borderRadius: "50%",
+          background: "var(--lav-100)", color: "var(--ink)", display: "grid", placeItems: "center", fontSize: 15,
+        }}>✕</button>
+
+        <div style={{ padding: "34px 36px 32px" }}>
+          {(step === "form" || step === "sending") && (
+            <form onSubmit={submit}>
+              <div className="eyebrow-dark" style={{ marginBottom: 10 }}>
+                <span style={{ color: "var(--purple-500)" }}>✦ </span>A happy tail
+              </div>
+              <h2 className="display" style={{ fontSize: 30, margin: "0 0 8px", color: "var(--ink)", lineHeight: 1.15 }}>
+                Share your survivor's story
+              </h2>
+              <p style={{ color: "var(--ink-2)", fontSize: 14, margin: "0 0 22px", lineHeight: 1.6 }}>
+                Adopted from Run 2 The Rescue? We'd love to hear how they're settling in. Our team reads every story and may feature yours.
+              </p>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 14 }}>
+                <div>
+                  <label style={labelStyle}>Your name *</label>
+                  <input style={inputStyle} value={form.name} onChange={(e) => set("name", e.target.value)} />
+                </div>
+                <div>
+                  <label style={labelStyle}>Email *</label>
+                  <input type="email" style={inputStyle} value={form.email} onChange={(e) => set("email", e.target.value)} />
+                </div>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "1.5fr 1fr", gap: 12, marginBottom: 14 }}>
+                <div>
+                  <label style={labelStyle}>Dog you adopted</label>
+                  <input style={inputStyle} value={form.dog} onChange={(e) => set("dog", e.target.value)} placeholder="Their name" />
+                </div>
+                <div>
+                  <label style={labelStyle}>Adoption year</label>
+                  <input style={inputStyle} value={form.year} onChange={(e) => set("year", e.target.value)} placeholder="2026" />
+                </div>
+              </div>
+              <div style={{ marginBottom: 14 }}>
+                <label style={labelStyle}>Your story *</label>
+                <textarea rows={4} style={{ ...inputStyle, resize: "vertical" }} value={form.story}
+                  onChange={(e) => set("story", e.target.value)}
+                  placeholder="How is your survivor doing? What would you tell a family considering adoption?" />
+              </div>
+              <div style={{ marginBottom: 16 }}>
+                <label style={labelStyle}>A photo (optional)</label>
+                <input type="file" accept="image/*" onChange={(e) => setPhoto((e.target.files && e.target.files[0]) || null)}
+                  style={{ fontSize: 13, color: "var(--ink-2)" }} />
+              </div>
+
+              <div style={{ marginBottom: 16 }}>
+                <label style={labelStyle}>How should we credit you?</label>
+                <div style={{ display: "flex", background: "var(--lav-100)", borderRadius: 10, padding: 3 }}>
+                  {[["first", "First name only"], ["full", "Full name"]].map(([v, l]) => (
+                    <button type="button" key={v} onClick={() => set("credit", v)} style={{
+                      flex: 1, padding: "9px 0", borderRadius: 8, fontSize: 13,
+                      background: form.credit === v ? "#fff" : "transparent",
+                      color: form.credit === v ? "var(--ink)" : "var(--ink-3)",
+                      boxShadow: form.credit === v ? "var(--shadow-sm)" : "none", fontWeight: 500,
+                    }}>{l}</button>
+                  ))}
+                </div>
+              </div>
+
+              <label style={{ display: "flex", gap: 10, alignItems: "flex-start", cursor: "pointer", marginBottom: 20 }}>
+                <input type="checkbox" checked={form.consent} onChange={(e) => set("consent", e.target.checked)}
+                  style={{ marginTop: 3, width: 16, height: 16, accentColor: "var(--purple-500)", flexShrink: 0 }} />
+                <span style={{ fontSize: 13, color: "var(--ink-2)", lineHeight: 1.5 }}>
+                  I give Run 2 The Rescue permission to share my story and photo on its website and social media.
+                </span>
+              </label>
+
+              <button type="submit" className="btn btn-accent" disabled={!canSubmit || step === "sending"}
+                style={{ width: "100%", justifyContent: "center", opacity: (!canSubmit || step === "sending") ? 0.55 : 1 }}>
+                {step === "sending" ? "Sending…" : "Share my story"}
+              </button>
+            </form>
+          )}
+
+          {step === "done" && (
+            <div style={{ textAlign: "center", padding: "16px 0" }}>
+              <div style={{ width: 64, height: 64, borderRadius: "50%", background: "var(--purple-soft)", display: "grid", placeItems: "center", margin: "0 auto 20px", fontSize: 28, color: "var(--purple-700)" }}>♡</div>
+              <h2 className="display" style={{ fontSize: 28, margin: "0 0 10px", color: "var(--ink)" }}>
+                Thank you{form.name ? `, ${form.name.split(" ")[0]}` : ""}.
+              </h2>
+              <p style={{ color: "var(--ink-2)", fontSize: 14, margin: "0 0 24px", lineHeight: 1.6 }}>
+                Our team reads every story with care. If yours is featured, we'll reach out at {form.email || "your email"} first.
+              </p>
+              <button className="btn btn-accent" onClick={onClose}>Close</button>
+            </div>
+          )}
+
+          {step === "error" && (
+            <div style={{ textAlign: "center", padding: "16px 0" }}>
+              <h2 className="display" style={{ fontSize: 26, margin: "0 0 10px", color: "var(--ink)" }}>That didn't go through.</h2>
+              <p style={{ color: "var(--ink-2)", fontSize: 14, margin: "0 0 24px", lineHeight: 1.6 }}>
+                Something interrupted the submission. Please try again, or email us directly at info@run2therescue.com.
+              </p>
+              <button className="btn btn-accent" onClick={() => setStep("form")}>Try again</button>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* Adopter testimonials, real verbatim quotes, shown as speech bubbles.
    Add more by appending to `quotes`; each becomes another bubble. */
 function Testimonials() {
+  const [storyOpen, setStoryOpen] = useState(false);
   const quotes = [
     {
       quote: "Fig and Coal have brought so much love and joy into our home since adopting them from R2TR… we absolutely adore them.",
@@ -736,12 +919,17 @@ function Testimonials() {
               </figcaption>
             </figure>
           ))}
-          <a href="Contact.html" className="reveal" style={{
+          <button type="button" onClick={() => setStoryOpen(true)} className="reveal" style={{
             flex: "1 1 360px", maxWidth: 440, minHeight: 236, boxSizing: "border-box",
-            border: "2px dashed var(--purple-400)", borderRadius: 28,
-            padding: "40px 34px", transform: "rotate(1.6deg)", textDecoration: "none",
+            border: "2px dashed var(--purple-400)", borderRadius: 28, background: "transparent",
+            padding: "40px 34px", transform: "rotate(1.6deg)", cursor: "pointer",
+            font: "inherit", textAlign: "left",
             display: "flex", flexDirection: "column", justifyContent: "center", gap: 10,
-          }}>
+            transition: "background .2s ease, border-color .2s ease",
+          }}
+            onMouseEnter={e => { e.currentTarget.style.background = "oklch(0.92 0.05 305 / 0.45)"; }}
+            onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
+          >
             <span aria-hidden="true" className="display" style={{ fontSize: 60, lineHeight: 0.6, color: "var(--purple-400)" }}>&ldquo;</span>
             <span className="display" style={{ fontSize: "clamp(20px, 2vw, 26px)", color: "var(--ink)" }}>
               Adopted from R2TR?
@@ -750,9 +938,10 @@ function Testimonials() {
               We'd love to add your story here. Tell us how your survivor is settling in.
             </span>
             <span style={{ marginTop: 4, fontWeight: 600, fontSize: 14, color: "var(--purple-600)" }}>Share your story →</span>
-          </a>
+          </button>
         </div>
       </div>
+      <ShareStoryModal open={storyOpen} onClose={() => setStoryOpen(false)} />
     </section>
   );
 }
