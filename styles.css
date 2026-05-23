@@ -144,6 +144,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   background: transparent; color: var(--ink); border: 1.5px solid var(--ink);
 }
 .btn-outline-dark:hover { background: var(--ink); color: #fff; }
+/* Soft purple outline — warm, on-brand secondary button for light sections */
+.btn-outline-soft {
+  background: transparent; color: var(--purple-700); border: 1.5px solid var(--purple-400);
+}
+.btn-outline-soft:hover { background: var(--purple-500); color: #fff; border-color: var(--purple-500); }
 .btn .arrow { transition: transform .2s ease; }
 .btn:hover .arrow { transform: translateX(3px); }
 

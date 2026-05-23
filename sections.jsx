@@ -140,9 +140,10 @@ function Mission() {
 }
 
 function Survivors({ onSponsor }) {
-  // Live from Shelterluv — the first four available survivors.
+  // Live from Shelterluv — a four-dog preview of the full Adopt page.
   const { status, animals } = useAnimals();
-  const dogs = animals.filter((a) => a.available !== false).slice(0, 4);
+  const available = animals.filter((a) => a.available !== false);
+  const dogs = available.slice(0, 4);
   return (
     <section id="survivors" className="section-light" style={{ padding: "72px 0 24px", position: "relative", overflow: "hidden" }}>
       <Paw className="paw-light" style={{ top: 40, left: "5%", width: 40, height: 40 }} />
@@ -170,6 +171,24 @@ function Survivors({ onSponsor }) {
           <div style={{ borderRadius: 22, overflow: "hidden", background: "var(--lav-200)", minHeight: 380 }}>
             <Img src="assets/sunny.jpg" alt="Sunny, the rescue that inspired Run 2 The Rescue" style={{ objectPosition: "center 30%" }} />
           </div>
+        </div>
+
+        <div style={{
+          display: "flex", justifyContent: "space-between", alignItems: "baseline",
+          flexWrap: "wrap", gap: "8px 16px", margin: "0 0 20px",
+        }}>
+          <h3 className="display" style={{ fontSize: "clamp(21px, 2.5vw, 30px)", margin: 0, color: "var(--ink)" }}>
+            A few of our survivors
+          </h3>
+          <a href="Adopt.html" style={{
+            display: "inline-flex", alignItems: "center", gap: 6,
+            fontWeight: 600, fontSize: 14, color: "var(--purple-600)", transition: "color .2s",
+          }}
+            onMouseEnter={e => { e.currentTarget.style.color = "var(--purple-700)"; }}
+            onMouseLeave={e => { e.currentTarget.style.color = "var(--purple-600)"; }}
+          >
+            Meet all{available.length ? ` ${available.length}` : ""} survivors <span className="arrow">→</span>
+          </a>
         </div>
 
         <div className="ways-grid" style={{

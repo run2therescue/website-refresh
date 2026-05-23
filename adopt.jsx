@@ -522,9 +522,9 @@ function AdoptCTA() {
           Fostering, sponsoring, and donating all keep our survivors moving toward their forever homes.
         </p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-          <MagneticS><a href="Foster.html" className="btn btn-accent">Become a Foster</a></MagneticS>
-          <a href="Sponsor.html" className="btn btn-outline-dark">Sponsor a Dog</a>
-          <a href="Donate.html" className="btn btn-outline-dark" style={{ borderColor: "var(--line-light)", color: "var(--ink-2)" }}>Donate</a>
+          <a href="Foster.html" className="btn btn-outline-soft">Become a Foster</a>
+          <a href="Sponsor.html" className="btn btn-outline-soft">Sponsor a Dog</a>
+          <a href="Donate.html" className="btn btn-outline-soft">Donate</a>
         </div>
       </div>
     </section>
