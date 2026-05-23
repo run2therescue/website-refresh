@@ -14,7 +14,11 @@
     { "source": "/news", "destination": "/News.html" },
     { "source": "/news.html", "destination": "/News.html" },
     { "source": "/contact", "destination": "/Contact.html" },
-    { "source": "/contact.html", "destination": "/Contact.html" }
+    { "source": "/contact.html", "destination": "/Contact.html" },
+    { "source": "/privacy", "destination": "/Privacy.html" },
+    { "source": "/privacy.html", "destination": "/Privacy.html" },
+    { "source": "/reality", "destination": "/Reality.html" },
+    { "source": "/reality.html", "destination": "/Reality.html" }
   ],
   "headers": [
     {

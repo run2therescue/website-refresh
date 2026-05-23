@@ -180,12 +180,6 @@ function RealityGallery({ revealed }) {
       heading: "Born into it",
       body: "Some survivors were stolen pets; others were born inside the trade and have known nothing else. Puppies are lifted out of these yards and given the start they should have had.",
     },
-    {
-      img: "assets/reality-cages.png",
-      alt: "Dogs crammed into stacked, rusted wire cages",
-      heading: "Stacked past capacity",
-      body: "Cages stacked four and five high, each one crammed well past capacity, no room to turn around, no room to lie down. Every rescue flight we fund empties cages exactly like these.",
-    },
   ];
   return (
     <section className="section-dark" style={{ padding: "8px 0 80px", position: "relative" }}>

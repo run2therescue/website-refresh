@@ -53,7 +53,7 @@ const PressLogos = {
 
 /* One press mark, shows the publication logo from assets/press/,
    falls back to a styled wordmark until the logo file is added. */
-function PressMark({ name, slug, href }) {
+function PressMark({ name, slug, href, h }) {
   const [failed, setFailed] = React.useState(false);
   return (
     <a href={href} target="_blank" rel="noopener noreferrer" className="press-logo"
@@ -68,7 +68,7 @@ function PressMark({ name, slug, href }) {
         }}>{name}</span>
       ) : (
         <img src={`assets/press/${slug}.png?v=1`} alt={name}
-          style={{ height: 30, width: "auto", display: "block" }}
+          style={{ height: h || 30, width: "auto", display: "block" }}
           onError={() => setFailed(true)} />
       )}
     </a>
@@ -77,10 +77,10 @@ function PressMark({ name, slug, href }) {
 
 function Press() {
   const items = [
+    { name: "The Dodo", slug: "thedodo", h: 40, href: "https://www.thedodo.com/daily-dodo/broken-dog-who-spent-his-life-in-a-cage-has-no-idea-hes-a-little-different" },
     { name: "People", slug: "people", href: "https://people.com/injured-malamute-with-crooked-head-transforms-after-dog-meat-farm-rescue-11904110" },
-    { name: "New York Post", slug: "nypost", href: "https://nypost.com/2026/04/26/us-news/meet-the-nyers-saving-hundreds-of-adorable-dogs-from-ending-up-on-the-menu/" },
     { name: "Long Island Press", slug: "longislandpress", href: "https://www.longislandpress.com/2026/01/27/how-a-long-island-advocate-is-rescuing-dogs-from-the-global-meat-trade/" },
-    { name: "The Dodo", slug: "thedodo", href: "https://www.thedodo.com/daily-dodo/broken-dog-who-spent-his-life-in-a-cage-has-no-idea-hes-a-little-different" },
+    { name: "New York Post", slug: "nypost", href: "https://nypost.com/2026/04/26/us-news/meet-the-nyers-saving-hundreds-of-adorable-dogs-from-ending-up-on-the-menu/" },
   ];
   return (
     <section id="press" className="press-section section-light" style={{ padding: "32px 0", borderBottom: "1px solid var(--line-light)" }}>
@@ -602,6 +602,17 @@ function Footer() {
             <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--purple-400)" }}>
               ✦ Run · Rescue · Repeat
             </div>
+            <div style={{ display: "flex", gap: 10, marginTop: 22 }}>
+              <a href="https://www.facebook.com/people/Run-2-The-Rescue/61564710401329/" target="_blank" rel="noopener noreferrer" aria-label="Run 2 The Rescue on Facebook" style={{ width: 38, height: 38, borderRadius: "50%", background: "var(--plum-700)", display: "inline-flex", alignItems: "center", justifyContent: "center", color: "var(--on-dark-2)", transition: "background .2s ease, color .2s ease, transform .2s ease" }} onMouseEnter={e => { e.currentTarget.style.background = "var(--purple-500)"; e.currentTarget.style.color = "#fff"; e.currentTarget.style.transform = "translateY(-2px)"; }} onMouseLeave={e => { e.currentTarget.style.background = "var(--plum-700)"; e.currentTarget.style.color = "var(--on-dark-2)"; e.currentTarget.style.transform = "none"; }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07c0 6.03 4.39 11.03 10.13 11.93v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.69.24 2.69.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8v8.44C19.61 23.1 24 18.1 24 12.07z"/></svg>
+              </a>
+              <a href="https://www.instagram.com/run2therescue" target="_blank" rel="noopener noreferrer" aria-label="Run 2 The Rescue on Instagram" style={{ width: 38, height: 38, borderRadius: "50%", background: "var(--plum-700)", display: "inline-flex", alignItems: "center", justifyContent: "center", color: "var(--on-dark-2)", transition: "background .2s ease, color .2s ease, transform .2s ease" }} onMouseEnter={e => { e.currentTarget.style.background = "var(--purple-500)"; e.currentTarget.style.color = "#fff"; e.currentTarget.style.transform = "translateY(-2px)"; }} onMouseLeave={e => { e.currentTarget.style.background = "var(--plum-700)"; e.currentTarget.style.color = "var(--on-dark-2)"; e.currentTarget.style.transform = "none"; }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85C2.4 3.92 3.92 2.38 7.15 2.23 8.42 2.17 8.8 2.16 12 2.16zM12 0C8.74 0 8.33.01 7.05.07 2.7.27.27 2.69.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.2 4.36 2.62 6.78 6.98 6.98C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c4.35-.2 6.78-2.62 6.98-6.98.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.2-4.35-2.62-6.78-6.98-6.98C15.67.01 15.26 0 12 0zm0 5.84A6.16 6.16 0 1 0 12 18.16 6.16 6.16 0 0 0 12 5.84zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.4-11.85a1.44 1.44 0 1 0 0 2.88 1.44 1.44 0 0 0 0-2.88z"/></svg>
+              </a>
+              <a href="https://www.tiktok.com/@_run2therescue_" target="_blank" rel="noopener noreferrer" aria-label="Run 2 The Rescue on TikTok" style={{ width: 38, height: 38, borderRadius: "50%", background: "var(--plum-700)", display: "inline-flex", alignItems: "center", justifyContent: "center", color: "var(--on-dark-2)", transition: "background .2s ease, color .2s ease, transform .2s ease" }} onMouseEnter={e => { e.currentTarget.style.background = "var(--purple-500)"; e.currentTarget.style.color = "#fff"; e.currentTarget.style.transform = "translateY(-2px)"; }} onMouseLeave={e => { e.currentTarget.style.background = "var(--plum-700)"; e.currentTarget.style.color = "var(--on-dark-2)"; e.currentTarget.style.transform = "none"; }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.89-4.51c.3 0 .59.05.85.13V9.4a6.34 6.34 0 0 0-1-.08A6.34 6.34 0 0 0 5.6 20.92a6.34 6.34 0 0 0 10.86-4.43V8.69a8.16 8.16 0 0 0 3.13 1.27V6.69z"/></svg>
+              </a>
+            </div>
           </div>
           <FooterCol title="Get Involved" links={[["Adopt","Adopt.html"],["Foster","Foster.html"],["Sponsor","Sponsor.html"],["Donate","Donate.html"]]} />
           <FooterCol title="Resources" links={[["News","News.html"],["Contact","Contact.html"],["Home","index.html"]]} />
@@ -613,7 +624,7 @@ function Footer() {
           <div>© 2026 Run 2 The Rescue · 501(c)(3) Nonprofit · EIN 99-4240461</div>
           <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
             <a href="assets/r2r-501c3-determination.pdf?v=1" target="_blank" rel="noopener noreferrer" style={{ color: "var(--on-dark-2)" }}>501(c)(3) Determination Letter</a>
-            <a href="#" style={{ color: "var(--on-dark-2)" }}>Privacy Policy</a>
+            <a href="Privacy.html" style={{ color: "var(--on-dark-2)" }}>Privacy Policy</a>
           </div>
         </div>
       </div>
