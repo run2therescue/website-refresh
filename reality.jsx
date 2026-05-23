@@ -180,6 +180,12 @@ function RealityGallery({ revealed }) {
       heading: "Born into it",
       body: "Some survivors were stolen pets; others were born inside the trade and have known nothing else. Puppies are lifted out of these yards and given the start they should have had.",
     },
+    {
+      img: "assets/reality-transport-cage.jpg",
+      alt: "Dogs crammed into a stacked wire crate during transport",
+      heading: "Crated for the road",
+      body: "Once caught, dogs are packed into wire crates and trucked between markets and holding sites, often for days. Interception during transport is one of the moments a rescue becomes possible.",
+    },
   ];
   return (
     <section className="section-dark" style={{ padding: "8px 0 80px", position: "relative" }}>
@@ -209,6 +215,40 @@ function RealityGallery({ revealed }) {
             </div>
           </article>
         ))}
+      </div>
+    </section>
+  );
+}
+
+/* ---- Video strip: short clips from the trade (R2R's own footage) -------- */
+function RealityClips({ revealed }) {
+  const clips = ["assets/reality-clip-1.mp4", "assets/reality-clip-2.mp4", "assets/reality-clip-3.mp4"];
+  return (
+    <section className="section-dark" style={{ padding: "8px 0 84px", position: "relative" }}>
+      <div className="wrap">
+        <h2 className="display" style={{ fontSize: "clamp(24px, 3vw, 38px)", margin: "0 0 8px", color: "#fff" }}>
+          Footage from the trade
+        </h2>
+        <p style={{ fontSize: 15, lineHeight: 1.6, color: "var(--on-dark-2)", margin: "0 0 28px", maxWidth: 520 }}>
+          Short clips from the holding sites and markets our rescuers pull dogs out of.
+        </p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 280px))", gap: 18, justifyContent: "center" }}>
+          {clips.map((src, i) => (
+            <div key={i} className="reveal" style={{
+              aspectRatio: "9 / 16", borderRadius: 18, overflow: "hidden",
+              background: "oklch(0.16 0.03 310)", border: "1px solid var(--line-dark)",
+            }}>
+              <SensitiveMedia revealed={revealed}>
+                <video autoPlay muted loop playsInline preload="metadata" style={{
+                  width: "100%", height: "100%", objectFit: "cover", display: "block",
+                  filter: "saturate(0.5) brightness(0.8)",
+                }}>
+                  <source src={src} type="video/mp4" />
+                </video>
+              </SensitiveMedia>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -246,5 +286,5 @@ function RealityCTA() {
 }
 
 Object.assign(window, {
-  TriggerWarning, SensitiveMedia, RealityHero, RealityIntro, RealityGallery, RealityCTA,
+  TriggerWarning, SensitiveMedia, RealityHero, RealityIntro, RealityGallery, RealityClips, RealityCTA,
 });
