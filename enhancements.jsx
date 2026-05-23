@@ -196,7 +196,7 @@ function ImpactCalc({ onDonate }) {
               </div>
               <Magnetic>
                 <button className="btn btn-accent" onClick={() => onDonate(amount)} style={{ width: "100%", justifyContent: "center" }}>
-                  Donate ${amount} now <span className="arrow">→</span>
+                  Donate now <span className="arrow">→</span>
                 </button>
               </Magnetic>
             </div>

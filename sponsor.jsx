@@ -1,10 +1,11 @@
-/* Sponsor page — sponsorship runs through the live Zeffy donation form,
-   embedded directly in the page. Zeffy owns the payment + receipts.
-   The tier cards and dog picker are the pitch; the embed is the real form. */
+/* Sponsor page — the custom UI (tiers, dog picker) is the pitch; the actual
+   monthly sponsorship is completed on Zeffy's hosted form, opened in a new
+   tab. Nothing is embedded. */
 
 const { useState: spS } = React;
 
-const ZEFFY_SPONSOR_EMBED = "https://www.zeffy.com/embed/donation-form/help-the-abandoned-dogs-come-home";
+/* Zeffy hosted sponsorship form (recurring donation). */
+const SPONSOR_URL = "https://www.zeffy.com/en-US/donation-form/help-the-abandoned-dogs-come-home";
 
 // Three tiers — shown as "where your money goes", not a checkout.
 const TIERS = [
@@ -53,32 +54,28 @@ function SponsorHero() {
   );
 }
 
-/* How it works + the embedded Zeffy sponsorship form. */
+/* How it works + the call to action that opens Zeffy's sponsorship form. */
 function SponsorStart() {
   return (
     <section id="start" className="sponsor-start">
       <PawS className="paw paw-light" style={{ bottom: 24, right: "4%", width: 56, height: 56 }} />
-      <div className="wrap" style={{ maxWidth: 720 }}>
-        <div style={{ textAlign: "center", marginBottom: 28 }}>
-          <div className="eyebrow-dark" style={{ marginBottom: 14, justifyContent: "center" }}>How it works</div>
-          <h2 className="display" style={{ fontSize: "clamp(28px, 3.6vw, 44px)", margin: "0 0 14px", color: "var(--ink)" }}>
-            Become a Sponsor Angel
-          </h2>
-          <p style={{ fontSize: 15, color: "var(--ink-2)", lineHeight: 1.65, margin: "0 auto", maxWidth: 540 }}>
-            Choose a monthly gift of any amount — every dollar goes directly to your survivor's food, medical care, and foster costs. You'll receive regular updates as their story unfolds, and you can cancel anytime.
-          </p>
-        </div>
-
-        <div style={{ background: "#fff", borderRadius: 16, overflow: "hidden", boxShadow: "var(--shadow)" }}>
-          <iframe
-            title="Sponsor a survivor — Run 2 The Rescue"
-            src={ZEFFY_SPONSOR_EMBED}
-            allow="payment"
-            style={{ display: "block", width: "100%", height: 1000, border: 0 }}
-          />
-        </div>
-
-        <blockquote className="sp-quote" style={{ marginTop: 28 }}>
+      <div className="wrap" style={{ maxWidth: 680, textAlign: "center" }}>
+        <div className="eyebrow-dark" style={{ marginBottom: 14, justifyContent: "center" }}>How it works</div>
+        <h2 className="display" style={{ fontSize: "clamp(28px, 3.6vw, 44px)", margin: "0 0 14px", color: "var(--ink)" }}>
+          Become a Sponsor Angel
+        </h2>
+        <p style={{ fontSize: 15, color: "var(--ink-2)", lineHeight: 1.65, margin: "0 auto 26px", maxWidth: 540 }}>
+          Choose a monthly gift of any amount — every dollar goes directly to your survivor's food, medical care, and foster costs. You'll get regular updates as their story unfolds, and you can cancel anytime.
+        </p>
+        <MagneticS>
+          <a href={SPONSOR_URL} target="_blank" rel="noopener noreferrer" className="btn btn-accent" style={{ fontSize: 15 }}>
+            Start your monthly sponsorship <span className="arrow">→</span>
+          </a>
+        </MagneticS>
+        <p style={{ fontSize: 12, color: "var(--ink-3)", marginTop: 14 }}>
+          Secure checkout through Zeffy — 100% of your sponsorship reaches the dogs.
+        </p>
+        <blockquote className="sp-quote" style={{ marginTop: 32 }}>
           "We cannot do this without you. Together, we can make change happen."
         </blockquote>
       </div>
@@ -86,8 +83,8 @@ function SponsorStart() {
   );
 }
 
-/* Picker — the dogs come live from Shelterluv; it's a showcase that points
-   visitors to the sponsorship form. */
+/* Picker — dogs come live from Shelterluv; a showcase that points visitors
+   back up to the sponsorship call to action. */
 function SponsorPicker({ animals, status, selected, setSelected, onChoose }) {
   const dogs = animals.map((a) => ({
     id: a.id,
@@ -106,12 +103,12 @@ function SponsorPicker({ animals, status, selected, setSelected, onChoose }) {
             Every sponsorship reaches a <em style={{ color: "var(--purple-600)" }}>real dog</em>.
           </h2>
           <p style={{ color: "var(--ink-2)", fontSize: 14, margin: 0 }}>
-            These survivors are waiting right now. Pick one to keep in mind, then start your monthly gift above.
+            These survivors are waiting right now. Pick one to keep in mind, then start your monthly gift.
           </p>
         </div>
         {status === "error" ? (
           <p style={{ textAlign: "center", color: "var(--ink-3)", fontSize: 14, marginTop: 24 }}>
-            Our live dog list is briefly unavailable — you can still sponsor above and we'll match you.
+            Our live dog list is briefly unavailable — you can still start a sponsorship and we'll match you.
           </p>
         ) : (
           <div className="pick-grid">
@@ -138,9 +135,9 @@ function SponsorPicker({ animals, status, selected, setSelected, onChoose }) {
   );
 }
 
-/* "Where your money goes" — the three tiers, as a pitch. Each button sends
-   the visitor to the sponsorship form above. */
-function SponsorTiers({ onStart }) {
+/* "Where your money goes" — the three tiers. Each card links to the
+   sponsorship form; the donor chooses any amount there. */
+function SponsorTiers() {
   return (
     <section id="tiers" className="section-dark sp-tiers" style={{ padding: "84px 0", position: "relative", overflow: "hidden" }}>
       <PawS className="paw paw-dark" style={{ top: 40, left: "4%", width: 48, height: 48 }} />
@@ -159,10 +156,12 @@ function SponsorTiers({ onStart }) {
 
         <div className="sp-tier-grid">
           {TIERS.map(t => (
-            <button
+            <a
               key={t.id}
+              href={SPONSOR_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className={`sp-tier ${t.featured ? "featured" : ""} reveal`}
-              onClick={onStart}
             >
               {t.featured && <span className="sp-tier-badge">Most popular</span>}
 
@@ -184,7 +183,7 @@ function SponsorTiers({ onStart }) {
               <span className="btn btn-accent sp-tier-btn">
                 Sponsor at ${t.price}/mo <span className="arrow">→</span>
               </span>
-            </button>
+            </a>
           ))}
         </div>
       </div>
@@ -210,7 +209,7 @@ function SponsorPage() {
       <SponsorHero />
       <SponsorStart />
       <SponsorPicker animals={available} status={status} selected={selectedDog} setSelected={setSelectedDog} onChoose={scrollToStart} />
-      <SponsorTiers onStart={scrollToStart} />
+      <SponsorTiers />
     </>
   );
 }

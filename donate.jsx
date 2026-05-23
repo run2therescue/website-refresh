@@ -1,90 +1,86 @@
-/* Donate page — giving runs through the live Zeffy donation form, embedded
-   directly in the page. Zeffy owns the payment, receipt, and tax handling. */
-const { useState: dUS, useEffect: dUE } = React;
+/* Donate page — a "choose how to give" page. The custom UI is the front end;
+   the actual payment happens on the provider (Zeffy / PayPal / Venmo), opened
+   in a new tab. Nothing is embedded. */
+const { useState: dUS } = React;
 
-/* Zeffy donation forms (slugs from the org's Zeffy account). */
-const ZEFFY = {
-  general:   "provide-food-and-medical",
-  transport: "help-bring-them-home",
+const GIVE = {
+  zeffyGeneral:   "https://www.zeffy.com/en-US/donation-form/provide-food-and-medical",
+  zeffyTransport: "https://www.zeffy.com/en-US/donation-form/help-bring-them-home",
+  paypal:         "https://www.paypal.com/donate/?hosted_button_id=5YFAYGX4FKHW6",
+  venmo:          "https://venmo.com/u/Run2TheRescue",
 };
-const zeffyEmbed = (slug) => `https://www.zeffy.com/embed/donation-form/${slug}`;
 
 function DonatePage() {
-  const [popup, setPopup] = dUS(null); // { slug, label } | null
-
   return (
     <>
       <DonateHero />
       <MissionSection />
-
-      <section id="give" style={{ background: "var(--plum-900)", color: "#fff", padding: "80px 0" }}>
-        <div className="wrap" style={{ maxWidth: 720 }}>
-          <div style={{ textAlign: "center", marginBottom: 28 }}>
-            <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 16, justifyContent: "center" }}>✦ Give</div>
-            <h2 className="display" style={{ fontSize: "clamp(34px, 4.2vw, 56px)", color: "#fff", margin: "0 0 12px", lineHeight: 1.1 }}>
-              Pick an amount. <em>Change a life.</em>
-            </h2>
-            <p style={{ color: "var(--on-dark-2)", fontSize: 16, margin: "0 auto", maxWidth: 520, lineHeight: 1.6 }}>
-              Every dollar goes directly to rescue, medical, and foster care. Your gift is secure, and your tax receipt arrives instantly.
-            </p>
-          </div>
-
-          <div style={{ background: "#fff", borderRadius: 16, overflow: "hidden", boxShadow: "var(--shadow-dark)" }}>
-            <iframe
-              title="Donate to Run 2 The Rescue"
-              src={zeffyEmbed(ZEFFY.general)}
-              allow="payment"
-              style={{ display: "block", width: "100%", height: 1000, border: 0 }}
-            />
-          </div>
-
-          <p style={{ fontSize: 12, color: "var(--on-dark-3)", marginTop: 16, textAlign: "center" }}>
-            Run 2 The Rescue is a 501(c)(3) nonprofit. Your gift is tax-deductible. EIN 99-4240461.
-          </p>
-        </div>
-      </section>
-
+      <GiveSection />
       <HopePullquote />
-      <DirectedGiving onPick={setPopup} />
+      <DirectedGiving />
       <DonateFAQ />
-
-      {popup && <ZeffyModal slug={popup.slug} label={popup.label} onClose={() => setPopup(null)} />}
     </>
   );
 }
 
-/* Popup that opens a specific Zeffy form (used by the directed-giving cards). */
-function ZeffyModal({ slug, label, onClose }) {
-  dUE(() => {
-    const onKey = (e) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
-    return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
-  }, []);
+/* A single giving-method row, styled for the dark "give" section. */
+function GiveRow({ href, name, note, badge }) {
   return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div onClick={(e) => e.stopPropagation()} style={{
-        background: "#fff", borderRadius: 20, width: "100%", maxWidth: 560,
-        height: "86vh", position: "relative", overflow: "hidden",
-        display: "flex", flexDirection: "column", boxShadow: "var(--shadow)",
-      }}>
-        <div style={{
-          display: "flex", justifyContent: "space-between", alignItems: "center",
-          padding: "14px 18px", borderBottom: "1px solid var(--line-light)", flexShrink: 0,
-        }}>
-          <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--ink-3)" }}>
-            {label || "Donate"} · Run 2 The Rescue
-          </span>
-          <button onClick={onClose} aria-label="Close" style={{ fontSize: 24, color: "var(--ink-3)", lineHeight: 1 }}>×</button>
+    <a href={href} target="_blank" rel="noopener noreferrer" style={{
+      display: "flex", alignItems: "center", gap: 14, padding: "18px 20px",
+      borderRadius: 14, border: "1.5px solid var(--line-dark)",
+      background: "oklch(0.22 0.04 310 / 0.5)", textDecoration: "none",
+      transition: "border-color .2s ease, background .2s ease",
+    }}
+      onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--purple-400)"; e.currentTarget.style.background = "oklch(0.26 0.05 310 / 0.7)"; }}
+      onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--line-dark)"; e.currentTarget.style.background = "oklch(0.22 0.04 310 / 0.5)"; }}
+    >
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+          <span style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 17, color: "#fff" }}>{name}</span>
+          {badge && (
+            <span style={{
+              fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase",
+              color: "var(--purple-300)", background: "oklch(0.5 0.15 305 / 0.3)", border: "1px solid var(--purple-500)",
+              padding: "3px 8px", borderRadius: 999, fontWeight: 600,
+            }}>{badge}</span>
+          )}
         </div>
-        <iframe
-          title={`${label || "Donate"} — Run 2 The Rescue`}
-          src={zeffyEmbed(slug)}
-          allow="payment"
-          style={{ flex: 1, width: "100%", border: 0 }}
-        />
+        <div style={{ fontSize: 13, color: "var(--on-dark-2)", marginTop: 4, lineHeight: 1.45 }}>{note}</div>
       </div>
-    </div>
+      <span aria-hidden="true" style={{ color: "var(--purple-400)", fontSize: 20, flexShrink: 0 }}>→</span>
+    </a>
+  );
+}
+
+function GiveSection() {
+  return (
+    <section id="give" style={{ background: "var(--plum-900)", color: "#fff", padding: "80px 0" }}>
+      <div className="wrap" style={{ maxWidth: 620 }}>
+        <div style={{ textAlign: "center", marginBottom: 32 }}>
+          <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 16, justifyContent: "center" }}>✦ Give</div>
+          <h2 className="display" style={{ fontSize: "clamp(34px, 4.2vw, 56px)", color: "#fff", margin: "0 0 12px", lineHeight: 1.1 }}>
+            Choose how to <em>give</em>.
+          </h2>
+          <p style={{ color: "var(--on-dark-2)", fontSize: 16, margin: "0 auto", maxWidth: 500, lineHeight: 1.6 }}>
+            Every path is secure and tax-deductible. We recommend card or bank transfer — it's the only one where 100% of your gift reaches the dogs.
+          </p>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <GiveRow href={GIVE.zeffyGeneral} name="Card or bank transfer" badge="100% to the dogs"
+            note="Secure checkout — Zeffy covers the fees, so every cent reaches a survivor." />
+          <GiveRow href={GIVE.paypal} name="PayPal"
+            note="Give with your PayPal balance or a linked card." />
+          <GiveRow href={GIVE.venmo} name="Venmo"
+            note="Send your gift straight from the Venmo app." />
+        </div>
+
+        <p style={{ fontSize: 12, color: "var(--on-dark-3)", marginTop: 18, textAlign: "center" }}>
+          Run 2 The Rescue is a 501(c)(3) nonprofit. Your gift is tax-deductible. EIN 99-4240461.
+        </p>
+      </div>
+    </section>
   );
 }
 
@@ -147,12 +143,12 @@ function HopePullquote() {
   );
 }
 
-function DirectedGiving({ onPick }) {
+function DirectedGiving() {
   const items = [
     {
       id: "medical",
       title: "Provide Urgent Medical Care",
-      slug: ZEFFY.general,
+      href: GIVE.zeffyGeneral,
       body: "Emergency vet care, diagnostics, medications, and recovery support for courageous souls rescued from the dog meat trade, help them heal safely and quickly.",
       icon: (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -163,7 +159,7 @@ function DirectedGiving({ onPick }) {
     {
       id: "transport",
       title: "Help Bring Them Home",
-      slug: ZEFFY.transport,
+      href: GIVE.zeffyTransport,
       body: "Support safe transport, boarding, paperwork, and travel logistics to move rescued dogs from danger into loving homes across the country.",
       icon: (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -190,9 +186,9 @@ function DirectedGiving({ onPick }) {
                 <h3>{it.title}</h3>
               </div>
               <p className="directed-body">{it.body}</p>
-              <button className="btn btn-accent directed-btn" onClick={() => onPick({ slug: it.slug, label: it.title })}>
+              <a href={it.href} target="_blank" rel="noopener noreferrer" className="btn btn-accent directed-btn">
                 Donate <span className="arrow">→</span>
-              </button>
+              </a>
             </div>
           ))}
         </div>
@@ -207,7 +203,7 @@ function DonateFAQ() {
     { q: "Is my donation tax-deductible?", a: "Yes, Run 2 The Rescue is a 501(c)(3) nonprofit. You'll receive an automatic receipt within minutes of donating. For gifts over $250, the receipt meets IRS substantiation requirements." },
     { q: "How is my money used?", a: "Roughly 72% to direct medical care and food, 18% to transport and foster stipends, and 10% to operations (insurance, software, licensing). Our audited financials are published annually." },
     { q: "Can I cancel my monthly gift?", a: "Anytime. You'll get a management link in every receipt email, or you can reply to any message from us and we'll handle it within one business day." },
-    { q: "Do you accept international donations?", a: "Yes, we accept cards and PayPal from any country. International donors should check with their local tax authority about deductibility." },
+    { q: "Which payment method should I choose?", a: "Card or bank transfer through Zeffy is best — Zeffy is free for nonprofits, so 100% of your gift reaches the dogs. PayPal and Venmo are offered for convenience, but those providers take a small processing fee." },
   ];
   return (
     <section style={{ background: "var(--plum-900)", color: "#fff", padding: "96px 0 120px" }}>
