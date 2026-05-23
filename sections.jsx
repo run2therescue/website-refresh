@@ -407,10 +407,10 @@ function Reality() {
 
 function Ways({ onDonate, onSponsor }) {
   const items = [
-    { title: "Adopt a Survivor", kind: "adopt",   icon: "♡", href: "Adopt.html" },
-    { title: "Become a Foster",  kind: "foster",  icon: "⌂", href: "Foster.html" },
-    { title: "Sponsor a Dog",    kind: "sponsor", icon: "♁", href: "Sponsor.html" },
-    { title: "Make a Donation",  kind: "donate",  icon: "♥", href: "Donate.html" },
+    { title: "Adopt a Survivor", kind: "adopt",   href: "Adopt.html" },
+    { title: "Become a Foster",  kind: "foster",  href: "Foster.html" },
+    { title: "Sponsor a Dog",    kind: "sponsor", href: "Sponsor.html" },
+    { title: "Make a Donation",  kind: "donate",  href: "Donate.html" },
   ];
   return (
     <section id="ways" className="section-light" style={{ padding: "64px 0 72px", position: "relative", overflow: "hidden" }}>
@@ -431,8 +431,8 @@ function Ways({ onDonate, onSponsor }) {
               <div className="help-art">
                 <HelpIllustration kind={it.kind} />
               </div>
-              <div className="help-label">
-                <span className="help-icon">{it.icon}</span>
+              <div className={"help-label help-label-" + it.kind}>
+                <span className="help-icon"><HelpIcon kind={it.kind} /></span>
                 <span className="help-text">{it.title}</span>
               </div>
             </a>
