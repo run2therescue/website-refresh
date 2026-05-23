@@ -1,41 +1,16 @@
-/* Donate page */
-const { useState: dUS } = React;
+/* Donate page — giving runs through the live Zeffy donation form, embedded
+   directly in the page. Zeffy owns the payment, receipt, and tax handling. */
+const { useState: dUS, useEffect: dUE } = React;
+
+/* Zeffy donation forms (slugs from the org's Zeffy account). */
+const ZEFFY = {
+  general:   "provide-food-and-medical",
+  transport: "help-bring-them-home",
+};
+const zeffyEmbed = (slug) => `https://www.zeffy.com/embed/donation-form/${slug}`;
 
 function DonatePage() {
-  const [amount, setAmount] = dUS(75);
-  const [custom, setCustom] = dUS("");
-  const [freq, setFreq] = dUS("monthly");
-  const [intent, setIntent] = dUS(null); // "medical" | "transport" | null
-
-  const effective = custom ? Number(custom) : amount;
-  const mealsPerDollar = 3.2;
-  const meals = Math.round(effective * mealsPerDollar);
-
-  const amounts = freq === "monthly"
-    ? [
-        { v: 25, what: "1 week of food for a survivor" },
-        { v: 50, what: "One vet visit + vaccines" },
-        { v: 75, what: "Half a month of foster care", highlight: true },
-        { v: 150, what: "Full transport from Asia" },
-        { v: 300, what: "Life-saving surgery share" },
-        { v: 500, what: "Full rescue sponsorship" },
-      ]
-    : [
-        { v: 50, what: "Feed a kennel for a week" },
-        { v: 150, what: "Spay/neuter one survivor" },
-        { v: 300, what: "Medical clearance workup", highlight: true },
-        { v: 500, what: "International transport" },
-        { v: 1000, what: "Fund a full rescue mission" },
-        { v: 2500, what: "Underwrite a monthly intake" },
-      ];
-
-  const scrollToGive = () => {
-    const el = document.getElementById("give");
-    if (el) {
-      const top = el.getBoundingClientRect().top + window.pageYOffset - 20;
-      window.scrollTo({ top, behavior: "smooth" });
-    }
-  };
+  const [popup, setPopup] = dUS(null); // { slug, label } | null
 
   return (
     <>
@@ -43,90 +18,73 @@ function DonatePage() {
       <MissionSection />
 
       <section id="give" style={{ background: "var(--plum-900)", color: "#fff", padding: "80px 0" }}>
-        <div className="wrap">
-          <div className="donate-grid">
-            <div>
-              <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 16 }}>✦ Give</div>
-              <h2 className="display" style={{ fontSize: "clamp(34px, 4.2vw, 56px)", color: "#fff", margin: "0 0 12px", lineHeight: 1.1 }}>
-                Pick an amount. <em>Change a life.</em>
-              </h2>
-              <p style={{ color: "var(--on-dark-2)", fontSize: 16, margin: "0 0 32px", lineHeight: 1.6, maxWidth: 520 }}>
-                {intent === "medical" && "You're giving to urgent medical care. "}
-                {intent === "transport" && "You're giving to transport home. "}
-                Every dollar goes directly to rescue, medical, and foster care. We cover overhead separately with a small board grant.
-              </p>
-
-              <div style={{ marginBottom: 24 }}>
-                <div className="freq-toggle">
-                  <button aria-pressed={freq === "monthly"} onClick={() => setFreq("monthly")}>Monthly</button>
-                  <button aria-pressed={freq === "oneTime"} onClick={() => setFreq("oneTime")}>One-time</button>
-                </div>
-              </div>
-
-              <div className="amount-grid">
-                {amounts.map(a => (
-                  <button key={a.v} className="amount-btn"
-                    aria-pressed={!custom && amount === a.v}
-                    onClick={() => { setAmount(a.v); setCustom(""); }}>
-                    <span className="amt">${a.v}</span>
-                    <span className="what">{a.what}</span>
-                  </button>
-                ))}
-              </div>
-
-              <div style={{ marginBottom: 28 }}>
-                <label className="label-mono" style={{ color: "var(--on-dark-3)", marginBottom: 8 }}>Or enter custom amount</label>
-                <div style={{ position: "relative" }}>
-                  <span style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", color: "var(--on-dark-2)", fontSize: 15 }}>$</span>
-                  <input type="number" className="input-dark" value={custom} onChange={e => setCustom(e.target.value)}
-                    placeholder="Custom amount" style={{ paddingLeft: 30 }} />
-                </div>
-              </div>
-
-              <MagneticS>
-                <button className="btn btn-accent" style={{ width: "100%", justifyContent: "center", padding: "18px", fontSize: 15 }}>
-                  Give ${effective}{freq === "monthly" ? "/mo" : ""} → save {meals} meals
-                </button>
-              </MagneticS>
-              <p style={{ fontSize: 12, color: "var(--on-dark-3)", marginTop: 12, textAlign: "center" }}>
-                Run 2 The Rescue is a 501(c)(3). Your gift is tax-deductible. EIN 45-XXXXXXX.
-              </p>
-            </div>
-
-            <aside className="impact-live reveal">
-              <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 16 }}>✦ Your impact, live</div>
-              <div className="num">${effective}{freq === "monthly" ? "/mo" : ""}</div>
-              <p style={{ color: "var(--on-dark-2)", fontSize: 14, margin: "0 0 24px" }}>
-                unlocks what's possible for a dog right now:
-              </p>
-
-              <ImpactRow num={meals} label="Meals" />
-              <ImpactRow num={Math.round(effective / 15)} label="Vaccines administered" />
-              <ImpactRow num={Math.round(effective / 120)} label="Vet exams covered" suffix={effective < 120 ? " (shared)" : ""} />
-              <ImpactRow num={Math.round(effective * 0.02 * 10) / 10} label="Days of foster care" suffix="" />
-
-              {freq === "monthly" && (
-                <div style={{
-                  marginTop: 20, padding: "14px 16px", background: "oklch(0.5 0.15 305 / 0.2)",
-                  border: "1px solid var(--purple-400)", borderRadius: 12,
-                }}>
-                  <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--purple-300)", fontWeight: 600, marginBottom: 6 }}>
-                    ✦ Sustainer benefit
-                  </div>
-                  <div style={{ color: "#fff", fontSize: 13, lineHeight: 1.5 }}>
-                    Monthly donors get the Survivor Circle newsletter, quarterly impact reports, and first look at new arrivals.
-                  </div>
-                </div>
-              )}
-            </aside>
+        <div className="wrap" style={{ maxWidth: 720 }}>
+          <div style={{ textAlign: "center", marginBottom: 28 }}>
+            <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 16, justifyContent: "center" }}>✦ Give</div>
+            <h2 className="display" style={{ fontSize: "clamp(34px, 4.2vw, 56px)", color: "#fff", margin: "0 0 12px", lineHeight: 1.1 }}>
+              Pick an amount. <em>Change a life.</em>
+            </h2>
+            <p style={{ color: "var(--on-dark-2)", fontSize: 16, margin: "0 auto", maxWidth: 520, lineHeight: 1.6 }}>
+              Every dollar goes directly to rescue, medical, and foster care. Your gift is secure, and your tax receipt arrives instantly.
+            </p>
           </div>
+
+          <div style={{ background: "#fff", borderRadius: 16, overflow: "hidden", boxShadow: "var(--shadow-dark)" }}>
+            <iframe
+              title="Donate to Run 2 The Rescue"
+              src={zeffyEmbed(ZEFFY.general)}
+              allow="payment"
+              style={{ display: "block", width: "100%", height: 1000, border: 0 }}
+            />
+          </div>
+
+          <p style={{ fontSize: 12, color: "var(--on-dark-3)", marginTop: 16, textAlign: "center" }}>
+            Run 2 The Rescue is a 501(c)(3) nonprofit. Your gift is tax-deductible. EIN 99-4240461.
+          </p>
         </div>
       </section>
 
       <HopePullquote />
-      <DirectedGiving onPick={(which) => { setIntent(which); scrollToGive(); }} active={intent} />
+      <DirectedGiving onPick={setPopup} />
       <DonateFAQ />
+
+      {popup && <ZeffyModal slug={popup.slug} label={popup.label} onClose={() => setPopup(null)} />}
     </>
+  );
+}
+
+/* Popup that opens a specific Zeffy form (used by the directed-giving cards). */
+function ZeffyModal({ slug, label, onClose }) {
+  dUE(() => {
+    const onKey = (e) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
+  }, []);
+  return (
+    <div className="modal-backdrop" onClick={onClose}>
+      <div onClick={(e) => e.stopPropagation()} style={{
+        background: "#fff", borderRadius: 20, width: "100%", maxWidth: 560,
+        height: "86vh", position: "relative", overflow: "hidden",
+        display: "flex", flexDirection: "column", boxShadow: "var(--shadow)",
+      }}>
+        <div style={{
+          display: "flex", justifyContent: "space-between", alignItems: "center",
+          padding: "14px 18px", borderBottom: "1px solid var(--line-light)", flexShrink: 0,
+        }}>
+          <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--ink-3)" }}>
+            {label || "Donate"} · Run 2 The Rescue
+          </span>
+          <button onClick={onClose} aria-label="Close" style={{ fontSize: 24, color: "var(--ink-3)", lineHeight: 1 }}>×</button>
+        </div>
+        <iframe
+          title={`${label || "Donate"} — Run 2 The Rescue`}
+          src={zeffyEmbed(slug)}
+          allow="payment"
+          style={{ flex: 1, width: "100%", border: 0 }}
+        />
+      </div>
+    </div>
   );
 }
 
@@ -189,11 +147,12 @@ function HopePullquote() {
   );
 }
 
-function DirectedGiving({ onPick, active }) {
+function DirectedGiving({ onPick }) {
   const items = [
     {
       id: "medical",
       title: "Provide Urgent Medical Care",
+      slug: ZEFFY.general,
       body: "Emergency vet care, diagnostics, medications, and recovery support for courageous souls rescued from the dog meat trade, help them heal safely and quickly.",
       icon: (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -204,6 +163,7 @@ function DirectedGiving({ onPick, active }) {
     {
       id: "transport",
       title: "Help Bring Them Home",
+      slug: ZEFFY.transport,
       body: "Support safe transport, boarding, paperwork, and travel logistics to move rescued dogs from danger into loving homes across the country.",
       icon: (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -224,13 +184,13 @@ function DirectedGiving({ onPick, active }) {
         </div>
         <div className="directed-grid">
           {items.map(it => (
-            <div key={it.id} className={`directed-card reveal ${active === it.id ? "active" : ""}`}>
+            <div key={it.id} className="directed-card reveal">
               <div className="directed-head">
                 <div className="directed-icon">{it.icon}</div>
                 <h3>{it.title}</h3>
               </div>
               <p className="directed-body">{it.body}</p>
-              <button className="btn btn-accent directed-btn" onClick={() => onPick(it.id)}>
+              <button className="btn btn-accent directed-btn" onClick={() => onPick({ slug: it.slug, label: it.title })}>
                 Donate <span className="arrow">→</span>
               </button>
             </div>
@@ -238,20 +198,6 @@ function DirectedGiving({ onPick, active }) {
         </div>
       </div>
     </section>
-  );
-}
-
-function ImpactRow({ num, label, suffix = "" }) {
-  return (
-    <div style={{
-      display: "flex", justifyContent: "space-between", alignItems: "baseline",
-      padding: "10px 0", borderBottom: "1px solid var(--line-dark)",
-    }}>
-      <span style={{ color: "var(--on-dark-2)", fontSize: 13 }}>{label}</span>
-      <span style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 20, color: "#fff" }}>
-        {num}{suffix}
-      </span>
-    </div>
   );
 }
 
