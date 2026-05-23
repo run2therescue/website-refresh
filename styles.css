@@ -418,10 +418,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   gap: 12px;
   background: var(--plum-800);
 }
-.help-label-adopt   { background: linear-gradient(135deg, oklch(0.53 0.17 305), oklch(0.40 0.14 308)); }
-.help-label-foster  { background: linear-gradient(135deg, oklch(0.59 0.16 35),  oklch(0.46 0.15 32)); }
-.help-label-sponsor { background: linear-gradient(135deg, oklch(0.56 0.12 72),  oklch(0.44 0.11 62)); }
-.help-label-donate  { background: linear-gradient(135deg, oklch(0.50 0.15 312), oklch(0.38 0.12 314)); }
+/* Tonal ramp in the brand plum/purple family — bright purple to deep plum */
+.help-label-adopt   { background: linear-gradient(135deg, oklch(0.56 0.17 300), oklch(0.47 0.16 303)); }
+.help-label-foster  { background: linear-gradient(135deg, oklch(0.49 0.155 308), oklch(0.40 0.14 311)); }
+.help-label-sponsor { background: linear-gradient(135deg, oklch(0.42 0.12 314), oklch(0.34 0.10 316)); }
+.help-label-donate  { background: linear-gradient(135deg, oklch(0.34 0.075 312), oklch(0.26 0.055 311)); }
 
 .help-icon {
   width: 32px;
