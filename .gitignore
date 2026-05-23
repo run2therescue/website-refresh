@@ -1,5 +1,8 @@
 .DS_Store
 .vercel/
+.env
+.env.local
+.env*.local
 assets/incoming/
 *.mp4
 # Hero + Reality videos are committed (used in production)

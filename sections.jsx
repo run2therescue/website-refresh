@@ -161,7 +161,7 @@ function Survivors({ onSponsor }) {
             <p style={{ fontSize: 15, color: "var(--ink-2)", margin: "0 0 22px", maxWidth: 480, lineHeight: 1.6 }}>
               Our team rescues dogs from the meat trade, provides critical medical treatment, and places them into loving homes, giving every survivor a second chance at a happy, healthy life.
             </p>
-            <Magnetic><button className="btn btn-accent" onClick={() => onSponsor()}>Adopt Today <span className="arrow">→</span></button></Magnetic>
+            <Magnetic><a href="Adopt.html" className="btn btn-accent">Adopt Today <span className="arrow">→</span></a></Magnetic>
             <div style={{ background: "var(--purple-500)", color: "#fff", borderRadius: 18, padding: "22px 26px", marginTop: 28 }}>
               <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.72)", marginBottom: 8 }}>Where it began</div>
               <div className="display" style={{ fontSize: 22, marginBottom: 6 }}>Meet Sunny</div>
