@@ -6,7 +6,7 @@
  * the SHELTERLUV_API_KEY environment variable.
  *
  * Usage:
- *   GET /api/animals          -> normalized, cached list of adoptable animals
+ *   GET /api/animals          -> normalized, cached list of animals
  *   GET /api/animals?debug=1  -> raw Shelterluv payload (for field inspection)
  */
 
@@ -26,21 +26,16 @@ module.exports = async (req, res) => {
     const all = await fetchAllAnimals(key);
 
     if (debug) {
-      // No caching on debug so inspection always reflects current data.
       res.setHeader("Cache-Control", "no-store");
-      res.status(200).json({
-        count: all.length,
-        sample: all[0] || null,
-        animals: all,
-      });
+      res.status(200).json({ count: all.length, sample: all[0] || null, animals: all });
       return;
     }
 
     const animals = all.map(normalize).filter(Boolean);
 
-    // The CDN serves this cached copy for 5 min, and keeps serving a stale
+    // The CDN serves this cached copy for 5 min, then keeps serving a stale
     // copy for 10 more while it refreshes — so Shelterluv is hit rarely and
-    // the page stays fast even if Shelterluv is briefly down.
+    // the page stays fast even if Shelterluv is briefly slow.
     res.setHeader("Cache-Control", "public, s-maxage=300, stale-while-revalidate=600");
     res.status(200).json({ count: animals.length, animals });
   } catch (err) {
@@ -51,9 +46,9 @@ module.exports = async (req, res) => {
   }
 };
 
-/* Page through every publishable animal. Shelterluv caps each page at 100;
-   the list endpoint has been seen as both /animals and /animal, so we try
-   the plural first and fall back to the singular. */
+/* Page through every publishable animal (Shelterluv caps pages at 100). The
+   list endpoint has been seen as both /animals and /animal, so try plural
+   first and fall back to singular. */
 async function fetchAllAnimals(key) {
   const headers = { "X-Api-Key": key, Accept: "application/json" };
   const path = await resolveListPath(headers);
@@ -76,7 +71,6 @@ async function fetchAllAnimals(key) {
   return out;
 }
 
-/* Probe which list path this API build uses (one HEAD-ish GET, tiny page). */
 async function resolveListPath(headers) {
   for (const path of ["animals", "animal"]) {
     try {
@@ -87,43 +81,47 @@ async function resolveListPath(headers) {
   return "animals";
 }
 
-/* Best-effort mapping from a Shelterluv animal record to the shape the site's
-   cards expect. Refined once the ?debug payload confirms exact field names. */
+/* ---- Normalization: Shelterluv record -> the shape the site's cards use -- */
+
 function normalize(a) {
   if (!a || typeof a !== "object") return null;
   const photos = Array.isArray(a.Photos) ? a.Photos.filter(Boolean) : [];
-  const cover = a.CoverPhoto || a.Photo || photos[0] || null;
+  const cover = a.CoverPhoto || photos[0] || null;
   const ageMonths = toInt(a.Age);
+  const weightLb = toFloat(a.CurrentWeightPounds);
+  const breed = cleanBreed(a.Breed);
+  const group = ageGroup(ageMonths);
+  const description = cleanText(a.Description);
   return {
-    id: a["Internal-ID"] || a.ID || a.id || null,
-    name: a.Name || "Unnamed",
-    type: a.Type || null,
-    breed: a.Breed || "",
+    id: String(a["Internal-ID"] || a.ID || ""),
+    name: String(a.Name || "Unnamed").trim(),
+    type: a.Type || "",
+    breed: breed,
     sex: a.Sex || "",
-    size: a.Size || "",
-    color: a.Color || "",
-    status: a.Status || "",
+    size: sizeBucket(a.Size, weightLb),
+    weightLb: weightLb,
     ageMonths: ageMonths,
-    ageGroup: ageGroup(ageMonths),
-    description: stripHtml(a.Description || a.Memo || ""),
+    ageGroup: group,
+    status: a.Status || "",
+    available: !/adopt/i.test(String(a.Status || "")),
     cover: cover,
-    photos: photos,
-    attributes: extractAttributes(a.Attributes),
-    intakeUnix: toInt(a.LastIntakeUnixTime || a.InTimestamp),
-    url: a.URL || null,
+    photos: photos.length ? photos : (cover ? [cover] : []),
+    videos: extractVideos(a.Videos),
+    description: description,
+    blurb: description || composeBlurb(breed, group, a.Sex),
+    goodWith: extractGoodWith(a.Attributes),
+    daysInCare: daysSince(a.LastIntakeUnixTime),
+    location: (a.CurrentLocation && a.CurrentLocation.Tier1) || "",
   };
-}
-
-function extractAttributes(attrs) {
-  if (!Array.isArray(attrs)) return [];
-  return attrs
-    .map((x) => (typeof x === "string" ? x : x && (x.AttributeName || x.Name || x.Internal_ID)))
-    .filter(Boolean);
 }
 
 function toInt(v) {
   const n = parseInt(v, 10);
   return Number.isFinite(n) ? n : null;
+}
+function toFloat(v) {
+  const n = parseFloat(v);
+  return Number.isFinite(n) ? Math.round(n) : null;
 }
 
 function ageGroup(months) {
@@ -134,6 +132,78 @@ function ageGroup(months) {
   return "Senior";
 }
 
-function stripHtml(s) {
-  return String(s).replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+/* Shelterluv stores size as "Medium (25-59)"; fall back to a weight bucket. */
+function sizeBucket(sizeStr, weightLb) {
+  const word = String(sizeStr || "").trim().split(" ")[0];
+  if (["Small", "Medium", "Large", "X-Large"].includes(word)) return word;
+  if (weightLb == null) return "";
+  if (weightLb < 25) return "Small";
+  if (weightLb < 60) return "Medium";
+  return "Large";
+}
+
+/* Shelterluv inverts breed names ("Collie, Border"); flip them back, and
+   keep mixes joined with a slash ("Shiba Inu/Korean Jindo"). */
+function cleanBreed(raw) {
+  if (!raw) return "";
+  return String(raw)
+    .split("/")
+    .map((seg) => {
+      seg = seg.trim();
+      if (seg.includes(", ")) {
+        const parts = seg.split(", ").map((p) => p.trim());
+        const family = parts.shift();
+        return parts.join(" ") + " " + family;
+      }
+      return seg;
+    })
+    .filter(Boolean)
+    .join(" / ");
+}
+
+function extractGoodWith(attrs) {
+  if (!Array.isArray(attrs)) return [];
+  const out = [];
+  for (const x of attrs) {
+    const name = typeof x === "string" ? x : x && x.AttributeName;
+    if (!name) continue;
+    const m = /good with (\w+)/i.exec(name);
+    if (m) out.push(m[1].toLowerCase());
+  }
+  return out;
+}
+
+function extractVideos(vids) {
+  if (!Array.isArray(vids)) return [];
+  return vids
+    .map((v) => v && {
+      id: v.VideoId || null,
+      url: v.YoutubeUrl || null,
+      embed: v.EmbedUrl ? (v.EmbedUrl.startsWith("//") ? "https:" + v.EmbedUrl : v.EmbedUrl) : null,
+      thumb: v.ThumbUrl || null,
+    })
+    .filter((v) => v && v.embed);
+}
+
+function daysSince(unix) {
+  const t = parseInt(unix, 10);
+  if (!Number.isFinite(t)) return null;
+  return Math.max(0, Math.floor((Date.now() / 1000 - t) / 86400));
+}
+
+function cleanText(s) {
+  return String(s || "")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .replace(/^["“]+|["”]+$/g, "")
+    .trim();
+}
+
+/* A warm, on-brand line for dogs whose Shelterluv record has no description.
+   Unique per dog (breed + age vary), so cards never look duplicated. */
+function composeBlurb(breed, group, sex) {
+  const her = sex === "Female" ? "her" : sex === "Male" ? "him" : "them";
+  const lead = group ? `A ${group.toLowerCase()} ${breed || "rescue dog"}` : (breed || "A rescue dog");
+  return `${lead}, rescued from the meat trade and waiting for the family that will call ${her} home.`;
 }

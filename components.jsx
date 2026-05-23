@@ -325,4 +325,28 @@ function Stat({ num, label, dark = true }) {
   );
 }
 
-Object.assign(window, { Paw, Img, IMG, Nav, Hero, Stat, HeroVideoBG });
+/* Live animal data from the Shelterluv proxy (/api/animals).
+   One shared fetch — every component that calls useAnimals reuses it. */
+let __animalsPromise = null;
+function loadAnimals() {
+  if (!__animalsPromise) {
+    __animalsPromise = fetch("/api/animals")
+      .then((r) => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+      .then((d) => (d && d.animals) || [])
+      .catch((e) => { __animalsPromise = null; throw e; });
+  }
+  return __animalsPromise;
+}
+function useAnimals() {
+  const [state, setState] = useState({ status: "loading", animals: [], error: null });
+  useEffect(() => {
+    let alive = true;
+    loadAnimals()
+      .then((animals) => { if (alive) setState({ status: "ready", animals: animals, error: null }); })
+      .catch((e) => { if (alive) setState({ status: "error", animals: [], error: String((e && e.message) || e) }); });
+    return () => { alive = false; };
+  }, []);
+  return state;
+}
+
+Object.assign(window, { Paw, Img, IMG, Nav, Hero, Stat, HeroVideoBG, useAnimals });

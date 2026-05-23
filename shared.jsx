@@ -297,6 +297,31 @@ function useRevealS() {
   }, []);
 }
 
+/* Live animal data from the Shelterluv proxy (/api/animals).
+   One shared fetch per page — every component that calls useAnimalsS reuses it,
+   so the Adopt hero and directory don't each hit the network. */
+let __animalsPromiseS = null;
+function loadAnimalsS() {
+  if (!__animalsPromiseS) {
+    __animalsPromiseS = fetch("/api/animals")
+      .then((r) => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+      .then((d) => (d && d.animals) || [])
+      .catch((e) => { __animalsPromiseS = null; throw e; });
+  }
+  return __animalsPromiseS;
+}
+function useAnimalsS() {
+  const [state, setState] = useStateS({ status: "loading", animals: [], error: null });
+  useEffectS(() => {
+    let alive = true;
+    loadAnimalsS()
+      .then((animals) => { if (alive) setState({ status: "ready", animals: animals, error: null }); })
+      .catch((e) => { if (alive) setState({ status: "error", animals: [], error: String((e && e.message) || e) }); });
+    return () => { alive = false; };
+  }, []);
+  return state;
+}
+
 Object.assign(window, {
-  IMG_BANK, PawS, ImgS, NavS, FooterS, MagneticS, CountUpS, ScrollProgressS, useRevealS,
+  IMG_BANK, PawS, ImgS, NavS, FooterS, MagneticS, CountUpS, ScrollProgressS, useRevealS, useAnimalsS,
 });

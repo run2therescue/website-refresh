@@ -128,16 +128,16 @@ function SponsorStart({ selectedDogName, onSubmit }) {
   );
 }
 
-function SponsorPicker({ selected, setSelected }) {
+/* Picker — the dogs come live from Shelterluv; "Any dog" is always offered. */
+function SponsorPicker({ animals, status, selected, setSelected }) {
   const dogs = [
-    { id: "willa", name: "Willa", breed: "Lab Mix · Adult", img: IMG_BANK.dog5 },
-    { id: "luna", name: "Luna", breed: "Terrier Mix · Young", img: IMG_BANK.dog3 },
-    { id: "otis", name: "Otis", breed: "Beagle Mix · Young", img: IMG_BANK.dog8 },
-    { id: "bao", name: "Bao", breed: "Chow Mix · Adult", img: IMG_BANK.dog10 },
-    { id: "mochi", name: "Mochi", breed: "Pom Mix · Senior", img: IMG_BANK.dog12 },
-    { id: "daisy", name: "Daisy", breed: "Poodle Mix · Senior", img: IMG_BANK.dog6 },
-    { id: "any", name: "Any dog", breed: "We'll match you", img: IMG_BANK.dog1 },
-    { id: "rocky", name: "Rocky", breed: "Husky Mix · Adult", img: IMG_BANK.dog7 },
+    { id: "any", name: "Any dog", meta: "We'll match you", img: null },
+    ...animals.map((a) => ({
+      id: a.id,
+      name: a.name,
+      meta: [a.breed, a.ageGroup].filter(Boolean).join(" · "),
+      img: a.cover,
+    })),
   ];
   return (
     <section id="pick" className="sponsor-picker">
@@ -152,17 +152,34 @@ function SponsorPicker({ selected, setSelected }) {
             You'll get updates about the dog you choose. Most sponsors love watching their story unfold.
           </p>
         </div>
-        <div className="pick-grid">
-          {dogs.map(d => (
-            <button key={d.id} className={`pick-card ${selected === d.id ? "sel" : ""}`} onClick={() => setSelected(d.id)}>
-              <div className="img"><ImgS src={d.img} alt={d.name} /></div>
-              <div className="body">
-                <div className="name">{d.name}</div>
-                <div className="meta">{d.breed}</div>
-              </div>
-            </button>
-          ))}
-        </div>
+        {status === "error" ? (
+          <p style={{ textAlign: "center", color: "var(--ink-3)", fontSize: 14, marginTop: 24 }}>
+            Our live dog list is briefly unavailable — you can still sponsor "Any dog" and we'll match you.
+          </p>
+        ) : (
+          <div className="pick-grid">
+            {dogs.map((d) => (
+              <button key={d.id} className={`pick-card ${selected === d.id ? "sel" : ""}`} onClick={() => setSelected(d.id)}>
+                <div className="img">
+                  {d.img ? (
+                    <ImgS src={d.img} alt={d.name} />
+                  ) : (
+                    <div style={{ width: "100%", height: "100%", background: "var(--lav-200)", display: "grid", placeItems: "center" }}>
+                      <PawS style={{ width: 44, height: 44, color: "var(--purple-400)" }} />
+                    </div>
+                  )}
+                </div>
+                <div className="body">
+                  <div className="name">{d.name}</div>
+                  <div className="meta">{d.meta}</div>
+                </div>
+              </button>
+            ))}
+          </div>
+        )}
+        {status === "loading" && (
+          <p style={{ textAlign: "center", color: "var(--ink-3)", fontSize: 13, marginTop: 16 }}>Loading our survivors…</p>
+        )}
       </div>
     </section>
   );
@@ -291,16 +308,18 @@ function SponsorCheckout({ tier, dog, onClose }) {
 }
 
 function SponsorPage() {
+  const { status, animals } = useAnimalsS();
+  const available = animals.filter((a) => a.available !== false);
+
   const [selectedDog, setSelectedDog] = spS(null);
   const [checkoutTier, setCheckoutTier] = spS(null);
-  const [startThanks, setStartThanks] = spS(false);
 
-  const DOG_MAP = { any: "Any dog", willa: "Willa", luna: "Luna", otis: "Otis", bao: "Bao", mochi: "Mochi", daisy: "Daisy", rocky: "Rocky" };
-  const dogName = selectedDog ? DOG_MAP[selectedDog] : null;
+  const dogName = selectedDog === "any"
+    ? "Any dog"
+    : ((available.find((a) => a.id === selectedDog) || {}).name || null);
 
-  const handleStartSubmit = (form) => {
-    // Jump to tier section so they pick an amount.
-    setStartThanks(true);
+  const handleStartSubmit = () => {
+    // Jump to the tier section so they pick an amount.
     const el = document.getElementById("tiers");
     if (el) {
       const top = el.getBoundingClientRect().top + window.pageYOffset - 20;
@@ -312,7 +331,7 @@ function SponsorPage() {
     <>
       <SponsorHero />
       <SponsorStart selectedDogName={dogName} onSubmit={handleStartSubmit} />
-      <SponsorPicker selected={selectedDog} setSelected={setSelectedDog} />
+      <SponsorPicker animals={available} status={status} selected={selectedDog} setSelected={setSelectedDog} />
       <SponsorTiers onPick={setCheckoutTier} />
       {checkoutTier && <SponsorCheckout tier={checkoutTier} dog={dogName} onClose={() => setCheckoutTier(null)} />}
     </>

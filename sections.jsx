@@ -140,12 +140,9 @@ function Mission() {
 }
 
 function Survivors({ onSponsor }) {
-  const dogs = [
-    { name: "Kronk", img: IMG.survivor1, status: "Featured · in foster", urgent: null, story: "Pulled from a Yulin holding pen. Featured in People Magazine." },
-    { name: "Willa", img: IMG.survivor2, status: "Needs foster · CA", urgent: 42, story: "Shy, gentle, loves other dogs. Working through kennel fear." },
-    { name: "Juno", img: IMG.survivor3, status: "Adopted · 2026", urgent: null, story: "Now a couch professional in Portland with the Reyes family." },
-    { name: "Otis", img: IMG.survivor4, status: "In foster · TX", urgent: 18, story: "Survivor of a Seoul slaughterhouse raid. Ready in November." },
-  ];
+  // Live from Shelterluv — the first four available survivors.
+  const { status, animals } = useAnimals();
+  const dogs = animals.filter((a) => a.available !== false).slice(0, 4);
   return (
     <section id="survivors" className="section-light" style={{ padding: "72px 0 24px", position: "relative", overflow: "hidden" }}>
       <Paw className="paw-light" style={{ top: 40, left: "5%", width: 40, height: 40 }} />
@@ -178,8 +175,23 @@ function Survivors({ onSponsor }) {
         <div className="ways-grid" style={{
           display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 20,
         }}>
-          {dogs.map(d => (
-            <article key={d.name} className="reveal" onClick={() => onSponsor(d.name)} style={{
+          {status === "loading" && [0, 1, 2, 3].map(i => (
+            <div key={i} style={{ background: "#fff", borderRadius: 20, overflow: "hidden" }}>
+              <div style={{ aspectRatio: "4/5", background: "var(--lav-200)" }} />
+              <div style={{ padding: 20 }}>
+                <div style={{ height: 16, width: "55%", background: "var(--lav-200)", borderRadius: 6, marginBottom: 12 }} />
+                <div style={{ height: 11, width: "100%", background: "var(--lav-100)", borderRadius: 6, marginBottom: 7 }} />
+                <div style={{ height: 11, width: "80%", background: "var(--lav-100)", borderRadius: 6 }} />
+              </div>
+            </div>
+          ))}
+          {status === "error" && (
+            <p style={{ gridColumn: "1 / -1", textAlign: "center", color: "var(--ink-3)", fontSize: 14, padding: "24px 0" }}>
+              Our survivors are loading from our shelter system — refresh in a moment to meet them.
+            </p>
+          )}
+          {status === "ready" && dogs.map(d => (
+            <article key={d.id} className="reveal" onClick={() => onSponsor(d.name)} style={{
               background: "#fff", borderRadius: 20, overflow: "hidden",
               cursor: "pointer", transition: "transform .25s ease, box-shadow .25s ease",
               display: "flex", flexDirection: "column",
@@ -187,20 +199,22 @@ function Survivors({ onSponsor }) {
               onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "var(--shadow)"; }}
               onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}
             >
-              <div style={{ aspectRatio: "4/5", overflow: "hidden" }}>
-                <Img src={d.img} alt={d.name} />
+              <div style={{ aspectRatio: "4/5", overflow: "hidden", background: "var(--lav-200)" }}>
+                <Img src={d.cover} alt={d.name} />
               </div>
               <div style={{ padding: 20 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8, gap: 8 }}>
                   <div className="display" style={{ fontSize: 24, color: "var(--ink)" }}>{d.name}</div>
-                  {d.urgent ? <UrgencyBadge days={d.urgent} /> : (
+                  {d.ageGroup && (
                     <span style={{
                       fontSize: 10, fontFamily: "var(--font-mono)", letterSpacing: "0.1em", textTransform: "uppercase",
-                      color: d.status.startsWith("Adopt") ? "oklch(0.55 0.12 150)" : "var(--purple-600)",
-                    }}>{d.status}</span>
+                      color: "var(--purple-600)",
+                    }}>{d.ageGroup}</span>
                   )}
                 </div>
-                <p style={{ margin: 0, fontSize: 13, color: "var(--ink-2)", lineHeight: 1.5 }}>{d.story}</p>
+                <p style={{ margin: 0, fontSize: 13, color: "var(--ink-2)", lineHeight: 1.5 }}>
+                  {d.blurb && d.blurb.length > 104 ? d.blurb.slice(0, 104).trim() + "…" : d.blurb}
+                </p>
               </div>
             </article>
           ))}
