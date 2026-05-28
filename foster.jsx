@@ -108,7 +108,7 @@ function WhyFoster() {
         <div style={{ textAlign: "center", maxWidth: 640, margin: "0 auto" }}>
           <div className="eyebrow-dark" style={{ marginBottom: 12 }}>Why Foster?</div>
           <h2 className="display" style={{ fontSize: "clamp(32px, 4.2vw, 56px)", margin: "0 0 12px", color: "var(--ink)" }}>
-            A couch. A few weeks. A <em style={{ color: "var(--purple-600)" }}>life</em> saved.
+            It takes a very <em style={{ color: "var(--purple-600)" }}>special</em> person to be a foster parent.
           </h2>
           <p style={{ color: "var(--ink-2)", fontSize: 15, margin: 0, lineHeight: 1.6 }}>
             Your home is the difference between a kennel and a family. We bring the dog, the food, the vet care. You bring the soft places.

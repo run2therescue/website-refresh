@@ -68,7 +68,7 @@ function ContactPage() {
             ) : (
               <form onSubmit={submit}>
                 <div className="eyebrow-dark" style={{ marginBottom: 10 }}>Send a message</div>
-                <h2 className="display contact-form-title">Say hi.</h2>
+                <h2 className="display contact-form-title">We'd Love to Hear From You</h2>
 
                 <div className="cf-form-row">
                   <div>
