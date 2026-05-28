@@ -157,7 +157,7 @@ function Survivors({ onSponsor }) {
               Hopeful Survivors in Search of a Loving Home
             </h2>
             <p style={{ fontSize: 15, color: "var(--ink-2)", margin: "0 0 22px", maxWidth: 480, lineHeight: 1.6 }}>
-              Our team rescues dogs from the meat trade, provides critical medical treatment, and places them into loving homes, giving every survivor a second chance at a happy, healthy life.
+              We pull dogs from the meat trade, get them well, and place them with families ready to give a second chance.
             </p>
             <Magnetic><a href="Adopt.html" className="btn btn-accent">Adopt Today <span className="arrow">→</span></a></Magnetic>
             <div style={{ background: "var(--purple-500)", color: "#fff", borderRadius: 18, padding: "22px 26px", marginTop: 28 }}>
@@ -206,7 +206,7 @@ function Survivors({ onSponsor }) {
           ))}
           {status === "error" && (
             <p style={{ gridColumn: "1 / -1", textAlign: "center", color: "var(--ink-3)", fontSize: 14, padding: "24px 0" }}>
-              Our survivors are loading from our shelter system — refresh in a moment to meet them.
+              Our survivors are loading from our shelter system. Refresh in a moment to meet them.
             </p>
           )}
           {status === "ready" && dogs.map(d => (
@@ -455,7 +455,7 @@ function Ways({ onDonate, onSponsor }) {
             How You Can Help
           </h2>
           <p style={{ color: "var(--ink-2)", fontSize: 15, margin: 0 }}>
-            Every act of compassion makes a difference.
+            Four doors. Pick yours.
           </p>
         </div>
         <div className="ways-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14 }}>
@@ -482,7 +482,7 @@ function Voices() {
       <div className="wrap" style={{ maxWidth: 900 }}>
         <div style={{ textAlign: "center" }}>
           <p style={{ fontSize: 16, color: "var(--on-dark-2)", maxWidth: 620, margin: "0 auto 32px", lineHeight: 1.65 }}>
-            Our mission is straightforward: be a beacon of hope for these courageous activists and the voiceless victims they protect. We fund rescue missions, medical care, and international transport to place survivors in safe, loving forever homes, while continuing to educate and advocate against animal cruelty worldwide.
+            A beacon of hope for the activists who go in, and the voiceless victims they pull out. We fund the rescues, the medical care, the flights home, the forever families.
           </p>
           <div style={{
             borderLeft: "3px solid var(--purple-500)", paddingLeft: 20,
@@ -575,7 +575,7 @@ function FinalCTA({ onDonate, onSubscribe }) {
           Every Dog Deserves a Chance
         </h2>
         <p style={{ fontSize: 18, color: "rgba(255,255,255,0.88)", maxWidth: 560, margin: "0 auto 32px" }}>
-          Your support makes rescue missions possible. Together, we can end the suffering.
+          Your gift puts the next survivor on a plane home.
         </p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginBottom: 72 }}>
           <button className="btn btn-light" onClick={onDonate}>Donate Now</button>
@@ -960,9 +960,7 @@ function RealityTeaser() {
           Every survivor comes from somewhere
         </h2>
         <p style={{ fontSize: 15, lineHeight: 1.65, color: "var(--on-dark-2)", margin: "0 auto 26px", maxWidth: 520 }}>
-          The dogs we rescue are pulled from the meat trade in East Asia, caged,
-          crowded, and waiting. It is hard to look at, so we've given it its own
-          page with a content notice. See it when you're ready.
+          The dogs we rescue come from caged, crowded holding pens in East Asia. It's hard to look at. We put it behind a notice so you choose when to see it.
         </p>
         <a href="Reality.html" className="btn btn-outline-light">See the reality they face <span className="arrow">→</span></a>
       </div>

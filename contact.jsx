@@ -31,13 +31,10 @@ function ContactPage() {
             <div className="reach-rule">
               <div className="eyebrow-dark" style={{ marginBottom: 16 }}>Reach out</div>
               <p className="reach-body">
-                Reach out to our dedicated team at <strong>Run2TheRescue</strong> to explore how we can help you give a rescued dog a second chance. We're here to connect you with a survivor in need of a loving home.
+                Want to adopt, foster, or sponsor? Hoping to give a survivor a second chance, share a story, or get a dog out of the trade?
               </p>
               <p className="reach-body">
-                Join us in our mission to rescue and rehabilitate dogs from the harshest conditions, giving them the opportunity for a safe and caring future. Become part of a community committed to making a lasting difference.
-              </p>
-              <p className="reach-body">
-                Connect with <strong>Run2TheRescue</strong> to learn more about our services and how you can support a courageous soul on their journey toward healing and a new life.
+                Write us. A real person answers, usually within a business day.
               </p>
             </div>
 
@@ -71,7 +68,7 @@ function ContactPage() {
             ) : (
               <form onSubmit={submit}>
                 <div className="eyebrow-dark" style={{ marginBottom: 10 }}>Send a message</div>
-                <h2 className="display contact-form-title">We'd Love to Hear From You</h2>
+                <h2 className="display contact-form-title">Say hi.</h2>
 
                 <div className="cf-form-row">
                   <div>
@@ -95,7 +92,7 @@ function ContactPage() {
                 </div>
 
                 <button type="submit" className="btn btn-accent cf-submit">
-                  Contact us!
+                  Send message
                 </button>
               </form>
             )}

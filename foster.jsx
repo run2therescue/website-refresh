@@ -20,7 +20,7 @@ function FosterHeroNarrative() {
           fontSize: "clamp(48px, 7.8vw, 108px)", margin: "0 0 24px", color: "#fff",
         }}>Fostering saves <em>lives.</em></h1>
         <p style={{ fontSize: 18, color: "var(--on-dark-2)", margin: "0 auto 40px", maxWidth: 620, lineHeight: 1.6 }}>
-          Our dogs are flown in periodically to JFK and LAX. We're always looking for kind people to join our Run&nbsp;2&nbsp;The&nbsp;Rescue Foster Team, because every survivor deserves a soft landing on the way to forever.
+          Our dogs land at JFK and LAX. Your home is the next stop on the way to forever.
         </p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginBottom: 56 }}>
           <MagneticS><a href="#apply" className="btn btn-accent">Apply to foster <span className="arrow">→</span></a></MagneticS>
@@ -98,7 +98,7 @@ function FosterHeroSplit() {
 function WhyFoster() {
   const items = [
     { icon: "🏠", title: "You're the first home they know", copy: "Many of our dogs have never slept on a bed, been called by a name, or felt safe. You're the one who teaches them that home is real." },
-    { icon: "✈️", title: "Fostering is time-bound, not forever", copy: "Fosters typically last 2 to 8 weeks, from airport pickup to adoption match. We provide food, supplies, and medical care, you provide the couch." },
+    { icon: "✈️", title: "Fostering has an end date", copy: "Most last 2 to 8 weeks, from airport pickup to adoption match. We cover food, supplies, and vet care. You cover the couch." },
     { icon: "💜", title: "Every foster creates space for the next rescue", copy: "Every dog you foster opens a spot for the next survivor waiting in Seoul or Yulin. You save two lives for every one in your home." },
   ];
   return (
@@ -108,10 +108,10 @@ function WhyFoster() {
         <div style={{ textAlign: "center", maxWidth: 640, margin: "0 auto" }}>
           <div className="eyebrow-dark" style={{ marginBottom: 12 }}>Why Foster?</div>
           <h2 className="display" style={{ fontSize: "clamp(32px, 4.2vw, 56px)", margin: "0 0 12px", color: "var(--ink)" }}>
-            It takes a very <em style={{ color: "var(--purple-600)" }}>special</em> person to be a foster parent.
+            A couch. A few weeks. A <em style={{ color: "var(--purple-600)" }}>life</em> saved.
           </h2>
           <p style={{ color: "var(--ink-2)", fontSize: 15, margin: 0, lineHeight: 1.6 }}>
-            By fostering, you're helping be a part of one of our dogs' journey home. This is truly a precious gift, it saves lives and brings hope.
+            Your home is the difference between a kennel and a family. We bring the dog, the food, the vet care. You bring the soft places.
           </p>
         </div>
         <div className="why-grid">
@@ -146,7 +146,7 @@ function FosterJourney() {
             Four stops, one journey home.
           </h2>
           <p style={{ color: "var(--on-dark-2)", fontSize: 15, margin: 0 }}>
-            A typical foster lasts 2 to 8 weeks. We support you every step of the way.
+            A typical foster lasts 2 to 8 weeks. We're with you the whole way.
           </p>
         </div>
         <div className="journey-flow">
@@ -204,10 +204,10 @@ function FosterForm() {
         <div style={{ textAlign: "center", maxWidth: 580, margin: "0 auto 32px" }}>
           <div className="eyebrow-dark" style={{ marginBottom: 12 }}>Apply to Foster</div>
           <h2 className="display" style={{ fontSize: "clamp(32px, 4.2vw, 52px)", margin: "0 0 12px", color: "var(--ink)" }}>
-            Ready to change a life?
+            Ready to foster?
           </h2>
           <p style={{ color: "var(--ink-2)", fontSize: 15, margin: 0, lineHeight: 1.6 }}>
-            Fill out the form below and our foster coordinator will be in touch within 48 hours.
+            Fill this out. Our foster coordinator writes back within 48 hours.
           </p>
         </div>
 

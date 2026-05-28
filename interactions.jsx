@@ -63,13 +63,13 @@ function DonateModal({ open, onClose }) {
         </div>
         <div style={{ padding: "14px 26px 26px", display: "flex", flexDirection: "column", gap: 10 }}>
           <GiveMethod href={GIVE_LINKS.zeffy} name="Card or bank transfer" badge="100% to the dogs"
-            note="Secure checkout — Zeffy covers the fees, so every cent reaches a survivor." />
+            note="Secure checkout. Zeffy covers the fees, so every cent reaches a survivor." />
           <GiveMethod href={GIVE_LINKS.paypal} name="PayPal"
             note="Give with your PayPal balance or a linked card." />
           <GiveMethod href={GIVE_LINKS.venmo} name="Venmo"
             note="Send your gift straight from the Venmo app." />
           <p style={{ fontSize: 12, color: "var(--ink-3)", textAlign: "center", margin: "6px 0 0", lineHeight: 1.5 }}>
-            Run 2 The Rescue is a 501(c)(3) nonprofit. Your gift is tax-deductible.
+            Run 2 The Rescue is a 501(c)(3) nonprofit. Your gift is tax deductible.
           </p>
         </div>
       </div>

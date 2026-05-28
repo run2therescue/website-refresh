@@ -63,13 +63,13 @@ function GiveSection() {
             Choose how to <em>give</em>.
           </h2>
           <p style={{ color: "var(--on-dark-2)", fontSize: 16, margin: "0 auto", maxWidth: 500, lineHeight: 1.6 }}>
-            Every path is secure and tax-deductible. We recommend card or bank transfer — it's the only one where 100% of your gift reaches the dogs.
+            Every path is secure and tax deductible. Card or bank transfer is the only one where 100% of your gift reaches the dogs.
           </p>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           <GiveRow href={GIVE.zeffyGeneral} name="Card or bank transfer" badge="100% to the dogs"
-            note="Secure checkout — Zeffy covers the fees, so every cent reaches a survivor." />
+            note="Secure checkout. Zeffy covers the fees, so every cent reaches a survivor." />
           <GiveRow href={GIVE.paypal} name="PayPal"
             note="Give with your PayPal balance or a linked card." />
           <GiveRow href={GIVE.venmo} name="Venmo"
@@ -77,7 +77,7 @@ function GiveSection() {
         </div>
 
         <p style={{ fontSize: 12, color: "var(--on-dark-3)", marginTop: 18, textAlign: "center" }}>
-          Run 2 The Rescue is a 501(c)(3) nonprofit. Your gift is tax-deductible. EIN 99-4240461.
+          Run 2 The Rescue is a 501(c)(3) nonprofit. Your gift is tax deductible. EIN 99-4240461.
         </p>
       </div>
     </section>
@@ -107,12 +107,12 @@ function MissionSection() {
     <section className="donate-mission">
       <div className="wrap" style={{ maxWidth: 820 }}>
         <div className="dm-rule">
-          <div className="eyebrow-dark" style={{ marginBottom: 16 }}>Our mission</div>
+          <div className="eyebrow-dark" style={{ marginBottom: 16 }}>Where it goes</div>
           <p className="dm-body">
-            At <strong>Run2TheRescue</strong>, we are a compassionate team dedicated to creating a safe and nurturing space for the animals in our care. Our mission is to rescue, rehabilitate, and rehome abandoned and abused dogs, helping them find the loving forever homes they deserve.
+            We pull dogs from holding pens in China and South Korea, heal what's broken, and put them on planes home. That's the work your gift pays for.
           </p>
           <p className="dm-body">
-            We believe every animal deserves the opportunity to heal and thrive. With unwavering dedication, we provide the care, attention, and support needed to give them the best chance at a bright future. Our team of experienced staff and volunteers is passionate about making a lasting difference in the lives of these brave souls.
+            Vet care, recovery, a flight home, a foster who keeps them safe until the right family says yes.
           </p>
         </div>
       </div>
@@ -132,10 +132,10 @@ function HopePullquote() {
             </svg>
           </div>
           <p className="hope-lead">
-            Your monthly contribution helps us continue our vital work, ensuring voiceless victims of the dog meat trade can be rescued and brought to the safety of our shelter.
+            Your monthly gift pulls voiceless victims out of holding pens and into safety. It rescues, it heals, it brings them home.
           </p>
           <p className="hope-emph">
-            You are giving them what they need the most… Hope.
+            You give them the one thing they've never had. Hope.
           </p>
         </div>
       </div>
@@ -200,10 +200,10 @@ function DirectedGiving() {
 function DonateFAQ() {
   const [open, setOpen] = dUS(0);
   const qs = [
-    { q: "Is my donation tax-deductible?", a: "Yes, Run 2 The Rescue is a 501(c)(3) nonprofit. You'll receive an automatic receipt within minutes of donating. For gifts over $250, the receipt meets IRS substantiation requirements." },
+    { q: "Is my donation tax deductible?", a: "Yes, Run 2 The Rescue is a 501(c)(3) nonprofit. You'll receive an automatic receipt within minutes of donating. For gifts over $250, the receipt meets IRS substantiation requirements." },
     { q: "How is my money used?", a: "Roughly 72% to direct medical care and food, 18% to transport and foster stipends, and 10% to operations (insurance, software, licensing). Our audited financials are published annually." },
     { q: "Can I cancel my monthly gift?", a: "Anytime. You'll get a management link in every receipt email, or you can reply to any message from us and we'll handle it within one business day." },
-    { q: "Which payment method should I choose?", a: "Card or bank transfer through Zeffy is best — Zeffy is free for nonprofits, so 100% of your gift reaches the dogs. PayPal and Venmo are offered for convenience, but those providers take a small processing fee." },
+    { q: "Which payment method should I choose?", a: "Card or bank transfer through Zeffy is best. Zeffy is free for nonprofits, so 100% of your gift reaches the dogs. PayPal and Venmo are offered for convenience, but those providers take a small processing fee." },
   ];
   return (
     <section style={{ background: "var(--plum-900)", color: "#fff", padding: "96px 0 120px" }}>

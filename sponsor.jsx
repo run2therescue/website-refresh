@@ -65,7 +65,7 @@ function SponsorStart() {
           Become a Sponsor Angel
         </h2>
         <p style={{ fontSize: 15, color: "var(--ink-2)", lineHeight: 1.65, margin: "0 auto 26px", maxWidth: 540 }}>
-          Choose a monthly gift of any amount — every dollar goes directly to your survivor's food, medical care, and foster costs. You'll get regular updates as their story unfolds, and you can cancel anytime.
+          Pick any monthly amount. It goes straight to your survivor's food, vet care, and foster costs. You'll get updates as their story unfolds. Cancel anytime.
         </p>
         <MagneticS>
           <a href={SPONSOR_URL} target="_blank" rel="noopener noreferrer" className="btn btn-accent" style={{ fontSize: 15 }}>
@@ -73,7 +73,7 @@ function SponsorStart() {
           </a>
         </MagneticS>
         <p style={{ fontSize: 12, color: "var(--ink-3)", marginTop: 14 }}>
-          Secure checkout through Zeffy — 100% of your sponsorship reaches the dogs.
+          Secure checkout through Zeffy. 100% reaches the dogs.
         </p>
         <blockquote className="sp-quote" style={{ marginTop: 32 }}>
           "We cannot do this without you. Together, we can make change happen."
@@ -150,7 +150,7 @@ function SponsorTiers() {
             Every dollar has a <em style={{ color: "var(--purple-400)" }}>job</em>.
           </h2>
           <p style={{ color: "var(--on-dark-2)", fontSize: 15, margin: 0, lineHeight: 1.6 }}>
-            97¢ of every dollar goes directly to dogs. The other 3¢ keeps the lights on. Choose any amount when you sponsor — cancel anytime.
+            97¢ on the dollar goes to the dogs. Pick any amount. Cancel anytime.
           </p>
         </div>
 

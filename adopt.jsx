@@ -57,7 +57,7 @@ function AdoptHeroFilter() {
             Find your next <em>best friend.</em>
           </h1>
           <p style={{ fontSize: 17, color: "var(--on-dark-2)", margin: "0 auto", maxWidth: 560, lineHeight: 1.55 }}>
-            Every dog below was pulled from the meat trade, medically cleared, and is ready to come home. Start with a filter, or scroll the whole family.
+            Pulled from the meat trade. Medically cleared. Ready for a home. Filter for a match, or scroll the whole family.
           </p>
         </div>
 
@@ -222,7 +222,7 @@ function AdoptDirectory() {
         {status === "error" && (
           <DirectoryMessage>
             <div className="display" style={{ fontSize: 22, color: "var(--ink)", margin: "0 0 8px" }}>We couldn't load our dogs just now.</div>
-            <p style={{ color: "var(--ink-2)", fontSize: 14, margin: 0 }}>Please refresh the page in a moment — our adoption list updates live from our shelter system.</p>
+            <p style={{ color: "var(--ink-2)", fontSize: 14, margin: 0 }}>Please refresh the page in a moment. Our adoption list updates live from our shelter system.</p>
           </DirectoryMessage>
         )}
 
@@ -230,7 +230,7 @@ function AdoptDirectory() {
           <DirectoryMessage>
             <div style={{ fontSize: 40, marginBottom: 12 }}>🐾</div>
             <div className="display" style={{ fontSize: 22, color: "var(--ink)", margin: "0 0 8px" }}>No dogs are listed right now.</div>
-            <p style={{ color: "var(--ink-2)", fontSize: 14, margin: "0 0 16px" }}>Every survivor here has found a home — check back soon, or reach out about fostering.</p>
+            <p style={{ color: "var(--ink-2)", fontSize: 14, margin: "0 0 16px" }}>Every survivor here has found a home. Check back soon, or reach out about fostering.</p>
             <a className="btn btn-accent" href="Foster.html">Become a Foster</a>
           </DirectoryMessage>
         )}
@@ -477,8 +477,8 @@ const inputStyle = {
 function AdoptProcess() {
   const steps = [
     { n: "01", t: "Apply", d: "Fill out the application on any dog's profile. Takes 5 minutes." },
-    { n: "02", t: "Meet", d: "We schedule a video or in-person meet-and-greet with your potential match." },
-    { n: "03", t: "Home check", d: "A quick home visit, virtual or in-person, to confirm a safe environment." },
+    { n: "02", t: "Meet", d: "We schedule a video or in person meet and greet with your potential match." },
+    { n: "03", t: "Home check", d: "A quick home visit, virtual or in person, to confirm a safe environment." },
     { n: "04", t: "Welcome home", d: "Sign the adoption agreement, pay the fee, and bring them home. Lifetime support included." },
   ];
   return (
@@ -492,7 +492,7 @@ function AdoptProcess() {
             Four steps, one new family member.
           </h2>
           <p style={{ color: "var(--on-dark-2)", fontSize: 15, margin: 0 }}>
-            Our process is thorough because every survivor deserves a forever match. It usually takes 1 to 3 weeks start to finish.
+            Thorough, because every survivor deserves a forever match. Usually 1 to 3 weeks start to finish.
           </p>
         </div>
         <div className="process-grid">
@@ -516,10 +516,10 @@ function AdoptCTA() {
       <PawS className="paw paw-light" style={{ top: 40, right: "8%", width: 44, height: 44 }} />
       <div className="wrap" style={{ textAlign: "center", maxWidth: 720 }}>
         <h2 className="display" style={{ fontSize: "clamp(32px, 4vw, 56px)", margin: "0 0 16px", color: "var(--ink)" }}>
-          Not ready to adopt, but want to <em style={{ color: "var(--purple-600)" }}>help</em>?
+          Not ready to adopt?
         </h2>
         <p style={{ fontSize: 16, color: "var(--ink-2)", margin: "0 0 28px", lineHeight: 1.6 }}>
-          Fostering, sponsoring, and donating all keep our survivors moving toward their forever homes.
+          Foster, sponsor, donate. Each one keeps a survivor moving home.
         </p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
           <a href="Foster.html" className="btn btn-outline-soft">Become a Foster</a>
