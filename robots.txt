@@ -1,2 +1,4 @@
 User-agent: *
-Disallow: /
+Allow: /
+
+Sitemap: https://run2-rescuedemo.vercel.app/sitemap.xml
