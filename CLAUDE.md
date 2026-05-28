@@ -156,6 +156,41 @@ intended next step.
 
 ---
 
+## Security
+
+The site sends a full set of hardened response headers via `vercel.json`
+(applied at the edge, every request):
+
+- **Content-Security-Policy** restricts script/style/image/font/connect/frame sources
+  to a tight allowlist (self, unpkg, Google Fonts, Shelterluv photo S3, Unsplash,
+  YouTube thumbs, Web3Forms). `frame-ancestors 'none'` blocks anyone iframing the site.
+- **Strict-Transport-Security** with 2-year max-age + `includeSubDomains` + `preload`.
+- **X-Frame-Options: DENY**, **X-Content-Type-Options: nosniff**,
+  **Referrer-Policy: strict-origin-when-cross-origin**, **Cross-Origin-Opener-Policy: same-origin**.
+- **Permissions-Policy** disables camera, microphone, geolocation, payment,
+  USB, motion sensors, and Google's FLoC interest-cohort.
+
+**One unavoidable CSP relaxation:** `script-src` must include `'unsafe-eval'`
+because the site uses Babel-standalone to compile JSX in the browser. If you
+ever move to a build step (Vite, Next.js, esbuild), drop `'unsafe-eval'` from
+the CSP — that's the only payoff of leaving the no-build architecture.
+
+**Embeds:** YouTube iframes use `youtube-nocookie.com` to avoid setting
+tracking cookies before the user clicks play. The `api/animals.js` proxy
+validates Shelterluv-supplied video URLs against the YouTube embed pattern
+before passing them through (defense in depth against malicious upstream data).
+
+**External links:** every `target="_blank"` carries `rel="noopener noreferrer"`
+to block reverse-tabnabbing and avoid leaking the referrer to providers
+(Zeffy, PayPal, Venmo, press outlets, social profiles).
+
+**Secrets:** the only server-side secret is `SHELTERLUV_API_KEY` in Vercel env
+vars. `.env*` is gitignored. The Web3Forms key (when set) is intentionally
+client-side — it's a routing token, not a credential, and is paired with
+Web3Forms' spam/abuse filtering on their end.
+
+---
+
 ## Environment variables (set in Vercel → Project Settings)
 
 | Variable             | Used by          | Notes                                  |

@@ -176,13 +176,21 @@ function extractGoodWith(attrs) {
 function extractVideos(vids) {
   if (!Array.isArray(vids)) return [];
   return vids
-    .map((v) => v && {
-      id: v.VideoId || null,
-      url: v.YoutubeUrl || null,
-      embed: v.EmbedUrl ? (v.EmbedUrl.startsWith("//") ? "https:" + v.EmbedUrl : v.EmbedUrl) : null,
-      thumb: v.ThumbUrl || null,
+    .map((v) => {
+      if (!v || !v.EmbedUrl) return null;
+      let url = v.EmbedUrl.startsWith("//") ? "https:" + v.EmbedUrl : v.EmbedUrl;
+      // Privacy-preserving YouTube domain (no cookies until play)
+      url = url.replace("www.youtube.com", "www.youtube-nocookie.com");
+      // Defense in depth: only allow real YouTube embed URLs through
+      if (!/^https:\/\/www\.youtube(?:-nocookie)?\.com\/embed\//.test(url)) return null;
+      return {
+        id: v.VideoId || null,
+        url: v.YoutubeUrl || null,
+        embed: url,
+        thumb: v.ThumbUrl || null,
+      };
     })
-    .filter((v) => v && v.embed);
+    .filter(Boolean);
 }
 
 function daysSince(unix) {

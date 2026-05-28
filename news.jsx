@@ -68,7 +68,7 @@ function NewsPage() {
             <h2 className="featured-title">{FEATURED.title}</h2>
             <div className="featured-video">
               <iframe
-                src={`https://www.youtube.com/embed/${FEATURED.youtubeId}?rel=0`}
+                src={`https://www.youtube-nocookie.com/embed/${FEATURED.youtubeId}?rel=0`}
                 title={FEATURED.title}
                 loading="lazy"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
