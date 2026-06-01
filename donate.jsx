@@ -1,7 +1,9 @@
 /* Donate page — a "choose how to give" page. The custom UI is the front end;
-   the actual payment happens on the provider (Zeffy / PayPal / Venmo), opened
-   in a new tab. Nothing is embedded. */
-const { useState: dUS } = React;
+   the actual payment happens on the provider (Zeffy / PayPal / Venmo / DAF),
+   opened in a new tab. Nothing is embedded.
+   DAF is an info-only flow: we show the donor our legal name and EIN; they
+   recommend a grant from their DAF provider's portal. */
+const { useState: dUS, useEffect: dUE } = React;
 
 const GIVE = {
   zeffyGeneral:   "https://www.zeffy.com/en-US/donation-form/provide-food-and-medical",
@@ -23,18 +25,21 @@ function DonatePage() {
   );
 }
 
-/* A single giving-method row, styled for the dark "give" section. */
-function GiveRow({ href, name, note, badge }) {
-  return (
-    <a href={href} target="_blank" rel="noopener noreferrer" style={{
-      display: "flex", alignItems: "center", gap: 14, padding: "18px 20px",
-      borderRadius: 14, border: "1.5px solid var(--line-dark)",
-      background: "oklch(0.22 0.04 310 / 0.5)", textDecoration: "none",
-      transition: "border-color .2s ease, background .2s ease",
-    }}
-      onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--purple-400)"; e.currentTarget.style.background = "oklch(0.26 0.05 310 / 0.7)"; }}
-      onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--line-dark)"; e.currentTarget.style.background = "oklch(0.22 0.04 310 / 0.5)"; }}
-    >
+/* A single giving-method row, styled for the dark "give" section.
+   Renders as an anchor when `href` is set, or as a button when `onClick` is set
+   (used by the DAF row, which opens an info popover instead of navigating). */
+function GiveRow({ href, onClick, name, note, badge }) {
+  const baseStyle = {
+    display: "flex", alignItems: "center", gap: 14, padding: "18px 20px",
+    borderRadius: 14, border: "1.5px solid var(--line-dark)",
+    background: "oklch(0.22 0.04 310 / 0.5)", textDecoration: "none",
+    textAlign: "left", width: "100%", cursor: "pointer", font: "inherit",
+    transition: "border-color .2s ease, background .2s ease",
+  };
+  const onEnter = e => { e.currentTarget.style.borderColor = "var(--purple-400)"; e.currentTarget.style.background = "oklch(0.26 0.05 310 / 0.7)"; };
+  const onLeave = e => { e.currentTarget.style.borderColor = "var(--line-dark)"; e.currentTarget.style.background = "oklch(0.22 0.04 310 / 0.5)"; };
+  const inner = (
+    <>
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
           <span style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 17, color: "#fff" }}>{name}</span>
@@ -49,11 +54,78 @@ function GiveRow({ href, name, note, badge }) {
         <div style={{ fontSize: 13, color: "var(--on-dark-2)", marginTop: 4, lineHeight: 1.45 }}>{note}</div>
       </div>
       <span aria-hidden="true" style={{ color: "var(--purple-400)", fontSize: 20, flexShrink: 0 }}>→</span>
+    </>
+  );
+  if (onClick) {
+    return (
+      <button type="button" onClick={onClick} style={baseStyle} onMouseEnter={onEnter} onMouseLeave={onLeave}>
+        {inner}
+      </button>
+    );
+  }
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer" style={baseStyle} onMouseEnter={onEnter} onMouseLeave={onLeave}>
+      {inner}
     </a>
   );
 }
 
+/* Modal opened from the DAF row. We don't integrate with a DAF platform —
+   instead we show the donor our legal name + EIN so they can recommend a grant
+   from any DAF provider's portal (Fidelity Charitable, Schwab, Vanguard, etc.).
+   The legal name is "Run to the Rescue" — without the "2" we use elsewhere. */
+function DafModal({ open, onClose }) {
+  dUE(() => {
+    if (!open) return;
+    const onKey = (e) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
+  }, [open]);
+  if (!open) return null;
+  return (
+    <div className="modal-backdrop" onClick={onClose}>
+      <div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 460 }}>
+        <div style={{ padding: "24px 26px 6px", display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
+          <div style={{ minWidth: 0 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+              <img src="assets/r2r-logo.png" alt="" style={{ width: 30, height: 30 }} />
+              <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--ink-3)" }}>
+                Donor Advised Fund
+              </span>
+            </div>
+            <h3 className="display" style={{ fontSize: 26, margin: 0, color: "var(--ink)" }}>Give from your DAF</h3>
+          </div>
+          <button onClick={onClose} aria-label="Close" style={{ fontSize: 24, color: "var(--ink-3)", lineHeight: 1 }}>×</button>
+        </div>
+        <div style={{ padding: "14px 26px 26px" }}>
+          <p style={{ fontSize: 14, color: "var(--ink-2)", margin: "0 0 14px", lineHeight: 1.55 }}>
+            Your DAF provider can send a grant directly. Use these details when you log into their portal:
+          </p>
+          <div style={{ background: "var(--lav-50)", border: "1px solid var(--line-light)", borderRadius: 12, padding: "16px 18px", marginBottom: 14 }}>
+            <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--ink-3)", marginBottom: 4 }}>Legal name</div>
+            <div style={{ fontFamily: "var(--font-display)", fontSize: 18, fontWeight: 600, color: "var(--ink)" }}>Run to the Rescue</div>
+            <div style={{ fontSize: 11, color: "var(--ink-3)", marginTop: 4, fontStyle: "italic" }}>Note: the "2" is dropped in our IRS filing — use exactly the name above.</div>
+            <div style={{ height: 1, background: "var(--line-light)", margin: "14px 0" }} />
+            <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--ink-3)", marginBottom: 4 }}>EIN</div>
+            <div style={{ fontFamily: "var(--font-mono)", fontSize: 16, fontWeight: 600, color: "var(--ink)" }}>99-4240461</div>
+          </div>
+          <div style={{ fontSize: 13, color: "var(--ink-2)", lineHeight: 1.65, marginBottom: 14 }}>
+            <div><b>1.</b> Log in to your DAF provider (Fidelity Charitable, Schwab Charitable, Vanguard Charitable, etc.).</div>
+            <div><b>2.</b> Recommend a grant using the legal name or EIN above.</div>
+            <div><b>3.</b> We'll receive the gift within 7 to 14 days.</div>
+          </div>
+          <p style={{ fontSize: 12, color: "var(--ink-3)", textAlign: "center", margin: 0, lineHeight: 1.5 }}>
+            Questions? Email <a href="mailto:info@run2therescue.com" style={{ color: "var(--purple-600)" }}>info@run2therescue.com</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function GiveSection() {
+  const [dafOpen, setDafOpen] = dUS(false);
   return (
     <section id="give" style={{ background: "var(--plum-900)", color: "#fff", padding: "80px 0" }}>
       <div className="wrap" style={{ maxWidth: 620 }}>
@@ -63,23 +135,26 @@ function GiveSection() {
             Choose how to <em>give</em>.
           </h2>
           <p style={{ color: "var(--on-dark-2)", fontSize: 16, margin: "0 auto", maxWidth: 500, lineHeight: 1.6 }}>
-            Every path is secure and tax deductible. Card or bank transfer is the only one where 100% of your gift reaches the dogs.
+            Every path is secure and tax deductible. Pick the one that's easiest for you.
           </p>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <GiveRow href={GIVE.zeffyGeneral} name="Card or bank transfer" badge="100% to the dogs"
-            note="Secure checkout. Zeffy covers the fees, so every cent reaches a survivor." />
+          <GiveRow href={GIVE.zeffyGeneral} name="Card or bank transfer"
+            note="Secure checkout through Zeffy. Card, bank, or Apple/Google Pay." />
           <GiveRow href={GIVE.paypal} name="PayPal"
             note="Give with your PayPal balance or a linked card." />
           <GiveRow href={GIVE.venmo} name="Venmo"
             note="Send your gift straight from the Venmo app." />
+          <GiveRow onClick={() => setDafOpen(true)} name="Donor Advised Fund (DAF)"
+            note="Recommend a grant from your DAF using our legal name and EIN." />
         </div>
 
         <p style={{ fontSize: 12, color: "var(--on-dark-3)", marginTop: 18, textAlign: "center" }}>
           Run 2 The Rescue is a 501(c)(3) nonprofit. Your gift is tax deductible. EIN 99-4240461.
         </p>
       </div>
+      <DafModal open={dafOpen} onClose={() => setDafOpen(false)} />
     </section>
   );
 }
@@ -203,7 +278,8 @@ function DonateFAQ() {
     { q: "Is my donation tax deductible?", a: "Yes, Run 2 The Rescue is a 501(c)(3) nonprofit. You'll receive an automatic receipt within minutes of donating. For gifts over $250, the receipt meets IRS substantiation requirements." },
     { q: "How is my money used?", a: "Roughly 72% to direct medical care and food, 18% to transport and foster stipends, and 10% to operations (insurance, software, licensing). Our audited financials are published annually." },
     { q: "Can I cancel my monthly gift?", a: "Anytime. You'll get a management link in every receipt email, or you can reply to any message from us and we'll handle it within one business day." },
-    { q: "Which payment method should I choose?", a: "Card or bank transfer through Zeffy is best. Zeffy is free for nonprofits, so 100% of your gift reaches the dogs. PayPal and Venmo are offered for convenience, but those providers take a small processing fee." },
+    { q: "Which payment method should I choose?", a: "Whichever is easiest for you. Card or bank transfer through Zeffy and DAF grants typically have no processing fee. PayPal and Venmo each take a small percentage. All four are secure and tax deductible." },
+    { q: "Can I give from a Donor Advised Fund?", a: "Yes. Recommend a grant from your DAF provider (Fidelity Charitable, Schwab Charitable, Vanguard Charitable, etc.) using our legal name 'Run to the Rescue' (without the 2) and EIN 99-4240461. We typically receive DAF grants within 7 to 14 days." },
   ];
   return (
     <section style={{ background: "var(--plum-900)", color: "#fff", padding: "96px 0 120px" }}>

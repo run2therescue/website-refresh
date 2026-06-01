@@ -869,6 +869,20 @@ function Testimonials() {
       initials: "M",
       rotate: -1.8,
     },
+    {
+      quote: "Brandy and Bonnie helped us find the perfect dog for our family. We'll be adopting our next one from them too.",
+      name: "Laurie Eisenberg",
+      detail: "Adopted Dash",
+      initials: "L",
+      rotate: 1.4,
+    },
+    {
+      quote: "We've adopted three R2R dogs: Romeo, Olive, and Junebug. Brandy and Bonnie find the right home for every dog.",
+      name: "Greg",
+      detail: "Adopted Romeo, Olive & Junebug",
+      initials: "G",
+      rotate: -1.2,
+    },
     // Future verbatims drop in here.
   ];
   return (

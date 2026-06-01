@@ -4,6 +4,11 @@
 .env.local
 .env*.local
 assets/incoming/
+# Visual QA artifacts from the brand playbook build (not part of the deliverable)
+docs/qa/
+docs/slide-*.jpg
+*.tmp
+.~lock*
 *.mp4
 # Hero + Reality videos are committed (used in production)
 !assets/hero-meadow.mp4

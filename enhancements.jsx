@@ -161,7 +161,7 @@ function ImpactCalc({ onDonate }) {
                 Every dollar has a face.
               </h2>
               <p style={{ color: "var(--on-dark-2)", maxWidth: 420, margin: 0, fontSize: 16 }}>
-                Slide to see what your gift does. 100% goes to rescue, care, and the flight home.
+                Slide to see what your gift does. Every dollar funds rescue, care, and the flight home.
               </p>
             </div>
             <div>

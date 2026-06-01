@@ -73,7 +73,7 @@ function SponsorStart() {
           </a>
         </MagneticS>
         <p style={{ fontSize: 12, color: "var(--ink-3)", marginTop: 14 }}>
-          Secure checkout through Zeffy. 100% reaches the dogs.
+          Secure checkout through Zeffy. Tax deductible. Cancel anytime.
         </p>
         <blockquote className="sp-quote" style={{ marginTop: 32 }}>
           "We cannot do this without you. Together, we can make change happen."
