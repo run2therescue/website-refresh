@@ -1,11 +1,36 @@
 /* Sponsor page — the custom UI (tiers, dog picker) is the pitch; the actual
    monthly sponsorship is completed on Zeffy's hosted form, opened in a new
-   tab. Nothing is embedded. */
+   tab. Nothing is embedded.
+
+   Dog attribution: when a donor picks a dog (e.g. Otto), the Zeffy URL is
+   tagged with `utm_content=otto-<id>`. Zeffy preserves UTM tags on every
+   payment and surfaces them in dashboard exports, so R2R can reconcile each
+   monthly gift back to the dog the donor selected — without any Zeffy form
+   customization required. Amount pre-fills via `?amount=`. */
 
 const { useState: spS } = React;
 
 /* Zeffy hosted sponsorship form (recurring donation). */
 const SPONSOR_URL = "https://www.zeffy.com/en-US/donation-form/help-the-abandoned-dogs-come-home";
+
+/* Lower-case, hyphen-safe slug for utm_content. Strips combining diacritical
+   marks (U+0300–U+036F) so names like "Léa" become "lea". */
+const slugify = (s) => String(s || "")
+  .toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "")
+  .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+
+/* Builds a Zeffy URL tagged for attribution. Both args are optional — if no
+   dog is selected, the URL is still a valid generic sponsorship link. */
+function buildSponsorUrl(dog, amount) {
+  const u = new URL(SPONSOR_URL);
+  u.searchParams.set("utm_source", "r2r-site");
+  u.searchParams.set("utm_campaign", "sponsor");
+  if (dog && dog.slug && dog.id) {
+    u.searchParams.set("utm_content", `${dog.slug}-${dog.id}`);
+  }
+  if (amount) u.searchParams.set("amount", String(amount));
+  return u.toString();
+}
 
 // Three tiers — shown as "where your money goes", not a checkout.
 const TIERS = [
@@ -54,8 +79,14 @@ function SponsorHero() {
   );
 }
 
-/* How it works + the call to action that opens Zeffy's sponsorship form. */
-function SponsorStart() {
+/* How it works + the call to action that opens Zeffy's sponsorship form.
+   When a dog is selected, the CTA reads "Sponsor <Name> monthly" and the
+   Zeffy URL is tagged so we can attribute the gift on our side. */
+function SponsorStart({ selectedDog }) {
+  const ctaHref = buildSponsorUrl(selectedDog, null);
+  const ctaLabel = selectedDog
+    ? <>Sponsor {selectedDog.name} monthly <span className="arrow">→</span></>
+    : <>Start your monthly sponsorship <span className="arrow">→</span></>;
   return (
     <section id="start" className="sponsor-start">
       <PawS className="paw paw-light" style={{ bottom: 24, right: "4%", width: 56, height: 56 }} />
@@ -68,12 +99,14 @@ function SponsorStart() {
           Pick any monthly amount. It goes straight to your survivor's food, vet care, and foster costs. You'll get updates as their story unfolds. Cancel anytime.
         </p>
         <MagneticS>
-          <a href={SPONSOR_URL} target="_blank" rel="noopener noreferrer" className="btn btn-accent" style={{ fontSize: 15 }}>
-            Start your monthly sponsorship <span className="arrow">→</span>
+          <a href={ctaHref} target="_blank" rel="noopener noreferrer" className="btn btn-accent" style={{ fontSize: 15 }}>
+            {ctaLabel}
           </a>
         </MagneticS>
         <p style={{ fontSize: 12, color: "var(--ink-3)", marginTop: 14 }}>
-          Secure checkout through Zeffy. Tax deductible. Cancel anytime.
+          {selectedDog
+            ? <>Your gift will be tagged for <strong style={{ color: "var(--purple-700)" }}>{selectedDog.name}</strong> so we route it to him on our end.</>
+            : <>Secure checkout through Zeffy. Tax deductible. Cancel anytime.</>}
         </p>
         <blockquote className="sp-quote" style={{ marginTop: 32 }}>
           "We cannot do this without you. Together, we can make change happen."
@@ -83,16 +116,30 @@ function SponsorStart() {
   );
 }
 
-/* Picker — dogs come live from Shelterluv; a showcase that points visitors
-   back up to the sponsorship call to action. */
-function SponsorPicker({ animals, status, selected, setSelected, onChoose }) {
+/* Picker — dogs come live from Shelterluv. Selecting a dog highlights its
+   card and reveals an inline confirmation panel directly below the grid,
+   wired straight to a Zeffy URL tagged for that specific dog. Picking a dog
+   is encouraged but not required: the page works fine without a selection. */
+function SponsorPicker({ animals, status, selectedDog, setSelectedDog }) {
   const dogs = animals.map((a) => ({
     id: a.id,
     name: a.name,
+    slug: slugify(a.name),
     meta: [a.breed, a.ageGroup].filter(Boolean).join(" · "),
     img: a.cover,
   }));
-  const choose = (id) => { setSelected(id); onChoose(); };
+  const choose = (d) => {
+    // Toggle off if the user re-clicks the already-selected card.
+    if (selectedDog && selectedDog.id === d.id) { setSelectedDog(null); return; }
+    setSelectedDog({ id: d.id, name: d.name, slug: d.slug });
+  };
+  const scrollToTiers = () => {
+    const el = document.getElementById("tiers");
+    if (el) {
+      const top = el.getBoundingClientRect().top + window.pageYOffset - 20;
+      window.scrollTo({ top, behavior: "smooth" });
+    }
+  };
   return (
     <section id="pick" className="sponsor-picker">
       <PawS className="paw paw-light" style={{ top: 40, right: "5%", width: 48, height: 48 }} />
@@ -103,7 +150,7 @@ function SponsorPicker({ animals, status, selected, setSelected, onChoose }) {
             Every sponsorship reaches a <em style={{ color: "var(--purple-600)" }}>real dog</em>.
           </h2>
           <p style={{ color: "var(--ink-2)", fontSize: 14, margin: 0 }}>
-            These survivors are waiting right now. Pick one to keep in mind, then start your monthly gift.
+            Tap a survivor below to pair your monthly gift with them. Your gift goes to your dog on our end.
           </p>
         </div>
         {status === "error" ? (
@@ -113,7 +160,10 @@ function SponsorPicker({ animals, status, selected, setSelected, onChoose }) {
         ) : (
           <div className="pick-grid">
             {dogs.map((d) => (
-              <button key={d.id} className={`pick-card ${selected === d.id ? "sel" : ""}`} onClick={() => choose(d.id)}>
+              <button key={d.id}
+                className={`pick-card ${selectedDog && selectedDog.id === d.id ? "sel" : ""}`}
+                aria-pressed={!!(selectedDog && selectedDog.id === d.id)}
+                onClick={() => choose(d)}>
                 <div className="img">
                   {d.img
                     ? <ImgS src={d.img} alt={d.name} />
@@ -130,14 +180,42 @@ function SponsorPicker({ animals, status, selected, setSelected, onChoose }) {
         {status === "loading" && (
           <p style={{ textAlign: "center", color: "var(--ink-3)", fontSize: 13, marginTop: 16 }}>Loading our survivors…</p>
         )}
+
+        {/* Inline confirmation — appears below the grid the moment a dog is
+            picked. Primary action goes straight to Zeffy at the featured tier;
+            secondary scrolls to all tiers for amount choice. */}
+        {selectedDog && (
+          <div className="sp-pick-confirm" role="region" aria-label={`Sponsoring ${selectedDog.name}`}>
+            <div className="sp-pc-left">
+              <span className="sp-pc-check" aria-hidden="true">✓</span>
+              <div>
+                <div className="sp-pc-eyebrow">Sponsoring</div>
+                <div className="sp-pc-name">{selectedDog.name}</div>
+              </div>
+            </div>
+            <div className="sp-pc-actions">
+              <a href={buildSponsorUrl(selectedDog, 35)} target="_blank" rel="noopener noreferrer"
+                 className="btn btn-accent sp-pc-primary">
+                Sponsor {selectedDog.name} at $35/mo <span className="arrow">→</span>
+              </a>
+              <button type="button" onClick={scrollToTiers} className="sp-pc-secondary">
+                Choose a different amount ↓
+              </button>
+            </div>
+            <button type="button" onClick={() => setSelectedDog(null)}
+                    className="sp-pc-clear" aria-label="Clear selection">×</button>
+          </div>
+        )}
       </div>
     </section>
   );
 }
 
 /* "Where your money goes" — the three tiers. Each card links to the
-   sponsorship form; the donor chooses any amount there. */
-function SponsorTiers() {
+   sponsorship form; the donor chooses any amount there. When a dog is
+   selected, the tier buttons read "Sponsor <Name> at $X/mo" and the Zeffy
+   URL is tagged with the dog's slug + id. */
+function SponsorTiers({ selectedDog }) {
   return (
     <section id="tiers" className="section-dark sp-tiers" style={{ padding: "84px 0", position: "relative", overflow: "hidden" }}>
       <PawS className="paw paw-dark" style={{ top: 40, left: "4%", width: 48, height: 48 }} />
@@ -147,7 +225,9 @@ function SponsorTiers() {
         <div style={{ textAlign: "center", maxWidth: 680, margin: "0 auto" }}>
           <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 12 }}>✦ Where your money goes</div>
           <h2 className="display" style={{ fontSize: "clamp(30px, 4.2vw, 52px)", margin: "0 0 12px", color: "#fff" }}>
-            Every dollar has a <em style={{ color: "var(--purple-400)" }}>job</em>.
+            {selectedDog
+              ? <>Pick a monthly amount for <em style={{ color: "var(--purple-400)" }}>{selectedDog.name}</em>.</>
+              : <>Every dollar has a <em style={{ color: "var(--purple-400)" }}>job</em>.</>}
           </h2>
           <p style={{ color: "var(--on-dark-2)", fontSize: 15, margin: 0, lineHeight: 1.6 }}>
             97¢ on the dollar goes to the dogs. Pick any amount. Cancel anytime.
@@ -158,7 +238,7 @@ function SponsorTiers() {
           {TIERS.map(t => (
             <a
               key={t.id}
-              href={SPONSOR_URL}
+              href={buildSponsorUrl(selectedDog, t.price)}
               target="_blank"
               rel="noopener noreferrer"
               className={`sp-tier ${t.featured ? "featured" : ""} reveal`}
@@ -181,7 +261,9 @@ function SponsorTiers() {
               </ul>
 
               <span className="btn btn-accent sp-tier-btn">
-                Sponsor at ${t.price}/mo <span className="arrow">→</span>
+                {selectedDog
+                  ? <>Sponsor {selectedDog.name} at ${t.price}/mo <span className="arrow">→</span></>
+                  : <>Sponsor at ${t.price}/mo <span className="arrow">→</span></>}
               </span>
             </a>
           ))}
@@ -194,22 +276,17 @@ function SponsorTiers() {
 function SponsorPage() {
   const { status, animals } = useAnimalsS();
   const available = animals.filter((a) => a.available !== false);
+  // selectedDog: null | { id, name, slug } — carried through to every CTA on
+  // the page so the donor's chosen survivor is reflected and tagged in Zeffy.
   const [selectedDog, setSelectedDog] = spS(null);
-
-  const scrollToStart = () => {
-    const el = document.getElementById("start");
-    if (el) {
-      const top = el.getBoundingClientRect().top + window.pageYOffset - 20;
-      window.scrollTo({ top, behavior: "smooth" });
-    }
-  };
 
   return (
     <>
       <SponsorHero />
-      <SponsorStart />
-      <SponsorPicker animals={available} status={status} selected={selectedDog} setSelected={setSelectedDog} onChoose={scrollToStart} />
-      <SponsorTiers />
+      <SponsorStart selectedDog={selectedDog} />
+      <SponsorPicker animals={available} status={status}
+        selectedDog={selectedDog} setSelectedDog={setSelectedDog} />
+      <SponsorTiers selectedDog={selectedDog} />
     </>
   );
 }

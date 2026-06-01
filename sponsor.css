@@ -270,3 +270,107 @@
   background: var(--purple-500);
   border-color: var(--purple-500);
 }
+
+/* ---------- Sponsor-pick confirmation (appears below the dog grid) ----------
+   Inline panel that surfaces once a survivor is selected. Holds the primary
+   one-tap Zeffy link at the featured tier amount, plus an option to choose a
+   different amount (scrolls to tiers). Dismissible via the × button. */
+.sp-pick-confirm {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 22px;
+  margin: 28px auto 0;
+  max-width: 760px;
+  padding: 18px 22px 18px 18px;
+  background: var(--purple-soft);
+  border: 1.5px solid var(--purple-300, var(--purple-400));
+  border-radius: 18px;
+  box-shadow: 0 8px 28px -16px rgba(120, 60, 200, 0.35);
+  animation: spPcIn .35s cubic-bezier(.2,.7,.2,1.05) both;
+}
+@keyframes spPcIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.sp-pc-left {
+  display: flex; align-items: center; gap: 14px;
+  min-width: 0;
+}
+.sp-pc-check {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--purple-500); color: #fff;
+  font-size: 18px; font-weight: 700;
+  flex-shrink: 0;
+}
+.sp-pc-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--purple-700);
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.sp-pc-name {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+.sp-pc-actions {
+  display: flex; align-items: center; gap: 14px;
+  justify-self: end;
+  flex-wrap: wrap;
+}
+.sp-pc-primary {
+  padding: 12px 20px;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.sp-pc-secondary {
+  background: transparent;
+  border: 0;
+  color: var(--purple-700);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 0;
+  border-bottom: 1px solid transparent;
+  transition: border-color .2s ease, color .2s ease;
+}
+.sp-pc-secondary:hover {
+  color: var(--purple-800, var(--purple-700));
+  border-bottom-color: var(--purple-500);
+}
+.sp-pc-clear {
+  position: absolute; top: 8px; right: 10px;
+  width: 24px; height: 24px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: transparent; border: 0;
+  color: var(--ink-3);
+  font-size: 18px; line-height: 1;
+  cursor: pointer; border-radius: 50%;
+  transition: background .2s ease, color .2s ease;
+}
+.sp-pc-clear:hover { background: rgba(120, 60, 200, 0.12); color: var(--ink); }
+
+@media (max-width: 720px) {
+  .sp-pick-confirm {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 18px 18px 20px;
+  }
+  .sp-pc-actions { justify-self: stretch; flex-direction: column; align-items: stretch; gap: 10px; }
+  .sp-pc-primary { justify-content: center; width: 100%; }
+  .sp-pc-secondary { text-align: center; }
+}
