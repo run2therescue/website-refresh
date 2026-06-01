@@ -352,18 +352,11 @@ function Feature() {
             <h2 className="display" style={{ fontSize: "clamp(34px, 4.4vw, 56px)", margin: "0 0 16px", color: "var(--ink)" }}>
               Meet Kronk
             </h2>
-            <p style={{ fontSize: 15, color: "var(--ink-2)", marginBottom: 16, maxWidth: 480 }}>
-              Want an easy (and free) way to help courageous souls escaping the dog meat trade in East Asia? Vote for Kronk on America's Favorite Pet. If Kronk wins, the <b style={{ color: "var(--ink)" }}>$10,000 prize</b> goes to Run 2 The Rescue to save and heal more dogs like him.
+            <p style={{ fontSize: 15, color: "var(--ink-2)", marginBottom: 22, maxWidth: 480, lineHeight: 1.65 }}>
+              Pulled from a holding pen in Yulin, Kronk now leaps through fresh snow a world away — proof of what a second chance makes possible. His journey from the meat trade to a life of joy caught the eye of <b style={{ color: "var(--ink)" }}>People Magazine</b>.
             </p>
-            <div style={{
-              borderLeft: "3px solid var(--purple-500)", paddingLeft: 14, marginBottom: 22,
-              fontSize: 13, fontStyle: "italic", color: "var(--ink-2)",
-            }}>
-              Free daily vote available; additional votes can be made via donation through the contest.
-            </div>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-              <a href="https://americasfavpet.com/" target="_blank" rel="noopener noreferrer" className="btn btn-accent">Vote for Kronk</a>
-              <a href="News.html" className="btn btn-outline-dark" style={{ borderColor: "var(--line-light)", color: "var(--ink-2)" }}>Read Kronk's Story →</a>
+              <a href="News.html" className="btn btn-accent">Read Kronk's Story <span className="arrow">→</span></a>
             </div>
           </div>
         </div>
@@ -886,11 +879,11 @@ function Testimonials() {
     // Future verbatims drop in here.
   ];
   return (
-    <section className="section-light" style={{ padding: "88px 0", position: "relative", overflow: "hidden" }}>
+    <section className="section-light" style={{ padding: "64px 0", position: "relative", overflow: "hidden" }}>
       <Paw className="paw-light" style={{ top: 44, left: "5%", width: 42, height: 42 }} />
       <Paw className="paw-light" style={{ bottom: 40, right: "6%", width: 50, height: 50 }} />
       <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
-        <div style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 48px" }}>
+        <div style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 36px" }}>
           <div className="eyebrow" style={{ justifyContent: "center", marginBottom: 14, color: "var(--ink-3)" }}>
             <span style={{ color: "var(--purple-500)" }}>✦ </span>From families who said yes
           </div>
@@ -898,60 +891,61 @@ function Testimonials() {
             A second chance, in their own words
           </h2>
         </div>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 30, justifyContent: "center", alignItems: "flex-start" }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 18, justifyContent: "center", alignItems: "stretch" }}>
           {quotes.map((q, i) => (
             <figure key={i} className="reveal" style={{
-              position: "relative", flex: "1 1 360px", maxWidth: 440, margin: 0,
-              background: "var(--lav-200)", borderRadius: 28, padding: "44px 34px 30px",
-              transform: `rotate(${q.rotate}deg)`,
-              boxShadow: "0 2px 6px oklch(0.4 0.06 310 / 0.07), 0 16px 36px oklch(0.4 0.06 310 / 0.11)",
+              position: "relative", flex: "1 1 230px", maxWidth: 300, margin: 0,
+              display: "flex", flexDirection: "column",
+              background: "var(--lav-200)", borderRadius: 20, padding: "28px 22px 22px",
+              transform: `rotate(${q.rotate * 0.45}deg)`,
+              boxShadow: "0 2px 6px oklch(0.4 0.06 310 / 0.07), 0 12px 28px oklch(0.4 0.06 310 / 0.10)",
             }}>
               <span aria-hidden="true" className="display" style={{
-                position: "absolute", top: 8, left: 26, fontSize: 110, lineHeight: 1,
+                position: "absolute", top: 6, left: 18, fontSize: 64, lineHeight: 1,
                 fontWeight: 800, color: "var(--purple-400)", opacity: 0.3,
               }}>&ldquo;</span>
               <span aria-hidden="true" style={{
-                position: "absolute", left: 48, bottom: -12, width: 26, height: 26,
-                background: "var(--lav-200)", transform: "rotate(45deg)", borderRadius: 5,
+                position: "absolute", left: 34, bottom: -9, width: 19, height: 19,
+                background: "var(--lav-200)", transform: "rotate(45deg)", borderRadius: 4,
               }} />
               <blockquote style={{
                 position: "relative", fontFamily: "var(--font-display)", fontWeight: 500,
-                fontSize: "clamp(19px, 1.9vw, 24px)", lineHeight: 1.5, color: "var(--ink)",
-                margin: "30px 0 28px",
+                fontSize: "clamp(14px, 1.15vw, 16px)", lineHeight: 1.45, color: "var(--ink)",
+                margin: "20px 0 18px", flex: 1,
               }}>{q.quote}</blockquote>
-              <figcaption style={{ display: "flex", alignItems: "center", gap: 13 }}>
+              <figcaption style={{ display: "flex", alignItems: "center", gap: 10 }}>
                 <span style={{
-                  width: 46, height: 46, borderRadius: "50%", flexShrink: 0,
+                  width: 36, height: 36, borderRadius: "50%", flexShrink: 0,
                   background: "var(--purple-500)", color: "#fff",
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 19,
+                  fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 15,
                 }}>{q.initials}</span>
-                <span style={{ display: "flex", flexDirection: "column", gap: 2, textAlign: "left" }}>
-                  <span style={{ fontWeight: 600, fontSize: 15, color: "var(--ink)" }}>{q.name}</span>
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--purple-600)" }}>{q.detail}</span>
+                <span style={{ display: "flex", flexDirection: "column", gap: 1, textAlign: "left" }}>
+                  <span style={{ fontWeight: 600, fontSize: 13, color: "var(--ink)" }}>{q.name}</span>
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 9.5, letterSpacing: "0.07em", textTransform: "uppercase", color: "var(--purple-600)" }}>{q.detail}</span>
                 </span>
               </figcaption>
             </figure>
           ))}
           <button type="button" onClick={() => setStoryOpen(true)} className="reveal" style={{
-            flex: "1 1 360px", maxWidth: 440, minHeight: 236, boxSizing: "border-box",
-            border: "2px dashed var(--purple-400)", borderRadius: 28, background: "transparent",
-            padding: "40px 34px", transform: "rotate(1.6deg)", cursor: "pointer",
+            flex: "1 1 230px", maxWidth: 300, boxSizing: "border-box",
+            border: "2px dashed var(--purple-400)", borderRadius: 20, background: "transparent",
+            padding: "26px 22px", transform: "rotate(0.7deg)", cursor: "pointer",
             font: "inherit", textAlign: "left",
-            display: "flex", flexDirection: "column", justifyContent: "center", gap: 10,
+            display: "flex", flexDirection: "column", justifyContent: "center", gap: 8,
             transition: "background .2s ease, border-color .2s ease",
           }}
             onMouseEnter={e => { e.currentTarget.style.background = "oklch(0.92 0.05 305 / 0.45)"; }}
             onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
           >
-            <span aria-hidden="true" className="display" style={{ fontSize: 60, lineHeight: 0.6, color: "var(--purple-400)" }}>&ldquo;</span>
-            <span className="display" style={{ fontSize: "clamp(20px, 2vw, 26px)", color: "var(--ink)" }}>
+            <span aria-hidden="true" className="display" style={{ fontSize: 44, lineHeight: 0.6, color: "var(--purple-400)" }}>&ldquo;</span>
+            <span className="display" style={{ fontSize: "clamp(17px, 1.4vw, 20px)", color: "var(--ink)" }}>
               Adopted from R2TR?
             </span>
-            <span style={{ fontSize: 14, color: "var(--ink-2)", lineHeight: 1.55 }}>
+            <span style={{ fontSize: 12.5, color: "var(--ink-2)", lineHeight: 1.5 }}>
               We'd love to add your story here. Tell us how your survivor is settling in.
             </span>
-            <span style={{ marginTop: 4, fontWeight: 600, fontSize: 14, color: "var(--purple-600)" }}>Share your story →</span>
+            <span style={{ marginTop: 2, fontWeight: 600, fontSize: 13, color: "var(--purple-600)" }}>Share your story →</span>
           </button>
         </div>
       </div>
