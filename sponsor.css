@@ -441,6 +441,45 @@
   letter-spacing: -0.02em;
   line-height: 1.05;
 }
+/* In-modal amount chips — the donor confirms the monthly amount right in the
+   pop-up before the Zeffy hand-off. */
+.sp-confirm-amounts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 2px;
+}
+.sp-confirm-chip {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 12px 8px;
+  background: #fff;
+  border: 1.5px solid var(--line-light);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: border-color .18s ease, background .18s ease, box-shadow .18s ease, transform .12s ease;
+}
+.sp-confirm-chip:hover { border-color: var(--purple-300, var(--purple-400)); transform: translateY(-1px); }
+.sp-confirm-chip.sel {
+  border-color: var(--purple-500);
+  background: var(--purple-soft);
+  box-shadow: 0 0 0 3px var(--purple-soft);
+}
+.sp-confirm-chip-amt {
+  font-family: var(--font-display);
+  font-size: 19px; font-weight: 700; color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.sp-confirm-chip.sel .sp-confirm-chip-amt { color: var(--purple-700); }
+.sp-confirm-chip-amt .per {
+  font-family: var(--font-ui); font-size: 11px; font-weight: 500;
+  color: var(--ink-3); margin-left: 1px;
+}
+.sp-confirm-chip-note {
+  font-family: var(--font-mono); font-size: 9px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--ink-3); font-weight: 600; text-align: center; line-height: 1.3;
+}
+
 .sp-confirm-card {
   background: var(--lav-50);
   border: 1px solid var(--line-light);
