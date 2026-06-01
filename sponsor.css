@@ -374,3 +374,148 @@
   .sp-pc-primary { justify-content: center; width: 100%; }
   .sp-pc-secondary { text-align: center; }
 }
+
+/* ---------- Sponsor confirm modal ----------
+   The "moment" between picking a dog+amount and the Zeffy handoff. Big dog
+   photo, amount summary, Zeffy-handoff explanation, one continue CTA. This
+   collapses the old WordPress "pay-then-fill-a-form" flow into one moment. */
+.modal.sp-confirm {
+  max-width: 480px;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+}
+.sp-confirm-close {
+  position: absolute; top: 12px; right: 14px;
+  width: 32px; height: 32px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.85); backdrop-filter: blur(4px);
+  border: 0; border-radius: 50%;
+  font-size: 22px; line-height: 1; color: var(--ink-2);
+  cursor: pointer;
+  z-index: 2;
+  transition: background .2s ease, color .2s ease;
+}
+.sp-confirm-close:hover { background: #fff; color: var(--ink); }
+.sp-confirm-photo {
+  position: relative;
+  width: 100%; aspect-ratio: 16/9;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--lav-100), var(--lav-200));
+}
+.sp-confirm-photo img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  display: block;
+}
+.sp-confirm-photo::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0;
+  height: 36px;
+  background: linear-gradient(180deg, transparent, rgba(255,255,255,0.85));
+  pointer-events: none;
+}
+.sp-confirm-photo-fallback {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 56px;
+}
+.sp-confirm-body {
+  padding: 18px 28px 28px;
+  display: flex; flex-direction: column;
+  gap: 14px;
+}
+.sp-confirm-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--purple-700);
+  font-weight: 600;
+  margin-bottom: -6px;
+}
+.sp-confirm-title {
+  font-size: 32px;
+  margin: 0;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+.sp-confirm-card {
+  background: var(--lav-50);
+  border: 1px solid var(--line-light);
+  border-radius: 14px;
+  padding: 12px 16px;
+  margin-top: 4px;
+}
+.sp-confirm-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 8px 0;
+}
+.sp-confirm-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 600;
+}
+.sp-confirm-val {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.sp-confirm-amt {
+  font-size: 22px;
+  color: var(--purple-700);
+  letter-spacing: -0.01em;
+}
+.sp-confirm-amt .per {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-3);
+  margin-left: 2px;
+}
+.sp-confirm-divider {
+  height: 1px;
+  background: var(--line-light);
+}
+.sp-confirm-handoff {
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 1.55;
+  margin: 4px 0 0;
+}
+.sp-confirm-cta {
+  width: 100%;
+  justify-content: center;
+  padding: 16px 24px;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+  margin-top: 4px;
+}
+.sp-confirm-back {
+  background: transparent;
+  border: 0;
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 0;
+  align-self: center;
+  transition: color .2s ease;
+}
+.sp-confirm-back:hover { color: var(--ink); }
+
+@media (max-width: 520px) {
+  .modal.sp-confirm { max-width: calc(100% - 24px); }
+  .sp-confirm-body { padding: 16px 22px 24px; }
+  .sp-confirm-title { font-size: 26px; }
+  .sp-confirm-photo { aspect-ratio: 16/10; }
+}

@@ -8,7 +8,7 @@
    monthly gift back to the dog the donor selected — without any Zeffy form
    customization required. Amount pre-fills via `?amount=`. */
 
-const { useState: spS } = React;
+const { useState: spS, useEffect: spE } = React;
 
 /* Zeffy hosted sponsorship form (recurring donation). */
 const SPONSOR_URL = "https://www.zeffy.com/en-US/donation-form/help-the-abandoned-dogs-come-home";
@@ -30,6 +30,66 @@ function buildSponsorUrl(dog, amount) {
   }
   if (amount) u.searchParams.set("amount", String(amount));
   return u.toString();
+}
+
+/* Sponsor confirmation modal — the moment between "Sponsor Duncan at $35"
+   and the Zeffy handoff. Shows the dog's photo + amount, sets expectations
+   for the secure checkout, then opens Zeffy in a new tab. Compared to the
+   old live site (which required a separate post-payment form to match the
+   donor to a dog), this collapses everything into one continuous moment. */
+function SponsorConfirmModal({ open, dog, amount, onClose }) {
+  spE(() => {
+    if (!open) return;
+    const onKey = (e) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
+  }, [open]);
+  if (!open || !dog) return null;
+  const url = buildSponsorUrl(dog, amount);
+  return (
+    <div className="modal-backdrop" onClick={onClose}>
+      <div className="modal sp-confirm" onClick={(e) => e.stopPropagation()}>
+        <button onClick={onClose} aria-label="Close" className="sp-confirm-close">×</button>
+        <div className="sp-confirm-photo">
+          {dog.photo
+            ? <img src={dog.photo} alt={dog.name} />
+            : <div className="sp-confirm-photo-fallback" aria-hidden="true">🐾</div>}
+        </div>
+        <div className="sp-confirm-body">
+          <div className="sp-confirm-eyebrow">You're about to be {dog.name}'s</div>
+          <h3 className="display sp-confirm-title">Sponsor Angel</h3>
+          <div className="sp-confirm-card">
+            <div className="sp-confirm-row">
+              <span className="sp-confirm-label">Survivor</span>
+              <span className="sp-confirm-val">{dog.name}</span>
+            </div>
+            <div className="sp-confirm-divider" />
+            <div className="sp-confirm-row">
+              <span className="sp-confirm-label">Monthly gift</span>
+              <span className="sp-confirm-val sp-confirm-amt">${amount}<span className="per">/mo</span></span>
+            </div>
+            <div className="sp-confirm-divider" />
+            <div className="sp-confirm-row">
+              <span className="sp-confirm-label">Frequency</span>
+              <span className="sp-confirm-val">Monthly · cancel anytime</span>
+            </div>
+          </div>
+          <p className="sp-confirm-handoff">
+            Our payment partner is <strong>Zeffy</strong>. They process recurring donations securely and fee free, so your full gift reaches {dog.name}. Your gift will be tagged for {dog.name} on our end.
+          </p>
+          <a href={url} target="_blank" rel="noopener noreferrer"
+             onClick={() => { setTimeout(onClose, 200); }}
+             className="btn btn-accent sp-confirm-cta">
+            Continue to secure checkout <span className="arrow">→</span>
+          </a>
+          <button type="button" onClick={onClose} className="sp-confirm-back">
+            ← Change my mind
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 // Three tiers — shown as "where your money goes", not a checkout.
@@ -120,7 +180,7 @@ function SponsorStart({ selectedDog }) {
    card and reveals an inline confirmation panel directly below the grid,
    wired straight to a Zeffy URL tagged for that specific dog. Picking a dog
    is encouraged but not required: the page works fine without a selection. */
-function SponsorPicker({ animals, status, selectedDog, setSelectedDog }) {
+function SponsorPicker({ animals, status, selectedDog, setSelectedDog, onSponsor }) {
   const dogs = animals.map((a) => ({
     id: a.id,
     name: a.name,
@@ -131,7 +191,7 @@ function SponsorPicker({ animals, status, selectedDog, setSelectedDog }) {
   const choose = (d) => {
     // Toggle off if the user re-clicks the already-selected card.
     if (selectedDog && selectedDog.id === d.id) { setSelectedDog(null); return; }
-    setSelectedDog({ id: d.id, name: d.name, slug: d.slug });
+    setSelectedDog({ id: d.id, name: d.name, slug: d.slug, photo: d.img });
   };
   const scrollToTiers = () => {
     const el = document.getElementById("tiers");
@@ -195,6 +255,7 @@ function SponsorPicker({ animals, status, selectedDog, setSelectedDog }) {
             </div>
             <div className="sp-pc-actions">
               <a href={buildSponsorUrl(selectedDog, 35)} target="_blank" rel="noopener noreferrer"
+                 onClick={(e) => { e.preventDefault(); onSponsor(selectedDog, 35); }}
                  className="btn btn-accent sp-pc-primary">
                 Sponsor {selectedDog.name} at $35/mo <span className="arrow">→</span>
               </a>
@@ -215,7 +276,7 @@ function SponsorPicker({ animals, status, selectedDog, setSelectedDog }) {
    sponsorship form; the donor chooses any amount there. When a dog is
    selected, the tier buttons read "Sponsor <Name> at $X/mo" and the Zeffy
    URL is tagged with the dog's slug + id. */
-function SponsorTiers({ selectedDog }) {
+function SponsorTiers({ selectedDog, onSponsor }) {
   return (
     <section id="tiers" className="section-dark sp-tiers" style={{ padding: "84px 0", position: "relative", overflow: "hidden" }}>
       <PawS className="paw paw-dark" style={{ top: 40, left: "4%", width: 48, height: 48 }} />
@@ -241,6 +302,7 @@ function SponsorTiers({ selectedDog }) {
               href={buildSponsorUrl(selectedDog, t.price)}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={selectedDog ? (e) => { e.preventDefault(); onSponsor(selectedDog, t.price); } : undefined}
               className={`sp-tier ${t.featured ? "featured" : ""} reveal`}
             >
               {t.featured && <span className="sp-tier-badge">Most popular</span>}
@@ -276,17 +338,31 @@ function SponsorTiers({ selectedDog }) {
 function SponsorPage() {
   const { status, animals } = useAnimalsS();
   const available = animals.filter((a) => a.available !== false);
-  // selectedDog: null | { id, name, slug } — carried through to every CTA on
-  // the page so the donor's chosen survivor is reflected and tagged in Zeffy.
+  // selectedDog: null | { id, name, slug, photo } — carried through to every
+  // CTA on the page so the donor's chosen survivor is reflected and tagged.
   const [selectedDog, setSelectedDog] = spS(null);
+  // confirm: null | { dog, amount } — drives the SponsorConfirmModal. The
+  // modal opens when both dog and amount are picked (inline panel or tier
+  // button) and closes either when the donor cancels or after the Zeffy
+  // checkout link is opened. The generic "Start" CTA does not route through
+  // the modal because there's no specific amount to confirm.
+  const [confirm, setConfirm] = spS(null);
+  const onSponsor = (dog, amount) => setConfirm({ dog, amount });
+  const closeConfirm = () => setConfirm(null);
 
   return (
     <>
       <SponsorHero />
       <SponsorStart selectedDog={selectedDog} />
       <SponsorPicker animals={available} status={status}
-        selectedDog={selectedDog} setSelectedDog={setSelectedDog} />
-      <SponsorTiers selectedDog={selectedDog} />
+        selectedDog={selectedDog} setSelectedDog={setSelectedDog}
+        onSponsor={onSponsor} />
+      <SponsorTiers selectedDog={selectedDog} onSponsor={onSponsor} />
+      <SponsorConfirmModal
+        open={!!confirm}
+        dog={confirm && confirm.dog}
+        amount={confirm && confirm.amount}
+        onClose={closeConfirm} />
     </>
   );
 }
