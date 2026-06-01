@@ -128,29 +128,6 @@ function SponsorConfirmModal({ open, dog, amount, onClose }) {
   );
 }
 
-// Three tiers — shown as "where your money goes", not a checkout.
-const TIERS = [
-  {
-    id: "paw", name: "Paw", price: 15,
-    headline: "feeds a dog for a week",
-    desc: "Premium kibble + supplements to rebuild strength after rescue.",
-    includes: ["Monthly photo update", "Sticker pack", "Name on our wall"],
-  },
-  {
-    id: "heart", name: "Heart", price: 35,
-    headline: "covers vaccines & meds",
-    desc: "Full vaccine series, flea/tick, and heartworm prevention for one survivor.",
-    includes: ["Everything in Paw", "Quarterly handwritten letter", "Adoption day photo"],
-    featured: true,
-  },
-  {
-    id: "lifeline", name: "Lifeline", price: 150,
-    headline: "flies a dog home",
-    desc: "An international flight from Seoul or Shanghai to JFK or LAX.",
-    includes: ["Quarterly foster home visit video", "Live video call with your dog", "Recognition on our homepage"],
-  },
-];
-
 function SponsorHero() {
   return (
     <header className="sponsor-hero">
@@ -168,7 +145,7 @@ function SponsorHero() {
         </p>
         <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 16 }}>
           <MagneticS><a href="#pick" className="btn btn-accent">Meet the survivors <span className="arrow">→</span></a></MagneticS>
-          <a href="#tiers" className="btn btn-outline-light">See where money goes</a>
+          <a href="#start" className="btn btn-outline-light">How it works</a>
         </div>
       </div>
     </header>
@@ -200,7 +177,7 @@ function SponsorStart({ selectedDog, onSponsor }) {
               {ctaLabel}
             </button>
           ) : (
-            <a href="#pick" className="btn btn-accent" style={{ fontSize: 15 }}>
+            <a href={ctaHref} target="_blank" rel="noopener noreferrer" className="btn btn-accent" style={{ fontSize: 15 }}>
               {ctaLabel}
             </a>
           )}
@@ -273,89 +250,8 @@ function SponsorPicker({ animals, status, selectedDog, setSelectedDog, onSponsor
         {status === "loading" && (
           <p style={{ textAlign: "center", color: "var(--ink-3)", fontSize: 13, marginTop: 16 }}>Loading our survivors…</p>
         )}
-
-        {/* Slim reminder bar — the modal has already popped; this is just a
-            persistent way to re-open it or clear the selection. */}
-        {selectedDog && (
-          <div className="sp-pick-confirm" role="region" aria-label={`Sponsoring ${selectedDog.name}`}>
-            <div className="sp-pc-left">
-              <span className="sp-pc-check" aria-hidden="true">✓</span>
-              <div>
-                <div className="sp-pc-eyebrow">Sponsoring</div>
-                <div className="sp-pc-name">{selectedDog.name}</div>
-              </div>
-            </div>
-            <div className="sp-pc-actions">
-              <button type="button" onClick={() => onSponsor(selectedDog, 35)} className="btn btn-accent sp-pc-primary">
-                Continue <span className="arrow">→</span>
-              </button>
-            </div>
-            <button type="button" onClick={() => setSelectedDog(null)}
-                    className="sp-pc-clear" aria-label="Clear selection">×</button>
-          </div>
-        )}
-      </div>
-    </section>
-  );
-}
-
-/* "Where your money goes" — the three tiers. With a dog selected, clicking a
-   tier opens the confirm modal at that amount. With no dog, it's a direct Zeffy
-   link (amount pre-filled). */
-function SponsorTiers({ selectedDog, onSponsor }) {
-  return (
-    <section id="tiers" className="section-dark sp-tiers" style={{ padding: "84px 0", position: "relative", overflow: "hidden" }}>
-      <PawS className="paw paw-dark" style={{ top: 40, left: "4%", width: 48, height: 48 }} />
-      <PawS className="paw paw-dark" style={{ bottom: 40, right: "5%", width: 56, height: 56 }} />
-
-      <div className="wrap">
-        <div style={{ textAlign: "center", maxWidth: 680, margin: "0 auto" }}>
-          <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 12 }}>✦ Where your money goes</div>
-          <h2 className="display" style={{ fontSize: "clamp(30px, 4.2vw, 52px)", margin: "0 0 12px", color: "#fff" }}>
-            {selectedDog
-              ? <>Pick a monthly amount for <em style={{ color: "var(--purple-400)" }}>{selectedDog.name}</em>.</>
-              : <>Every dollar has a <em style={{ color: "var(--purple-400)" }}>job</em>.</>}
-          </h2>
-          <p style={{ color: "var(--on-dark-2)", fontSize: 15, margin: 0, lineHeight: 1.6 }}>
-            97¢ on the dollar goes to the dogs. Pick any amount. Cancel anytime.
-          </p>
-        </div>
-
-        <div className="sp-tier-grid">
-          {TIERS.map(t => (
-            <a
-              key={t.id}
-              href={buildSponsorUrl(selectedDog, t.price)}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={selectedDog ? (e) => { e.preventDefault(); onSponsor(selectedDog, t.price); } : undefined}
-              className={`sp-tier ${t.featured ? "featured" : ""} reveal`}
-            >
-              {t.featured && <span className="sp-tier-badge">Most popular</span>}
-
-              <div className="sp-tier-top">
-                <div className="sp-tier-price">
-                  <span className="amt">${t.price}</span>
-                  <span className="per">/mo</span>
-                </div>
-                <div className="sp-tier-headline">{t.headline}</div>
-                <p className="sp-tier-desc">{t.desc}</p>
-              </div>
-
-              <div className="sp-tier-divider" />
-
-              <ul className="sp-tier-includes">
-                {t.includes.map(i => <li key={i}>{i}</li>)}
-              </ul>
-
-              <span className="btn btn-accent sp-tier-btn">
-                {selectedDog
-                  ? <>Sponsor {selectedDog.name} at ${t.price}/mo <span className="arrow">→</span></>
-                  : <>Sponsor at ${t.price}/mo <span className="arrow">→</span></>}
-              </span>
-            </a>
-          ))}
-        </div>
+        {/* No reminder bar / no tiers — the pop-up modal is now the single place
+            to confirm dog + amount. Re-tapping a selected card re-opens it. */}
       </div>
     </section>
   );
@@ -380,7 +276,6 @@ function SponsorPage() {
       <SponsorPicker animals={available} status={status}
         selectedDog={selectedDog} setSelectedDog={setSelectedDog}
         onSponsor={onSponsor} />
-      <SponsorTiers selectedDog={selectedDog} onSponsor={onSponsor} />
       <SponsorConfirmModal
         open={!!confirm}
         dog={confirm && confirm.dog}
