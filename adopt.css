@@ -218,8 +218,10 @@
   .dog-grid { column-count: 2; }
   .filter-btn { margin-left: 0; width: 100%; justify-content: center; }
 }
+/* Keep dogs 2-up on phones — single column made each portrait photo huge. */
 @media (max-width: 600px) {
-  .dog-grid { column-count: 1; }
+  .dog-grid { column-count: 2; column-gap: 14px; }
+  .dog-card { margin-bottom: 14px; }
 }
 .dog-card {
   break-inside: avoid;

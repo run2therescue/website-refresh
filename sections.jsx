@@ -353,7 +353,7 @@ function Feature() {
               Meet Kronk
             </h2>
             <p style={{ fontSize: 15, color: "var(--ink-2)", marginBottom: 22, maxWidth: 480, lineHeight: 1.65 }}>
-              Pulled from a holding pen in Yulin, Kronk now leaps through fresh snow a world away — proof of what a second chance makes possible. His journey from the meat trade to a life of joy caught the eye of <b style={{ color: "var(--ink)" }}>People Magazine</b>.
+              Pulled from a holding pen in Yulin, Kronk now leaps through fresh snow a world away. His journey from the meat trade to a life of pure joy is proof of what a second chance makes possible, and it caught the eye of <b style={{ color: "var(--ink)" }}>People Magazine</b>.
             </p>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
               <a href="News.html" className="btn btn-accent">Read Kronk's Story <span className="arrow">→</span></a>

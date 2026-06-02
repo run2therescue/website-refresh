@@ -118,7 +118,8 @@
   margin-top: 28px;
 }
 @media (max-width: 900px) { .pick-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 480px) { .pick-grid { grid-template-columns: 1fr; } }
+/* Keep dogs 2-up on phones — one-per-row made each portrait photo huge. */
+@media (max-width: 480px) { .pick-grid { gap: 12px; margin-top: 20px; } }
 
 .pick-card {
   background: #fff;

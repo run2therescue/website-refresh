@@ -369,7 +369,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 
 @media (max-width: 560px) {
-  .ways-grid { grid-template-columns: minmax(0, 1fr) !important; }
+  /* Keep survivor/help cards 2-up on phones — full-width portraits were huge. */
+  .ways-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 14px !important; }
   .stat-row { grid-template-columns: repeat(2, 1fr) !important; gap: 16px !important; }
 }
 
@@ -553,4 +554,11 @@ html { scroll-behavior: smooth; }
 @media (max-width: 560px) {
   .modal-backdrop { padding: 14px !important; }
   .modal { max-height: calc(100vh - 28px); overflow-y: auto; }
+}
+
+/* Tighten the tall desktop section rhythm on phones so the site doesn't feel
+   stretched out. Overrides the inline section padding via !important. */
+@media (max-width: 600px) {
+  .section-light, .section-dark { padding-top: 52px !important; padding-bottom: 52px !important; }
+  .wrap { padding-left: 20px !important; padding-right: 20px !important; }
 }
