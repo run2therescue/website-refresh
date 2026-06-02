@@ -1,0 +1,10 @@
+# Files excluded from the deployed Vercel build output.
+# Build-time tooling and dependencies must never ship to the edge.
+scripts/
+node_modules/
+.github/
+docs/
+*.md
+Run2theRescue.zip
+.env*
+.DS_Store

@@ -13,6 +13,9 @@ medical care, and rehoming survivors.
 
 This is a **static site with no build step**. React runs **in the browser** via
 Babel-standalone. There is no webpack/vite, no `node_modules`, no `npm run build`.
+(The one exception is a deploy-time **pre-render** pass — see Deployment →
+Pre-rendering — that bakes rendered HTML into each page for crawlers. It runs only
+in CI and never changes how you author pages.)
 
 Each HTML page loads React + ReactDOM + Babel from a CDN, then a series of
 `<script type="text/babel" src="...jsx">` files. **Babel compiles each `.jsx`
@@ -98,6 +101,36 @@ auto-deploys** (`.github/workflows/deploy.yml` runs `vercel build` +
 `vercel.json` defines: clean-URL rewrites (`/adopt` → `/Adopt.html`, etc.),
 no-cache headers for static files, and security headers. The `/api/` path is
 excluded from the no-cache rule so the function controls its own caching.
+
+### Pre-rendering (crawler / AI-answer visibility)
+
+The site authors as no-build React-in-browser, but JS-less crawlers (ChatGPT,
+Claude, Perplexity, and Google's fast first pass) would otherwise fetch an empty
+`<div id="root">` and see no content. To fix that, the GitHub Action runs a
+**snapshot pre-render step before `vercel build`**:
+
+1. `scripts/prerender.mjs` (Node + Puppeteer) serves the checkout locally, loads
+   each `*.html` page in headless Chrome, waits for React to finish, and **bakes
+   the rendered HTML back into that page's `<div id="root">`** (wrapped in
+   `<!--prerender:start-->` … `<!--prerender:end-->`, with `data-prerendered="1"`).
+2. This happens on the **ephemeral CI checkout only** — committed source keeps the
+   empty `#root`, so the no-build authoring model is unchanged. Don't commit baked
+   HTML.
+3. On load, the client React still mounts via `createRoot().render()` and replaces
+   `#root` with the live tree (interactivity intact). Crawlers and no-JS visitors
+   read the baked snapshot.
+
+Tradeoff: **live Shelterluv dog lists are NOT in the snapshot** (the `/api`
+proxy isn't running during prerender) — the client fetches them live on load.
+All static narrative (mission, founders, EIN, transformation stories, press,
+testimonials) IS captured, which is what AI answers need.
+
+`scripts/`, `node_modules/`, `.github/`, `docs/`, and `*.md` are excluded from the
+deployed output via `.vercelignore` — build tooling never ships to the edge.
+
+To run the prerender locally (needs an x86-64 host or arm64 Chrome):
+`cd scripts && npm install && cd .. && node scripts/prerender.mjs --root .`
+(run on a throwaway copy — it rewrites the HTML files in place).
 
 ---
 

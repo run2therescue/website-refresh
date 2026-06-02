@@ -1,0 +1,13 @@
+{
+  "name": "r2r-prerender",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Build-time snapshot pre-rendering for the Run 2 The Rescue static site. Not part of the deployed site — CI tooling only.",
+  "scripts": {
+    "prerender": "node prerender.mjs --root .."
+  },
+  "dependencies": {
+    "puppeteer": "^23.0.0"
+  }
+}
