@@ -45,6 +45,18 @@ const PRESS = [
 ];
 
 function NewsPage() {
+  const [nlEmail, setNlEmail] = React.useState("");
+  const [nlSubbed, setNlSubbed] = React.useState(false);
+  const [nlSending, setNlSending] = React.useState(false);
+  const nlSubmit = async (e) => {
+    e.preventDefault();
+    if (!nlEmail) return;
+    setNlSending(true);
+    await submitForm({ email: nlEmail, source: "News page" }, "Newsletter");
+    setNlSending(false);
+    setNlSubbed(true);
+    setNlEmail("");
+  };
   return (
     <>
       <header className="news-hero">
@@ -122,9 +134,20 @@ function NewsPage() {
                 One letter a month. New arrivals, field updates, and the occasional happy-ending photo that'll ruin your workday in the best way.
               </p>
             </div>
-            <form onSubmit={e => e.preventDefault()} style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-              <input type="email" placeholder="your@email.com" className="input-dark" style={{ flex: "1 1 200px", minWidth: 180 }} />
-              <button type="submit" className="btn btn-accent">Subscribe</button>
+            <form onSubmit={nlSubmit} style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+              <input
+                type="email"
+                required
+                value={nlEmail}
+                onChange={(e) => setNlEmail(e.target.value)}
+                placeholder={nlSubbed ? "Subscribed ♡" : "your@email.com"}
+                className="input-dark"
+                style={{ flex: "1 1 200px", minWidth: 180 }}
+                disabled={nlSubbed}
+              />
+              <button type="submit" className="btn btn-accent" disabled={nlSending || nlSubbed}>
+                {nlSubbed ? "Subscribed" : nlSending ? "Sending..." : "Subscribe"}
+              </button>
             </form>
           </div>
         </div>

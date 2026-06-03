@@ -74,7 +74,7 @@ function DafInfo() {
         <div><b>3.</b> We'll receive the gift within 7 to 14 days.</div>
       </div>
       <p style={{ fontSize: 12, color: "var(--ink-3)", textAlign: "center", margin: 0, lineHeight: 1.5 }}>
-        Questions? Email <a href="mailto:info@run2therescue.com" style={{ color: "var(--purple-600)" }}>info@run2therescue.com</a>.
+        Questions? Email <a href="mailto:info@run2therescue.org" style={{ color: "var(--purple-600)" }}>info@run2therescue.org</a>.
       </p>
     </div>
   );

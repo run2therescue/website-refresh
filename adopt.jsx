@@ -328,7 +328,25 @@ function ProfileModal({ dog, fav, onFav, onClose }) {
     return () => { document.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
   }, []);
 
-  const submit = (e) => { e.preventDefault(); setStep("sent"); };
+  const [sending, setSending] = uS(false);
+  const submit = async (e) => {
+    e.preventDefault();
+    setSending(true);
+    await submitForm(
+      {
+        dog_name: dog.name,
+        dog_id: dog.id || "",
+        applicant_name: form.name,
+        email: form.email,
+        phone: form.phone,
+        home: form.home,
+        why: form.why,
+      },
+      "Adoption Application"
+    );
+    setSending(false);
+    setStep("sent");
+  };
   const gallery = dog.gallery.length ? dog.gallery : [dog.img];
 
   return (
@@ -427,7 +445,7 @@ function ProfileModal({ dog, fav, onFav, onClose }) {
 
               <FormField label={`Tell us why ${dog.name} would be a great fit`} textarea value={form.why} onChange={(v) => setForm({ ...form, why: v })} />
 
-              <button type="submit" className="btn btn-accent" style={{ width: "100%", justifyContent: "center", marginTop: 8 }}>Submit application →</button>
+              <button type="submit" className="btn btn-accent" style={{ width: "100%", justifyContent: "center", marginTop: 8 }} disabled={sending}>{sending ? "Sending..." : "Submit application →"}</button>
             </form>
           )}
 

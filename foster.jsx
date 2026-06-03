@@ -191,8 +191,24 @@ function FosterForm() {
   });
   const [sent, setSent] = fS(false);
 
-  const submit = (e) => {
+  const [sending, setSending] = fS(false);
+  const submit = async (e) => {
     e.preventDefault();
+    setSending(true);
+    await submitForm(
+      {
+        first_name: form.firstName,
+        last_name: form.lastName,
+        email: form.email,
+        phone: form.phone,
+        location: form.location,
+        home: form.home,
+        experience: form.experience,
+        message: form.message,
+      },
+      "Foster Application"
+    );
+    setSending(false);
     setSent(true);
     setTimeout(() => window.scrollTo({ top: document.getElementById("apply").offsetTop - 40, behavior: "smooth" }), 50);
   };
@@ -301,7 +317,7 @@ function FosterForm() {
                   value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} />
               </div>
 
-              <MagneticS><button type="submit" className="btn btn-accent" style={{ width: "100%", justifyContent: "center" }}>Submit foster application <span className="arrow">→</span></button></MagneticS>
+              <MagneticS><button type="submit" className="btn btn-accent" style={{ width: "100%", justifyContent: "center" }} disabled={sending}>{sending ? "Sending..." : <>Submit foster application <span className="arrow">→</span></>}</button></MagneticS>
 
               <p style={{ margin: "16px 0 0", fontSize: 12, color: "var(--ink-3)", textAlign: "center", lineHeight: 1.5 }}>
                 By submitting, you agree to be contacted by our foster coordinator. No obligation, this just starts the conversation.

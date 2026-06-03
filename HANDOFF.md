@@ -8,6 +8,9 @@ Read **[CLAUDE.md](CLAUDE.md)** first for the architecture and how things
 work. This document covers *access and ownership*: who needs an account
 where, and what to do once they have it.
 
+> **Just want to make a content edit?** See [TEAM_GUIDE.md](TEAM_GUIDE.md) — a plain-English
+> guide for non-technical teammates editing pages from GitHub.com's web UI.
+
 ---
 
 ## What's already team-owned (good news)
@@ -44,7 +47,7 @@ needs **Write** access at minimum, **Admin** is safer for long-term ownership.
 4. On their machine, configure local git:
    ```bash
    git config --global user.name  "Run 2 The Rescue"
-   git config --global user.email "tech@run2therescue.com"   # or whichever
+   git config --global user.email "tech@run2therescue.org"   # or whichever
    ```
 5. Generate a **Personal Access Token** with `repo` scope:
    - Settings → Developer settings → Personal access tokens → Tokens (classic) → Generate new token.

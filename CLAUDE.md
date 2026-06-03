@@ -1,5 +1,8 @@
 # Run 2 The Rescue — Website
 
+> **Non-technical teammate?** Start with [TEAM_GUIDE.md](TEAM_GUIDE.md) — a plain-English
+> walkthrough of how to edit a page from GitHub.com's web UI, preview changes, and ship safely.
+
 Developer / context guide for the Run 2 The Rescue (R2R) site. R2R is a 501(c)(3)
 nonprofit (EIN 99-4240461) rescuing dogs from the East Asia meat trade, funding
 medical care, and rehoming survivors.

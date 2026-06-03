@@ -700,7 +700,7 @@ def build_story():
         "RUN 2 THE RESCUE<br/>"
         "501(c)(3) Nonprofit   ·   EIN 99-4240461<br/>"
         "FOR IMMEDIATE RELEASE   —   [Date]<br/>"
-        "Contact: [Name]   ·   info@run2therescue.com", Mono))
+        "Contact: [Name]   ·   info@run2therescue.org", Mono))
 
     # ---- 12 Trust signals ----
     s.append(PageBreak())

@@ -322,6 +322,41 @@ function useAnimalsS() {
   return state;
 }
 
+/* ---------------------------------------------------------------
+   Web3Forms helper — shared by every form on the site.
+   All forms route to the single inbox configured in Web3Forms
+   (info@run2therescue.org). To go live, paste the access key from
+   web3forms.com into WEB3FORMS_KEY below. Until then, submitForm
+   returns {ok:false, demo:true} and each form should still show
+   its graceful thank-you UI (don't break the demo state).
+--------------------------------------------------------------- */
+const WEB3FORMS_KEY = "PASTE_KEY_HERE"; // single key, all forms route to info@run2therescue.org
+
+async function submitForm(fields, formName) {
+  if (!WEB3FORMS_KEY || WEB3FORMS_KEY === "PASTE_KEY_HERE") {
+    console.log("[submitForm] Demo mode (no Web3Forms key set). Form:", formName, fields);
+    return { ok: false, demo: true };
+  }
+  try {
+    const res = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({
+        access_key: WEB3FORMS_KEY,
+        subject: `[R2TR Site] ${formName}`,
+        from_name: "Run 2 The Rescue Website",
+        ...fields,
+      }),
+    });
+    const data = await res.json();
+    return { ok: data.success === true };
+  } catch (e) {
+    console.warn("[submitForm] network error:", e);
+    return { ok: false, error: e.message };
+  }
+}
+
 Object.assign(window, {
   IMG_BANK, PawS, ImgS, NavS, FooterS, MagneticS, CountUpS, ScrollProgressS, useRevealS, useAnimalsS,
+  submitForm, WEB3FORMS_KEY,
 });

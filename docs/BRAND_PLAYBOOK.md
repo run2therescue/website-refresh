@@ -481,7 +481,7 @@ Three new arrivals at LAX. Meet them.
 RUN 2 THE RESCUE
 501(c)(3) Nonprofit · EIN 99-4240461
 FOR IMMEDIATE RELEASE — [Date]
-Contact: [Name] · info@run2therescue.com
+Contact: [Name] · info@run2therescue.org
 ```
 
 ---

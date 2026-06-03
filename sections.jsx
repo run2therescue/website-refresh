@@ -554,6 +554,16 @@ function Team() {
 function FinalCTA({ onDonate, onSubscribe }) {
   const [email, setEmail] = useState("");
   const [subbed, setSubbed] = useState(false);
+  const [sending, setSending] = useState(false);
+  const submitNewsletter = async (e) => {
+    e.preventDefault();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return;
+    setSending(true);
+    await submitForm({ email: email, source: "Homepage final CTA" }, "Newsletter");
+    setSending(false);
+    setSubbed(true);
+    setEmail("");
+  };
   return (
     <section id="contact" style={{
       padding: "80px 0", position: "relative", overflow: "hidden",
@@ -584,7 +594,7 @@ function FinalCTA({ onDonate, onSubscribe }) {
             <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 8, fontWeight: 600 }}>Stay Connected</div>
             <div style={{ fontSize: 13, color: "rgba(255,255,255,0.82)" }}>Get rescue updates and survivor stories in your inbox.</div>
           </div>
-          <form className="cta-form" onSubmit={(e) => { e.preventDefault(); if (/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { setSubbed(true); setEmail(""); } }}
+          <form className="cta-form" onSubmit={submitNewsletter}
             style={{ display: "flex", gap: 8 }}>
             <input
               type="email" className="cta-email"
@@ -596,7 +606,7 @@ function FinalCTA({ onDonate, onSubscribe }) {
                 color: "#fff", fontSize: 14, outline: "none",
               }}
             />
-            <button type="submit" className="btn btn-light" style={{ height: 46 }}>Subscribe</button>
+            <button type="submit" className="btn btn-light" style={{ height: 46 }} disabled={sending || subbed}>{subbed ? "Subscribed" : sending ? "Sending..." : "Subscribe"}</button>
           </form>
         </div>
       </div>
@@ -673,11 +683,11 @@ function FooterCol({ title, links }) {
    needs explicit consent. Stories email the team; a human reviews and
    features them — nothing here is auto-published.
 
-   TO GO LIVE: create a free Web3Forms access key at https://web3forms.com
-   for the inbox that should receive adopter stories, and paste it below.
-   While this is blank the form still works but shows a thank-you without
-   sending. The same pattern (one key per inbox) wires up the other forms. */
-const STORY_FORM_ACCESS_KEY = "";
+   Wired through the shared submitForm helper in shared.jsx — all site
+   forms route to the single Web3Forms access key (info@run2therescue.org).
+   Until WEB3FORMS_KEY is set in shared.jsx, this still shows the thank-you
+   without sending. Photos are not forwarded (Web3Forms JSON endpoint is
+   text-only); if a photo is selected, we note it in the message body. */
 
 function ShareStoryModal({ open, onClose }) {
   const [form, setForm] = useState({ name: "", email: "", dog: "", year: "", story: "", credit: "first", consent: false });
@@ -702,25 +712,25 @@ function ShareStoryModal({ open, onClose }) {
   const submit = async (e) => {
     e.preventDefault();
     if (!canSubmit || step === "sending") return;
-    if (!STORY_FORM_ACCESS_KEY) { setStep("done"); return; } // not wired to email yet
     setStep("sending");
-    try {
-      const fd = new FormData();
-      fd.append("access_key", STORY_FORM_ACCESS_KEY);
-      fd.append("subject", `New adopter story — ${form.dog || "a survivor"}`);
-      fd.append("from_name", form.name);
-      fd.append("Adopter", form.name);
-      fd.append("Email", form.email);
-      fd.append("Dog", form.dog);
-      fd.append("Adoption year", form.year);
-      fd.append("Story", form.story);
-      fd.append("Credit as", form.credit === "full" ? "Full name" : "First name only");
-      fd.append("Consent to publish", "Yes — granted in the submission form");
-      if (photo) fd.append("photo", photo);
-      const r = await fetch("https://api.web3forms.com/submit", { method: "POST", body: fd });
-      if (!r.ok) throw new Error("HTTP " + r.status);
+    const result = await submitForm(
+      {
+        adopter: form.name,
+        email: form.email,
+        dog: form.dog,
+        adoption_year: form.year,
+        story: form.story,
+        credit_as: form.credit === "full" ? "Full name" : "First name only",
+        consent_to_publish: "Yes — granted in the submission form",
+        photo_attached: photo ? `Yes — ${photo.name} (will be requested by email)` : "No",
+      },
+      `Share Your Story — ${form.dog || "a survivor"}`
+    );
+    // Graceful UX: show thank-you for demo mode OR successful send.
+    // Only show the error state on a real network failure with the key set.
+    if (result.ok || result.demo) {
       setStep("done");
-    } catch (err) {
+    } else {
       setStep("error");
     }
   };
@@ -839,7 +849,7 @@ function ShareStoryModal({ open, onClose }) {
             <div style={{ textAlign: "center", padding: "16px 0" }}>
               <h2 className="display" style={{ fontSize: 26, margin: "0 0 10px", color: "var(--ink)" }}>That didn't go through.</h2>
               <p style={{ color: "var(--ink-2)", fontSize: 14, margin: "0 0 24px", lineHeight: 1.6 }}>
-                Something interrupted the submission. Please try again, or email us directly at info@run2therescue.com.
+                Something interrupted the submission. Please try again, or email us directly at info@run2therescue.org.
               </p>
               <button className="btn btn-accent" onClick={() => setStep("form")}>Try again</button>
             </div>
