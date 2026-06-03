@@ -330,7 +330,7 @@ function useAnimalsS() {
    returns {ok:false, demo:true} and each form should still show
    its graceful thank-you UI (don't break the demo state).
 --------------------------------------------------------------- */
-const WEB3FORMS_KEY = "PASTE_KEY_HERE"; // single key, all forms route to info@run2therescue.org
+const WEB3FORMS_KEY = "f328982c-e9de-4611-8bf7-49034cfa2d21"; // single key, all forms route to info@run2therescue.org
 
 async function submitForm(fields, formName) {
   if (!WEB3FORMS_KEY || WEB3FORMS_KEY === "PASTE_KEY_HERE") {
