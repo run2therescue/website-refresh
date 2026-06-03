@@ -881,7 +881,7 @@ function Testimonials() {
     },
     {
       quote: "We've adopted three R2R dogs: Romeo, Olive, and Junebug. Brandy and Bonnie find the right home for every dog.",
-      name: "Greg",
+      name: "Greg Carrico",
       detail: "Adopted Romeo, Olive & Junebug",
       initials: "G",
       rotate: -1.2,
