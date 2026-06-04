@@ -7,8 +7,54 @@ Developer / context guide for the Run 2 The Rescue (R2R) site. R2R is a 501(c)(3
 nonprofit (EIN 99-4240461) rescuing dogs from the East Asia meat trade, funding
 medical care, and rehoming survivors.
 
-- **Production / preview URL:** https://run2-rescuedemo.vercel.app
-- **Repo root = this `site/` folder** (the git repo lives here, not a parent dir).
+- **Repo root = this folder** (the git repo lives here, not a parent dir).
+
+---
+
+## Quick reference — every URL, key, and inbox
+
+**The site**
+- Preview / staging (current public-facing): https://run2-rescuedemo.vercel.app
+- Live (still the old WordPress site, will be cut over later): https://run2therescue.org
+
+**Code & deploy**
+- GitHub repo: https://github.com/run2therescue/website-refresh
+- GitHub org: https://github.com/run2therescue
+- Vercel project: https://vercel.com/run2-rescue-s-projects/website-refresh
+- Vercel team: https://vercel.com/run2-rescue-s-projects
+- Deploy workflow: `.github/workflows/deploy.yml` (runs `vercel build` then `vercel deploy --prebuilt --prod` on every push to `main`)
+
+**Forms (Web3Forms)**
+- Dashboard: https://app.web3forms.com
+- Account login: `webmaster@run2therescue.org`
+- All form submissions are routed to **`info@run2therescue.org`** (configured
+  as the recipient in the Web3Forms form settings — see "Web3Forms recipient
+  configuration" below)
+- Access key lives in `shared.jsx` as `WEB3FORMS_KEY` (intentionally client-side; see Security)
+- Helper: `submitForm(fields, formName)` exposed on `window` from `shared.jsx`
+
+**Donations**
+- Zeffy general: https://www.zeffy.com/en-US/donation-form/provide-food-and-medical
+- Zeffy transport: https://www.zeffy.com/en-US/donation-form/help-bring-them-home
+- Zeffy sponsorship: https://www.zeffy.com/en-US/donation-form/help-the-abandoned-dogs-come-home
+- PayPal: https://www.paypal.com/donate/?hosted_button_id=5YFAYGX4FKHW6
+- Venmo: https://venmo.com/u/Run2TheRescue
+
+**Live data**
+- Shelterluv (animal data source): https://www.shelterluv.com
+- Proxy endpoint on the site: `/api/animals` (debug: `/api/animals?debug=1`)
+- Secret key: `SHELTERLUV_API_KEY` in Vercel project env vars (never in repo)
+
+**Social (footer icons in `shared.jsx → FooterS`)**
+- Facebook: https://www.facebook.com/people/Run-2-The-Rescue/61564710401329/
+- Instagram: https://www.instagram.com/run2therescue
+- TikTok: https://www.tiktok.com/@_run2therescue_
+- YouTube: https://www.youtube.com/@R2TRDogs
+
+**Inboxes**
+- Public-facing contact: `info@run2therescue.org` (receives all site form submissions)
+- Tech / webmaster: `webmaster@run2therescue.org` (Web3Forms account owner, Vercel/GitHub admin)
+- Old `.com` addresses are typos and have been purged from the codebase
 
 ---
 
@@ -41,7 +87,7 @@ Because each script is compiled separately, components are shared two ways:
 `components.jsx` → `help-illustrations.jsx` → `sections.jsx` →
 `interactions.jsx` → `enhancements.jsx`
 
-**Standalone pages** each load `shared.jsx` (Nav, Footer, shared hooks) plus
+**Standalone pages** each load `shared.jsx` (Nav, Footer, shared hooks, `submitForm`) plus
 their own `*.jsx` and `*.css`:
 
 | Page          | JSX                              | CSS           |
@@ -73,7 +119,6 @@ also sets `must-revalidate`, but bumping `?v=` guarantees no stale cache.
 It's static — serve the folder with anything:
 
 ```bash
-cd site
 python3 -m http.server 8000      # then open http://localhost:8000
 ```
 
@@ -85,17 +130,22 @@ state. To run the function locally, use `npx vercel dev` instead.
 Before deploying, syntax-check any `.jsx` you changed:
 
 ```bash
-npx @babel/parser  # or: node -e "require('@babel/parser').parse(require('fs').readFileSync('FILE.jsx','utf8'),{sourceType:'script',plugins:['jsx']})"
+node -e "require('@babel/parser').parse(require('fs').readFileSync('FILE.jsx','utf8'),{sourceType:'script',plugins:['jsx']})"
 ```
+
+(`@babel/parser` is the only dev dependency you'd need — install ad-hoc with
+`npm i @babel/parser` in a throwaway dir.)
 
 ---
 
 ## Deployment
 
-Hosted on **Vercel**, connected to this GitHub repo. **Push to `main` → Vercel
-auto-deploys** (`.github/workflows/deploy.yml` runs `vercel build` +
+Hosted on **Vercel**, connected to the GitHub repo. **Push to `main` → Vercel
+auto-deploys** via `.github/workflows/deploy.yml` (runs `vercel build` +
 `vercel deploy --prebuilt --prod`).
 
+- GitHub repo: https://github.com/run2therescue/website-refresh
+- Vercel dashboard: https://vercel.com/run2-rescue-s-projects/website-refresh
 - Vercel project: `website-refresh` (team `run2-rescue-s-projects`).
 - Root Directory: **blank** (the repo root IS the deployable site).
 - Framework preset: **Other** (static). No build command.
@@ -174,21 +224,52 @@ Links are constants at the top of `interactions.jsx`, `donate.jsx`, `sponsor.jsx
 Note: Zeffy has no API to pre-fill a donation amount, so the impact slider /
 tier prices are framed as a pitch — the donor picks the amount on the provider.
 
-### "Share Your Story" submissions
+### Forms — Web3Forms (single shared helper)
 
-The homepage Testimonials section has a `ShareStoryModal` (in `sections.jsx`)
-for adopters to submit a testimonial (with a required consent checkbox). It
-posts to **Web3Forms**. **It is not live until a key is added:** set
-`STORY_FORM_ACCESS_KEY` in `sections.jsx` to a Web3Forms access key
-(free, from web3forms.com). Until then the form shows a thank-you without
-sending.
+Every user-facing form on the site routes through one helper in `shared.jsx`:
 
-### Other forms
+```js
+const WEB3FORMS_KEY = "f328982c-e9de-4611-8bf7-49034cfa2d21"; // single key
+async function submitForm(fields, formName) { /* POSTs JSON to api.web3forms.com/submit */ }
+Object.assign(window, { submitForm, WEB3FORMS_KEY });
+```
 
-Contact, the adoption application, and the newsletter signup are currently
-**front-end demos** — they show a confirmation but do not deliver anywhere.
-Wiring them to Web3Forms (one access key per destination inbox) is the
-intended next step.
+Every form on the site calls `submitForm({...fields}, "<Form Name>")`.
+Each submission lands at info@run2therescue.org with subject line `[R2TR Site] <Form Name>`,
+making Gmail filtering trivial.
+
+**Forms currently wired** (all live, all to info@run2therescue.org):
+
+| Form                 | File           | formName passed              |
+|----------------------|----------------|------------------------------|
+| Contact              | `contact.jsx`  | `Contact`                    |
+| Adoption application | `adopt.jsx`    | `Adoption Application`       |
+| Foster application   | `foster.jsx`   | `Foster Application`         |
+| Newsletter (homepage)| `sections.jsx` (`FinalCTA`) | `Newsletter`    |
+| Newsletter (news)    | `news.jsx`     | `Newsletter`                 |
+| Share Your Story     | `sections.jsx` (`ShareStoryModal`) | `Share Your Story — <dog>` |
+
+**Demo mode:** if `WEB3FORMS_KEY === "PASTE_KEY_HERE"`, `submitForm` short-circuits
+and returns `{ ok: false, demo: true }`. Each form is written to show the same
+graceful thank-you in demo mode, so the site never appears broken before a key
+is set. Submissions in demo mode log to the console via `console.log("[submitForm] Demo mode...")`.
+
+**Photo uploads (Share Your Story):** the Web3Forms JSON endpoint is text-only.
+If a user attaches a photo, we send a `photo_attached` field noting the filename
+and tell the team to follow up by email — we never silently drop the photo.
+
+### Web3Forms recipient configuration (gotcha)
+
+By default, Web3Forms emails the **account owner's address**
+(`webmaster@run2therescue.org`). To deliver to `info@run2therescue.org` instead:
+
+1. Web3Forms → **Linked Emails** → **Add Email** → `info@run2therescue.org`
+2. Click the verification link sent to that inbox
+3. Web3Forms → form **Settings** → **Email To** → `info@run2therescue.org`
+4. Optional: set **Reply-To** → `{{email}}` so Gmail's Reply hits the submitter, not Web3Forms
+
+The custom subject (`[R2TR Site] <formName>`) is set in `submitForm` itself —
+no need to configure it in Web3Forms.
 
 ---
 
@@ -199,7 +280,8 @@ The site sends a full set of hardened response headers via `vercel.json`
 
 - **Content-Security-Policy** restricts script/style/image/font/connect/frame sources
   to a tight allowlist (self, unpkg, Google Fonts, Shelterluv photo S3, Unsplash,
-  YouTube thumbs, Web3Forms). `frame-ancestors 'none'` blocks anyone iframing the site.
+  YouTube thumbs, Web3Forms — `api.web3forms.com` in both `connect-src` and
+  `form-action`). `frame-ancestors 'none'` blocks anyone iframing the site.
 - **Strict-Transport-Security** with 2-year max-age + `includeSubDomains` + `preload`.
 - **X-Frame-Options: DENY**, **X-Content-Type-Options: nosniff**,
   **Referrer-Policy: strict-origin-when-cross-origin**, **Cross-Origin-Opener-Policy: same-origin**.
@@ -221,9 +303,11 @@ to block reverse-tabnabbing and avoid leaking the referrer to providers
 (Zeffy, PayPal, Venmo, press outlets, social profiles).
 
 **Secrets:** the only server-side secret is `SHELTERLUV_API_KEY` in Vercel env
-vars. `.env*` is gitignored. The Web3Forms key (when set) is intentionally
-client-side — it's a routing token, not a credential, and is paired with
-Web3Forms' spam/abuse filtering on their end.
+vars. `.env*` is gitignored. The **Web3Forms key is intentionally committed**
+to the repo — it's a public/client-side routing token, not a credential, and
+is paired with Web3Forms' server-side spam/abuse filtering. Worst case if it
+leaks: an attacker can spam our inbox, which Web3Forms throttles. There is
+no rotation cost beyond pasting a new key.
 
 ---
 
@@ -233,7 +317,8 @@ Web3Forms' spam/abuse filtering on their end.
 |----------------------|------------------|----------------------------------------|
 | `SHELTERLUV_API_KEY` | `api/animals.js` | Secret. Scope to the `website-refresh` project. |
 
-`.env*` files are git-ignored — never commit secrets.
+`.env*` files are git-ignored — never commit secrets. (The Web3Forms key
+*is* committed, intentionally — see Security.)
 
 ---
 
@@ -243,6 +328,8 @@ Web3Forms' spam/abuse filtering on their end.
   forms** — donations are link-outs.
 - **No em-dashes** in visible copy. Use commas, periods, or "and". (Compound-word
   hyphens are fine.)
+- **All forms** use `submitForm` from `shared.jsx`. New forms should follow the
+  same pattern — never call `fetch("https://api.web3forms.com/...")` directly.
 - Bump `?v=N` cache strings when editing shared `.jsx`/`.css` (see above).
 - Syntax-check `.jsx` before deploying — a Babel error blanks the whole page.
 - `feedback.js` adds a floating "Send feedback" button on every page (copy-to-
@@ -259,3 +346,15 @@ cruelty. Reader is a co-rescuer, not a savior — CTAs are doors, not asks
 "hopeful survivors", "second chance", "beacon of hope". Tagline:
 RUN. RESCUE. REPEAT. Anchor quote: "Run to the rescue with love, and peace will
 follow." (River Phoenix).
+
+Deeper brand reference (do not mass-edit without team review):
+- `docs/BRAND_PLAYBOOK.md` — full voice/tone playbook
+- `docs/RUN_2_THE_RESCUE_BRAND_PLAYBOOK.pdf` — PDF for stakeholders
+- `docs/PROJECT_BRIEF.md` — original site brief
+- `docs/IMAGE_PLACEMENT_PROPOSAL.md` / `docs/IMAGE_AUDIT.md` — imagery reference
+
+## Related docs
+
+- [TEAM_GUIDE.md](TEAM_GUIDE.md) — for non-technical teammates editing via the GitHub web UI
+- [HANDOFF.md](HANDOFF.md) — access ownership and account migration runbook
+- [DEPLOY.md](DEPLOY.md) — deployment-specific notes
