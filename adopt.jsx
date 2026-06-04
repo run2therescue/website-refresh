@@ -527,6 +527,118 @@ function AdoptProcess() {
   );
 }
 
+/* ---- FAQ --------------------------------------------------------------- */
+const ADOPT_FAQ = [
+  {
+    q: "Why rescue dogs from China instead of American shelters?",
+    a: "Both matter. We aren't here to argue otherwise. The dogs we bring home weren't going to be adopted into a Chinese shelter, they were headed for the meat trade with no rescue infrastructure around them. Our partners on the ground get them out, our team brings them stateside, and then we ask the same question every American shelter asks: who's the right family for this dog. Many of our adopters have shelter dogs at home already, this just adds one more saved life to the count."
+  },
+  {
+    q: "Aren't these dogs too traumatized to be normal pets?",
+    a: "Most settle into normal pet life faster than people expect. The phrase we use is trauma to trust, not trauma to broken. A dog who has been caged still wants what every dog wants: a soft bed, a quiet routine, a person who shows up. We see the tail wag back within the first week of foster, the first real play bow within the first month, and a dog who acts like he's lived in your house forever within three to six months. We're transparent about the dogs who need more time, and we match those to experienced adopters."
+  },
+  {
+    q: "What medical care have they had before adoption?",
+    a: "Every dog arrives spayed or neutered, fully vaccinated (DHPP, rabies, bordetella), microchipped, dewormed, and tested for the diseases that matter for international transport (heartworm, distemper, parvo, and the tick-borne panel). Anything chronic is treated or stabilized before they're listed for adoption. The medical history travels with them, and our vet partners are available to your vet for questions after you take them home."
+  },
+  {
+    q: "How are they with kids, other dogs, and cats?",
+    a: "It depends on the dog, and we tell you exactly what we know. Every profile is honest about who they've been observed with in foster: kids, other dogs, cats, men, women, leashes, stairs, car rides. We never sell a match. If a dog is still working through a fear, we say so, and we match accordingly. The goal isn't to place them fast, it's to place them once."
+  },
+  {
+    q: "What support do I get after I bring them home?",
+    a: "Lifetime. That's not a slogan, it's the adoption contract. A dedicated coordinator answers texts and emails for as long as you have the dog. Our trainer network gives discounted intro sessions to every R2R adopter. And if life ever changes and you can't keep them, the contract requires the dog comes back to us, never to a shelter. We are their safety net forever."
+  },
+  {
+    q: "How long until they feel like a normal dog at home?",
+    a: "The three-three-three rule is a useful sketch: three days to decompress, three weeks to learn your routine, three months to feel fully at home. Some dogs are couch surfing by day two, others quietly observe for a month and then bloom. Both are normal. We coach you through every phase, and we celebrate the small wins with you (the first time they ask to be petted is a real moment)."
+  },
+];
+
+function AdoptFAQ() {
+  const [open, setOpen] = uS(0);
+  return (
+    <section style={{ background: "var(--lav-50)", padding: "80px 0", position: "relative", overflow: "hidden" }}>
+      <PawS className="paw paw-light" style={{ top: 60, left: "5%", width: 44, height: 44 }} />
+      <PawS className="paw paw-light" style={{ bottom: 60, right: "6%", width: 52, height: 52 }} />
+      <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
+        <div style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 40px" }}>
+          <div className="eyebrow-dark" style={{ marginBottom: 12 }}>✦ Honest answers</div>
+          <h2 className="display" style={{ fontSize: "clamp(32px, 4vw, 52px)", margin: "0 0 12px", color: "var(--ink)" }}>
+            The questions we get asked the most.
+          </h2>
+          <p style={{ color: "var(--ink-2)", fontSize: 15, margin: 0, lineHeight: 1.6 }}>
+            Hesitation is fair. These dogs have a long story. Here's what we tell every adopter, plainly.
+          </p>
+        </div>
+        <div style={{ maxWidth: 760, margin: "0 auto", display: "grid", gap: 14 }}>
+          {ADOPT_FAQ.map((item, i) => {
+            const isOpen = open === i;
+            return (
+              <div
+                key={i}
+                className="reveal"
+                style={{
+                  background: "#fff",
+                  borderRadius: 16,
+                  border: isOpen ? "1px solid var(--purple-400)" : "1px solid var(--line-light)",
+                  boxShadow: isOpen ? "0 8px 24px rgba(80,40,140,0.10)" : "0 1px 2px rgba(0,0,0,0.04)",
+                  overflow: "hidden",
+                  transition: "border-color .2s ease, box-shadow .2s ease",
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={() => setOpen(isOpen ? -1 : i)}
+                  aria-expanded={isOpen}
+                  style={{
+                    display: "flex", width: "100%", alignItems: "center", gap: 16,
+                    padding: "20px 22px", background: "transparent", border: 0, cursor: "pointer",
+                    textAlign: "left", color: "var(--ink)",
+                    fontFamily: "var(--font-ui)", fontSize: 16, fontWeight: 600, lineHeight: 1.4,
+                  }}
+                >
+                  <span style={{ flex: 1 }}>{item.q}</span>
+                  <span
+                    aria-hidden="true"
+                    style={{
+                      width: 30, height: 30, borderRadius: "50%",
+                      background: isOpen ? "var(--purple-500)" : "var(--lav-100)",
+                      color: isOpen ? "#fff" : "var(--purple-700)",
+                      display: "grid", placeItems: "center", flexShrink: 0,
+                      transition: "background .2s ease, color .2s ease, transform .25s ease",
+                      transform: isOpen ? "rotate(180deg)" : "rotate(0)",
+                    }}
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                  </span>
+                </button>
+                {isOpen && (
+                  <div style={{
+                    padding: "0 22px 22px",
+                    color: "var(--ink-2)", fontSize: 15, lineHeight: 1.65,
+                    borderTop: "1px solid var(--lav-100)", paddingTop: 16, marginTop: 0,
+                  }}>
+                    {item.a}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+        <div style={{ textAlign: "center", marginTop: 36 }}>
+          <p style={{ fontSize: 14, color: "var(--ink-3)", margin: "0 0 14px" }}>
+            Still wondering about something specific?
+          </p>
+          <a href="Contact.html" className="btn btn-outline-soft">Ask us anything →</a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ---- Bottom CTA -------------------------------------------------------- */
 function AdoptCTA() {
   return (
@@ -549,4 +661,4 @@ function AdoptCTA() {
   );
 }
 
-Object.assign(window, { AdoptHero, AdoptDirectory, AdoptProcess, AdoptCTA });
+Object.assign(window, { AdoptHero, AdoptDirectory, AdoptProcess, AdoptFAQ, AdoptCTA });
