@@ -366,10 +366,10 @@ function DifferentDogsS() {
   const { animals } = useAnimalsS();
   const find = (n) => animals.find(a => (a.name || "").trim().toLowerCase() === n.toLowerCase());
   const cards = [
-    { name: "Kronk", img: "assets/kronk-after-snow.jpg", status: "home" },
     { name: "Twitch", status: "looking", live: find("Twitch") },
-    { name: "Honey", img: "assets/honey-after-portrait.png", status: "home" },
     { name: "Sweet Pea", status: "looking", live: find("Sweet Pea") },
+    { name: "Kronk", img: "assets/kronk-after-snow.jpg", status: "home" },
+    { name: "Honey", img: "assets/honey-after-portrait.png", status: "home" },
   ];
   return (
     <section className="section-light" style={{ padding: "44px 0 28px" }}>
@@ -388,7 +388,12 @@ function DifferentDogsS() {
               ? [c.live && c.live.breed, c.live && c.live.ageGroup].filter(Boolean).join(" · ")
               : "Alumni";
             return (
-              <div key={c.name} style={{ background: "#fff", borderRadius: 16, overflow: "hidden", border: "1px solid var(--lav-200)" }}>
+              <div key={c.name}
+                onClick={(looking && c.live) ? () => window.dispatchEvent(new CustomEvent("r2r-open-dog", { detail: c.live })) : undefined}
+                style={{ background: "#fff", borderRadius: 16, overflow: "hidden", border: "1px solid var(--lav-200)", cursor: (looking && c.live) ? "pointer" : "default", transition: "transform .2s ease, box-shadow .2s ease" }}
+                onMouseEnter={e => { if (looking && c.live) { e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.boxShadow = "var(--shadow)"; } }}
+                onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}
+              >
                 <div style={{ aspectRatio: "1/1", overflow: "hidden", background: "var(--lav-200)", position: "relative" }}>
                   {img
                     ? <ImgS src={img} alt={c.name} />
@@ -405,6 +410,7 @@ function DifferentDogsS() {
                 <div style={{ padding: "10px 12px" }}>
                   <div className="display" style={{ fontSize: 16, color: "var(--ink)", lineHeight: 1.1 }}>{c.name}</div>
                   {meta && <div style={{ fontSize: 9, fontFamily: "var(--font-mono)", letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--purple-600)", marginTop: 4 }}>{meta}</div>}
+                  {looking && c.live && <div style={{ fontSize: 11, fontWeight: 600, color: "var(--purple-600)", marginTop: 6 }}>Meet {c.name} →</div>}
                 </div>
               </div>
             );

@@ -269,6 +269,13 @@ function SponsorPage() {
   const onSponsor = (dog, amount) => setConfirm({ dog, amount });
   const closeConfirm = () => setConfirm(null);
 
+  // The "Different Dogs" strip above dispatches this to open the sponsor flow here.
+  spE(() => {
+    const open = (e) => { if (e.detail) { setSelectedDog(e.detail); setConfirm({ dog: e.detail, amount: 35 }); } };
+    window.addEventListener("r2r-open-dog", open);
+    return () => window.removeEventListener("r2r-open-dog", open);
+  }, []);
+
   return (
     <>
       <SponsorHero />

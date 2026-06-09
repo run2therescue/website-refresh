@@ -179,6 +179,13 @@ function AdoptDirectory() {
 
   uE(() => { localStorage.setItem("r2r:favs", JSON.stringify(favs)); }, [favs]);
 
+  // The "Different Dogs" strip above dispatches this to open a dog's profile here.
+  uE(() => {
+    const open = (e) => { if (e.detail && e.detail.id != null) setSelectedId(e.detail.id); };
+    window.addEventListener("r2r-open-dog", open);
+    return () => window.removeEventListener("r2r-open-dog", open);
+  }, []);
+
   const filtered = uM(() => {
     let r = dogs.filter((d) => {
       if (filters.age !== "Any" && d.age !== filters.age) return false;
