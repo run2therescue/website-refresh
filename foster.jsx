@@ -33,7 +33,7 @@ function FosterHeroNarrative() {
           borderTop: "1px solid var(--line-dark)",
         }}>
           <HeroStatF num={8} label="Fosters needed now" highlight />
-          <HeroStatF num={420} suffix="+" label="Fosters since 2012" />
+          <HeroStatF num={420} suffix="+" label="Fosters since 2024" />
           <HeroStatF num={2} label="Flight hubs · JFK · LAX" />
         </div>
       </div>

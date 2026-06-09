@@ -4,8 +4,9 @@ const { useState, useEffect, useRef, useMemo } = React;
 /* Image dictionary. Real R2R photography where available, Unsplash stock fallback elsewhere. */
 const IMG = {
   hero: "assets/survivors-hero-crop.png",
-  teamBrandy: "assets/brandy-transport-1.png",
-  teamBonnie: "assets/bonnie-transport-1.jpg",
+  teamBrandy: "assets/Brandy_profile.jpg",
+  teamBonnie: "assets/Bonnie_profile.jpg",
+  teamGreg: "assets/Greg_profile.jpg",
   kronk: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=900&q=80&auto=format",
   survivor1: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=700&q=80&auto=format",
   survivor2: "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?w=700&q=80&auto=format",
@@ -226,7 +227,7 @@ function HeroSplit({ onDonate }) {
         <div style={{ minWidth: 0 }}>
           <div className="eyebrow" style={{ marginBottom: 24 }}>
             <span style={{ color: "var(--purple-400)" }}>✦ </span>
-            501(c)(3) · est. 2012
+            501(c)(3) · est. 2024
           </div>
           <h1 className="display" style={{
             fontSize: "clamp(48px, 7.6vw, 108px)",

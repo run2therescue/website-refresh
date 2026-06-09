@@ -498,8 +498,12 @@ function Voices() {
 function Team() {
   // Leadership grid, add more team members here and the grid scales/centers.
   const people = [
-    { name: "Brandy Cherven", role: "Chief Executive Officer", tag: "Co-Founder", img: IMG.teamBrandy, copy: "Driven by an unwavering love for animals and a commitment to ending the dog meat trade, Brandy cofounded R2TR to be a beacon of hope for voiceless victims and the courageous activists who rescue them." },
-    { name: "Bonnie Klapper", role: "Chief Operating Officer", tag: "Co-Founder", img: IMG.teamBonnie, copy: "With firsthand experience witnessing the overwhelming challenges of rescue efforts in China and South Korea, Bonnie cofounded R2TR to give every survivor a second chance at a loving forever home." },
+    { name: "Brandy Cherven", role: "Chief Executive Officer", tag: "Co-Founder", img: IMG.teamBrandy, copy: "I never imagined rescue would be my life's work, until I met Sunny, a three-legged Jindo and the first meat-trade survivor in my life. In 2024 I co-founded R2TR to give these dogs the second chance they deserve. Rescue isn't what I do, it's who I am. In memory of Sunny, the dog who changed everything. ✨" },
+    { name: "Bonnie Klapper", role: "Chief Operating Officer", tag: "Co-Founder", img: IMG.teamBonnie, copy: "Bonnie S. Klapper spent nearly two dozen years as a federal prosecutor, an Assistant U.S. Attorney in California and New York. Today she puts that same fight behind animals, offering pro bono support to rescue nonprofits and the activists on the ground. She stands up for all animals, but dogs have always held her heart." },
+    { name: "Gregory Carrico", role: "Foster Dad & Volunteer", tag: "Volunteer", img: IMG.teamGreg, copy: "A lifelong animal lover, Gregory shares his Upstate New York home with a pack of twelve rescued poodles, plus fosters, pouring himself into their care, well-being, and the occasional pup-cup. Through his advocacy and volunteer work with R2TR, he champions senior and special-needs dogs and the quiet joy of giving them a forever home. \"Are all these dogs yours?\" ~ everyone Gregory meets while walking his dogs." },
+    { name: "Kirk", role: "Tech Wizard", tag: "Team", img: null, copy: "Bio coming soon." },
+    { name: "Aman", role: "Tech Lead", tag: "Team", img: null, copy: "Bio coming soon." },
+    { name: "Meg", role: "Merch Lead", tag: "Team", img: null, copy: "Bio coming soon." },
   ];
   return (
     <section className="section-dark" style={{ padding: "120px 0", position: "relative", overflow: "hidden" }}>
@@ -529,8 +533,23 @@ function Team() {
               onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-5px)"; e.currentTarget.style.boxShadow = "0 24px 48px -22px oklch(0.1 0.04 310 / 0.7)"; }}
               onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}
             >
-              <div style={{ aspectRatio: "1/1", borderRadius: 16, overflow: "hidden", marginBottom: 18, background: "var(--plum-600)" }}>
-                <Img src={p.img} alt={p.name} />
+              <div style={{ aspectRatio: "1/1", borderRadius: 16, overflow: "hidden", marginBottom: 18, background: "var(--plum-600)", position: "relative" }}>
+                {p.img ? (
+                  <Img src={p.img} alt={p.name} />
+                ) : (
+                  <div aria-hidden="true" style={{
+                    width: "100%", height: "100%", display: "flex", flexDirection: "column",
+                    alignItems: "center", justifyContent: "center", gap: 8,
+                    background: "linear-gradient(160deg, var(--plum-600), var(--plum-700))",
+                  }}>
+                    <span className="display" style={{ fontSize: 56, lineHeight: 1, color: "var(--purple-400)", opacity: 0.85 }}>
+                      {p.name.split(" ").map(w => w[0]).slice(0, 2).join("").toUpperCase()}
+                    </span>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--on-dark-3)" }}>
+                      Photo coming soon
+                    </span>
+                  </div>
+                )}
               </div>
               {p.tag && (
                 <span style={{
