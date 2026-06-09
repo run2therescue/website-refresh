@@ -506,9 +506,9 @@ function TeamCard({ p, featured }) {
       onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-5px)"; e.currentTarget.style.boxShadow = "0 24px 48px -22px oklch(0.1 0.04 310 / 0.7)"; }}
       onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}
     >
-      <div style={{ aspectRatio: "1/1", borderRadius: featured ? 16 : 13, overflow: "hidden", marginBottom: featured ? 18 : 13, background: "var(--plum-600)", position: "relative" }}>
+      <div style={{ aspectRatio: featured ? "4/3" : "1/1", borderRadius: featured ? 16 : 13, overflow: "hidden", marginBottom: featured ? 16 : 13, background: "var(--plum-600)", position: "relative" }}>
         {p.img ? (
-          <Img src={p.img} alt={p.name} />
+          <Img src={p.img} alt={p.name} style={featured ? { objectPosition: "center 28%" } : {}} />
         ) : (
           <div aria-hidden="true" style={{
             width: "100%", height: "100%", display: "flex", flexDirection: "column",
@@ -626,7 +626,7 @@ function Team() {
     { name: "Meg", role: "Merch Lead", tag: "Team", img: null, copy: "Bio coming soon." },
   ];
   return (
-    <section className="section-dark" style={{ padding: "120px 0", position: "relative", overflow: "hidden" }}>
+    <section className="section-dark" style={{ padding: "92px 0", position: "relative", overflow: "hidden" }}>
       <Paw className="paw-dark" style={{ top: 60, right: "6%", width: 52, height: 52 }} />
       <Paw className="paw-dark" style={{ bottom: 80, left: "5%", width: 56, height: 56 }} />
       <div className="wrap">
