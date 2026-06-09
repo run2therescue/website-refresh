@@ -366,7 +366,7 @@ function DifferentDogsS() {
   const { animals } = useAnimalsS();
   const find = (n) => animals.find(a => (a.name || "").trim().toLowerCase() === n.toLowerCase());
   const cards = [
-    { name: "Twitch", status: "looking", live: find("Twitch") },
+    { name: "Twitch", status: "looking", live: find("Twitch"), zoom: 1.12 },
     { name: "Sweet Pea", status: "looking", live: find("Sweet Pea") },
     { name: "Kronk", img: "assets/kronk-after-snow.jpg", status: "home" },
     { name: "Honey", img: "assets/honey-after-portrait.png", status: "home" },
@@ -396,7 +396,7 @@ function DifferentDogsS() {
               >
                 <div style={{ aspectRatio: "1/1", overflow: "hidden", background: "var(--lav-200)", position: "relative" }}>
                   {img
-                    ? <ImgS src={img} alt={c.name} />
+                    ? <ImgS src={img} alt={c.name} style={c.zoom ? { transform: `scale(${c.zoom})` } : undefined} />
                     : <div aria-hidden="true" style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(160deg, var(--lav-200), var(--lav-100))" }}>
                         <span className="display" style={{ fontSize: 40, color: "var(--purple-400)" }}>{c.name[0]}</span>
                       </div>}
