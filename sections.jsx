@@ -616,7 +616,7 @@ function DifferentDogs({ onSponsor }) {
 function Team() {
   // Founders render large; the growing team renders in a uniform, equal-height row below.
   const founders = [
-    { name: "Brandy Cherven", role: "Chief Executive Officer", tag: "Co-Founder", img: IMG.teamBrandy, copy: "I never imagined rescue would be my life's work, until I met Sunny, a three-legged Jindo and the first meat-trade survivor in my life. In 2024 I co-founded R2TR to give these dogs the second chance they deserve. Rescue isn't what I do, it's who I am. In memory of Sunny, the dog who changed everything. ✨" },
+    { name: "Brandy Cherven", role: "Chief Executive Officer", tag: "Co-Founder", img: IMG.teamBrandy, copy: "I never imagined rescuing dogs would become my life's work. Everything changed when I adopted Sunny, a three-legged Jindo rescued from the dog meat trade in East Asia. She led me to leave my traditional career and, in 2024, co-found Run 2 The Rescue, where our team saves survivors from slaughterhouses, meat trucks, and neglect and gives them medical care, rehabilitation, and loving homes. Rescue is more than what I do, it's who I am. In memory of Sunny, the dog who changed everything." },
     { name: "Bonnie Klapper", role: "Chief Operating Officer", tag: "Co-Founder", img: IMG.teamBonnie, copy: "Bonnie S. Klapper spent nearly two dozen years as a federal prosecutor, an Assistant U.S. Attorney in California and New York. Today she puts that same fight behind animals, offering pro bono support to rescue nonprofits and the activists on the ground. She stands up for all animals, but dogs have always held her heart." },
   ];
   const team = [
