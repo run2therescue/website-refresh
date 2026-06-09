@@ -534,7 +534,7 @@ function TeamCard({ p, featured }) {
       )}
       <div className="display" style={{ fontSize: featured ? 24 : 19, marginBottom: 4, color: "#fff" }}>{p.name}</div>
       <div style={{ fontSize: featured ? 11 : 10, fontFamily: "var(--font-mono)", letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--on-dark-3)", marginBottom: featured ? 14 : 10 }}>{p.role}</div>
-      <p style={{ color: "var(--on-dark-2)", fontSize: featured ? 14 : 13, margin: 0, lineHeight: 1.6, ...(featured ? {} : { display: "-webkit-box", WebkitLineClamp: 4, WebkitBoxOrient: "vertical", overflow: "hidden" }) }}>{p.copy}</p>
+      <p style={{ color: "var(--on-dark-2)", fontSize: featured ? 14 : 13, margin: 0, lineHeight: 1.6, ...(featured ? {} : { display: "-webkit-box", WebkitLineClamp: 9, WebkitBoxOrient: "vertical", overflow: "hidden" }) }}>{p.copy}</p>
     </div>
   );
 }
@@ -620,7 +620,7 @@ function Team() {
     { name: "Bonnie Klapper", role: "Chief Operating Officer", tag: "Co-Founder", img: IMG.teamBonnie, copy: "Bonnie S. Klapper spent nearly two dozen years as a federal prosecutor, an Assistant U.S. Attorney in California and New York. Today she puts that same fight behind animals, offering pro bono support to rescue nonprofits and the activists on the ground. She stands up for all animals, but dogs have always held her heart." },
   ];
   const team = [
-    { name: "Gregory Carrico", role: "Foster Dad & Volunteer", tag: "Volunteer", img: IMG.teamGreg, copy: "Foster dad to a pack of twelve rescued poodles in Upstate New York, championing senior and special-needs dogs at R2TR." },
+    { name: "Gregory Carrico", role: "Foster Dad & Volunteer", tag: "Volunteer", img: IMG.teamGreg, copy: "Lifelong animal lover and ringleader of a twelve-poodle pack (plus fosters), run out of a not-so-secret bunker in Upstate New York. The daily agenda: rehabilitation, well-being, fashion, and pup-cups. He champions senior and special-needs rescues and the joy of bringing them home. \"Are all these dogs yours?\" ~ everyone Gregory meets while walking his dogs." },
     { name: "Kirk", role: "Tech Wizard", tag: "Team", img: null, copy: "Bio coming soon." },
     { name: "Aman", role: "Tech Lead", tag: "Team", img: null, copy: "Bio coming soon." },
     { name: "Meg", role: "Merch Lead", tag: "Team", img: null, copy: "Bio coming soon." },
