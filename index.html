@@ -67,9 +67,9 @@
   window.__TWEAK_DEFAULTS__ = TWEAK_DEFAULTS;
 </script>
 
-<script type="text/babel" src="components.jsx?v=5"></script>
+<script type="text/babel" src="components.jsx?v=6"></script>
 <script type="text/babel" src="help-illustrations.jsx?v=4"></script>
-<script type="text/babel" src="sections.jsx?v=14"></script>
+<script type="text/babel" src="sections.jsx?v=15"></script>
 <script type="text/babel" src="interactions.jsx?v=6"></script>
 <script type="text/babel" src="enhancements.jsx?v=6"></script>
 
@@ -123,6 +123,7 @@ function App() {
       <RealityTeaser />
       <Journey />
       <Feature />
+      <DifferentDogs onSponsor={openSponsor} />
       <ImpactCalc onDonate={(amt) => openDonate()} />
       <Voices />
       <Testimonials />

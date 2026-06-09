@@ -500,6 +500,7 @@ function TeamCard({ p, featured }) {
     <div className="reveal" style={{
       background: "var(--plum-700)", borderRadius: featured ? 24 : 20, overflow: "hidden",
       padding: featured ? 22 : 16, border: "1px solid var(--line-dark)",
+      height: "100%", display: "flex", flexDirection: "column",
       transition: "transform .3s cubic-bezier(.2,.7,.3,1), box-shadow .3s ease",
     }}
       onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-5px)"; e.currentTarget.style.boxShadow = "0 24px 48px -22px oklch(0.1 0.04 310 / 0.7)"; }}
@@ -533,19 +534,93 @@ function TeamCard({ p, featured }) {
       )}
       <div className="display" style={{ fontSize: featured ? 24 : 19, marginBottom: 4, color: "#fff" }}>{p.name}</div>
       <div style={{ fontSize: featured ? 11 : 10, fontFamily: "var(--font-mono)", letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--on-dark-3)", marginBottom: featured ? 14 : 10 }}>{p.role}</div>
-      <p style={{ color: "var(--on-dark-2)", fontSize: featured ? 14 : 13, margin: 0, lineHeight: 1.6 }}>{p.copy}</p>
+      <p style={{ color: "var(--on-dark-2)", fontSize: featured ? 14 : 13, margin: 0, lineHeight: 1.6, ...(featured ? {} : { display: "-webkit-box", WebkitLineClamp: 4, WebkitBoxOrient: "vertical", overflow: "hidden" }) }}>{p.copy}</p>
     </div>
   );
 }
 
+function DifferentDogs({ onSponsor }) {
+  // Curated "different is just different" feature. Kronk and Honey are alumni
+  // (static photos); Twitch and Sweet Pea pull live from Shelterluv by name so
+  // their photo, breed, age, and availability stay current.
+  const { animals } = useAnimals();
+  const find = (n) => animals.find(a => (a.name || "").trim().toLowerCase() === n.toLowerCase());
+  const cards = [
+    { name: "Kronk", img: IMG.kronkAfter, status: "home", note: "Rescued from a holding pen in Yulin and featured in People Magazine. Proof of what a second chance makes possible." },
+    { name: "Twitch", status: "looking", live: find("Twitch") },
+    { name: "Honey", img: IMG.honeyAfter, status: "home", note: "From frightened to flourishing. Honey's before and after says everything about the road from fear to faith." },
+    { name: "Sweet Pea", status: "looking", live: find("Sweet Pea") },
+  ];
+  return (
+    <section className="section-light" style={{ padding: "88px 0", position: "relative", overflow: "hidden" }}>
+      <Paw className="paw-light" style={{ top: 48, right: "6%", width: 46, height: 46 }} />
+      <Paw className="paw-light" style={{ bottom: 56, left: "5%", width: 40, height: 40 }} />
+      <div className="wrap">
+        <div style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 48px" }}>
+          <div className="eyebrow" style={{ color: "var(--purple-600)", marginBottom: 12 }}>✦ Different Dogs</div>
+          <h2 className="display" style={{ fontSize: "clamp(34px, 4.4vw, 56px)", margin: "0 0 12px", color: "var(--ink)" }}>
+            Meet Our Different Dogs
+          </h2>
+          <p style={{ fontSize: 16, color: "var(--ink-2)", margin: 0, lineHeight: 1.6 }}>
+            Because different isn't bad. It's just different. Seniors, special needs, and the wonderfully one-of-a-kind, every one of them worth showing up for.
+          </p>
+        </div>
+        <div className="ways-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 20, alignItems: "stretch" }}>
+          {cards.map(c => {
+            const looking = c.status === "looking";
+            const img = c.img || (c.live && c.live.cover) || null;
+            const note = c.note || (c.live && c.live.blurb) || "";
+            const meta = looking
+              ? [c.live && c.live.breed, c.live && c.live.ageGroup].filter(Boolean).join(" · ")
+              : "Alumni";
+            return (
+              <article key={c.name} className="reveal" onClick={looking ? () => onSponsor(c.name) : undefined} style={{
+                background: "#fff", borderRadius: 20, overflow: "hidden",
+                cursor: looking ? "pointer" : "default", height: "100%",
+                display: "flex", flexDirection: "column",
+                transition: "transform .25s ease, box-shadow .25s ease",
+              }}
+                onMouseEnter={e => { if (looking) { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "var(--shadow)"; } }}
+                onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}
+              >
+                <div style={{ aspectRatio: "4/5", overflow: "hidden", background: "var(--lav-200)", position: "relative" }}>
+                  {img
+                    ? <Img src={img} alt={c.name} />
+                    : <div aria-hidden="true" style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(160deg, var(--lav-200), var(--lav-100))" }}>
+                        <span className="display" style={{ fontSize: 52, color: "var(--purple-400)" }}>{c.name[0]}</span>
+                      </div>}
+                  <span style={{
+                    position: "absolute", top: 12, left: 12,
+                    fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase",
+                    padding: "5px 10px", borderRadius: 999,
+                    background: looking ? "var(--purple-500)" : "rgba(26,16,37,0.74)", color: "#fff",
+                  }}>{looking ? "Looking for a home" : "Forever home ♥"}</span>
+                </div>
+                <div style={{ padding: 18, display: "flex", flexDirection: "column", gap: 6, flex: 1 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
+                    <div className="display" style={{ fontSize: 22, color: "var(--ink)" }}>{c.name}</div>
+                    {meta && <span style={{ fontSize: 10, fontFamily: "var(--font-mono)", letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--purple-600)", textAlign: "right", flexShrink: 0 }}>{meta}</span>}
+                  </div>
+                  {note && <p style={{ margin: 0, fontSize: 13, color: "var(--ink-2)", lineHeight: 1.5, display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{note}</p>}
+                  {looking && <span style={{ marginTop: "auto", paddingTop: 8, fontWeight: 600, fontSize: 13, color: "var(--purple-600)" }}>Sponsor or adopt →</span>}
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Team() {
-  // Founders render large; the growing team renders in a tighter row below.
+  // Founders render large; the growing team renders in a uniform, equal-height row below.
   const founders = [
     { name: "Brandy Cherven", role: "Chief Executive Officer", tag: "Co-Founder", img: IMG.teamBrandy, copy: "I never imagined rescue would be my life's work, until I met Sunny, a three-legged Jindo and the first meat-trade survivor in my life. In 2024 I co-founded R2TR to give these dogs the second chance they deserve. Rescue isn't what I do, it's who I am. In memory of Sunny, the dog who changed everything. ✨" },
     { name: "Bonnie Klapper", role: "Chief Operating Officer", tag: "Co-Founder", img: IMG.teamBonnie, copy: "Bonnie S. Klapper spent nearly two dozen years as a federal prosecutor, an Assistant U.S. Attorney in California and New York. Today she puts that same fight behind animals, offering pro bono support to rescue nonprofits and the activists on the ground. She stands up for all animals, but dogs have always held her heart." },
   ];
   const team = [
-    { name: "Gregory Carrico", role: "Foster Dad & Volunteer", tag: "Volunteer", img: IMG.teamGreg, copy: "A lifelong animal lover, Gregory shares his Upstate New York home with a pack of twelve rescued poodles, plus fosters, pouring himself into their care, well-being, and the occasional pup-cup. Through his advocacy and volunteer work with R2TR, he champions senior and special-needs dogs and the quiet joy of giving them a forever home. \"Are all these dogs yours?\" ~ everyone Gregory meets while walking his dogs." },
+    { name: "Gregory Carrico", role: "Foster Dad & Volunteer", tag: "Volunteer", img: IMG.teamGreg, copy: "Foster dad to a pack of twelve rescued poodles in Upstate New York, championing senior and special-needs dogs at R2TR." },
     { name: "Kirk", role: "Tech Wizard", tag: "Team", img: null, copy: "Bio coming soon." },
     { name: "Aman", role: "Tech Lead", tag: "Team", img: null, copy: "Bio coming soon." },
     { name: "Meg", role: "Merch Lead", tag: "Team", img: null, copy: "Bio coming soon." },
@@ -566,10 +641,16 @@ function Team() {
         </div>
 
         <div className="team-grid" style={{
-          display: "grid", gridTemplateColumns: "1.4fr 1.4fr 1fr 1fr 1fr 1fr",
-          gap: 18, justifyContent: "center", maxWidth: 1320, margin: "0 auto", alignItems: "start",
+          display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+          gap: 28, justifyContent: "center", maxWidth: 920, margin: "0 auto 24px", alignItems: "stretch",
         }}>
           {founders.map(p => <TeamCard key={p.name} p={p} featured />)}
+        </div>
+
+        <div className="team-grid" style={{
+          display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+          gap: 20, justifyContent: "center", maxWidth: 1100, margin: "0 auto", alignItems: "stretch",
+        }}>
           {team.map(p => <TeamCard key={p.name} p={p} />)}
         </div>
       </div>
@@ -1015,4 +1096,4 @@ function RealityTeaser() {
   );
 }
 
-Object.assign(window, { Press, Mission, Survivors, Journey, Feature, Reality, RealityTeaser, Testimonials, Ways, Voices, Team, FinalCTA, Footer });
+Object.assign(window, { Press, Mission, Survivors, Journey, Feature, Reality, RealityTeaser, Testimonials, Ways, Voices, Team, DifferentDogs, FinalCTA, Footer });
