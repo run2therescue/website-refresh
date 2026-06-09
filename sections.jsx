@@ -495,11 +495,56 @@ function Voices() {
   );
 }
 
+function TeamCard({ p, featured }) {
+  return (
+    <div className="reveal" style={{
+      background: "var(--plum-700)", borderRadius: featured ? 24 : 20, overflow: "hidden",
+      padding: featured ? 22 : 16, border: "1px solid var(--line-dark)",
+      transition: "transform .3s cubic-bezier(.2,.7,.3,1), box-shadow .3s ease",
+    }}
+      onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-5px)"; e.currentTarget.style.boxShadow = "0 24px 48px -22px oklch(0.1 0.04 310 / 0.7)"; }}
+      onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}
+    >
+      <div style={{ aspectRatio: "1/1", borderRadius: featured ? 16 : 13, overflow: "hidden", marginBottom: featured ? 18 : 13, background: "var(--plum-600)", position: "relative" }}>
+        {p.img ? (
+          <Img src={p.img} alt={p.name} />
+        ) : (
+          <div aria-hidden="true" style={{
+            width: "100%", height: "100%", display: "flex", flexDirection: "column",
+            alignItems: "center", justifyContent: "center", gap: 8,
+            background: "linear-gradient(160deg, var(--plum-600), var(--plum-700))",
+          }}>
+            <span className="display" style={{ fontSize: featured ? 56 : 40, lineHeight: 1, color: "var(--purple-400)", opacity: 0.85 }}>
+              {p.name.split(" ").map(w => w[0]).slice(0, 2).join("").toUpperCase()}
+            </span>
+            <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--on-dark-3)" }}>
+              Photo coming soon
+            </span>
+          </div>
+        )}
+      </div>
+      {p.tag && (
+        <span style={{
+          display: "inline-block", marginBottom: 10,
+          fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase",
+          color: "var(--purple-400)", background: "oklch(0.72 0.14 305 / 0.15)",
+          padding: "4px 10px", borderRadius: 999,
+        }}>{p.tag}</span>
+      )}
+      <div className="display" style={{ fontSize: featured ? 24 : 19, marginBottom: 4, color: "#fff" }}>{p.name}</div>
+      <div style={{ fontSize: featured ? 11 : 10, fontFamily: "var(--font-mono)", letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--on-dark-3)", marginBottom: featured ? 14 : 10 }}>{p.role}</div>
+      <p style={{ color: "var(--on-dark-2)", fontSize: featured ? 14 : 13, margin: 0, lineHeight: 1.6 }}>{p.copy}</p>
+    </div>
+  );
+}
+
 function Team() {
-  // Leadership grid, add more team members here and the grid scales/centers.
-  const people = [
+  // Founders render large; the growing team renders in a tighter row below.
+  const founders = [
     { name: "Brandy Cherven", role: "Chief Executive Officer", tag: "Co-Founder", img: IMG.teamBrandy, copy: "I never imagined rescue would be my life's work, until I met Sunny, a three-legged Jindo and the first meat-trade survivor in my life. In 2024 I co-founded R2TR to give these dogs the second chance they deserve. Rescue isn't what I do, it's who I am. In memory of Sunny, the dog who changed everything. ✨" },
     { name: "Bonnie Klapper", role: "Chief Operating Officer", tag: "Co-Founder", img: IMG.teamBonnie, copy: "Bonnie S. Klapper spent nearly two dozen years as a federal prosecutor, an Assistant U.S. Attorney in California and New York. Today she puts that same fight behind animals, offering pro bono support to rescue nonprofits and the activists on the ground. She stands up for all animals, but dogs have always held her heart." },
+  ];
+  const team = [
     { name: "Gregory Carrico", role: "Foster Dad & Volunteer", tag: "Volunteer", img: IMG.teamGreg, copy: "A lifelong animal lover, Gregory shares his Upstate New York home with a pack of twelve rescued poodles, plus fosters, pouring himself into their care, well-being, and the occasional pup-cup. Through his advocacy and volunteer work with R2TR, he champions senior and special-needs dogs and the quiet joy of giving them a forever home. \"Are all these dogs yours?\" ~ everyone Gregory meets while walking his dogs." },
     { name: "Kirk", role: "Tech Wizard", tag: "Team", img: null, copy: "Bio coming soon." },
     { name: "Aman", role: "Tech Lead", tag: "Team", img: null, copy: "Bio coming soon." },
@@ -521,49 +566,17 @@ function Team() {
         </div>
 
         <div className="team-grid" style={{
-          display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 300px))",
-          gap: 28, justifyContent: "center", maxWidth: 1120, margin: "0 auto",
+          display: "grid", gridTemplateColumns: "repeat(2, minmax(260px, 360px))",
+          gap: 28, justifyContent: "center", maxWidth: 780, margin: "0 auto 24px",
         }}>
-          {people.map(p => (
-            <div key={p.name} className="reveal" style={{
-              background: "var(--plum-700)", borderRadius: 24, overflow: "hidden",
-              padding: 20, border: "1px solid var(--line-dark)",
-              transition: "transform .3s cubic-bezier(.2,.7,.3,1), box-shadow .3s ease",
-            }}
-              onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-5px)"; e.currentTarget.style.boxShadow = "0 24px 48px -22px oklch(0.1 0.04 310 / 0.7)"; }}
-              onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}
-            >
-              <div style={{ aspectRatio: "1/1", borderRadius: 16, overflow: "hidden", marginBottom: 18, background: "var(--plum-600)", position: "relative" }}>
-                {p.img ? (
-                  <Img src={p.img} alt={p.name} />
-                ) : (
-                  <div aria-hidden="true" style={{
-                    width: "100%", height: "100%", display: "flex", flexDirection: "column",
-                    alignItems: "center", justifyContent: "center", gap: 8,
-                    background: "linear-gradient(160deg, var(--plum-600), var(--plum-700))",
-                  }}>
-                    <span className="display" style={{ fontSize: 56, lineHeight: 1, color: "var(--purple-400)", opacity: 0.85 }}>
-                      {p.name.split(" ").map(w => w[0]).slice(0, 2).join("").toUpperCase()}
-                    </span>
-                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--on-dark-3)" }}>
-                      Photo coming soon
-                    </span>
-                  </div>
-                )}
-              </div>
-              {p.tag && (
-                <span style={{
-                  display: "inline-block", marginBottom: 10,
-                  fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase",
-                  color: "var(--purple-400)", background: "oklch(0.72 0.14 305 / 0.15)",
-                  padding: "4px 10px", borderRadius: 999,
-                }}>{p.tag}</span>
-              )}
-              <div className="display" style={{ fontSize: 24, marginBottom: 4, color: "#fff" }}>{p.name}</div>
-              <div style={{ fontSize: 11, fontFamily: "var(--font-mono)", letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--on-dark-3)", marginBottom: 14 }}>{p.role}</div>
-              <p style={{ color: "var(--on-dark-2)", fontSize: 14, margin: 0, lineHeight: 1.6 }}>{p.copy}</p>
-            </div>
-          ))}
+          {founders.map(p => <TeamCard key={p.name} p={p} featured />)}
+        </div>
+
+        <div className="team-grid" style={{
+          display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 230px))",
+          gap: 20, justifyContent: "center", maxWidth: 1000, margin: "0 auto", alignItems: "start",
+        }}>
+          {team.map(p => <TeamCard key={p.name} p={p} />)}
         </div>
       </div>
     </section>

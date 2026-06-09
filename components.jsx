@@ -203,7 +203,7 @@ function HeroCentered({ onDonate }) {
         }}>
           <Stat num="1,200+" label="Dogs rescued" />
           <Stat num="800+" label="Forever homes" />
-          <Stat num="14" label="Years on the ground" />
+          <Stat num="2" label="Years on the ground" />
           <Stat num="2" label="Countries · CN · KR" />
         </div>
       </div>
