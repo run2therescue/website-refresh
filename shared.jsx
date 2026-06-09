@@ -359,7 +359,63 @@ async function submitForm(fields, formName) {
   }
 }
 
+/* Compact "Different Dogs" strip for the top of Adopt / Sponsor pages.
+   Kronk + Honey are alumni (static photos); Twitch + Sweet Pea pull live from
+   Shelterluv by name so their photo, breed, age, and availability stay current. */
+function DifferentDogsS() {
+  const { animals } = useAnimalsS();
+  const find = (n) => animals.find(a => (a.name || "").trim().toLowerCase() === n.toLowerCase());
+  const cards = [
+    { name: "Kronk", img: "assets/kronk-after-snow.jpg", status: "home" },
+    { name: "Twitch", status: "looking", live: find("Twitch") },
+    { name: "Honey", img: "assets/honey-after-portrait.png", status: "home" },
+    { name: "Sweet Pea", status: "looking", live: find("Sweet Pea") },
+  ];
+  return (
+    <section className="section-light" style={{ padding: "44px 0 28px" }}>
+      <div className="wrap">
+        <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", flexWrap: "wrap", gap: "6px 16px", marginBottom: 20 }}>
+          <h2 className="display" style={{ fontSize: "clamp(22px, 3vw, 34px)", margin: 0, color: "var(--ink)" }}>
+            Different isn't bad. It's just different.
+          </h2>
+          <span style={{ fontSize: 13, color: "var(--ink-2)" }}>Seniors and special-needs survivors worth showing up for.</span>
+        </div>
+        <div className="ways-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14 }}>
+          {cards.map(c => {
+            const looking = c.status === "looking";
+            const img = c.img || (c.live && c.live.cover) || null;
+            const meta = looking
+              ? [c.live && c.live.breed, c.live && c.live.ageGroup].filter(Boolean).join(" · ")
+              : "Alumni";
+            return (
+              <div key={c.name} style={{ background: "#fff", borderRadius: 16, overflow: "hidden", border: "1px solid var(--lav-200)" }}>
+                <div style={{ aspectRatio: "1/1", overflow: "hidden", background: "var(--lav-200)", position: "relative" }}>
+                  {img
+                    ? <ImgS src={img} alt={c.name} />
+                    : <div aria-hidden="true" style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(160deg, var(--lav-200), var(--lav-100))" }}>
+                        <span className="display" style={{ fontSize: 40, color: "var(--purple-400)" }}>{c.name[0]}</span>
+                      </div>}
+                  <span style={{
+                    position: "absolute", top: 8, left: 8,
+                    fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: "0.08em", textTransform: "uppercase",
+                    padding: "4px 8px", borderRadius: 999,
+                    background: looking ? "var(--purple-500)" : "rgba(26,16,37,0.74)", color: "#fff",
+                  }}>{looking ? "Looking" : "Forever home ♥"}</span>
+                </div>
+                <div style={{ padding: "10px 12px" }}>
+                  <div className="display" style={{ fontSize: 16, color: "var(--ink)", lineHeight: 1.1 }}>{c.name}</div>
+                  {meta && <div style={{ fontSize: 9, fontFamily: "var(--font-mono)", letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--purple-600)", marginTop: 4 }}>{meta}</div>}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 Object.assign(window, {
   IMG_BANK, PawS, ImgS, NavS, FooterS, MagneticS, CountUpS, ScrollProgressS, useRevealS, useAnimalsS,
-  submitForm, WEB3FORMS_KEY,
+  DifferentDogsS, submitForm, WEB3FORMS_KEY,
 });

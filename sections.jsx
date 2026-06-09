@@ -526,7 +526,7 @@ function TeamCard({ p, featured }) {
       </div>
       {p.tag && (
         <span style={{
-          display: "inline-block", marginBottom: 10,
+          display: "inline-block", alignSelf: "flex-start", marginBottom: 10,
           fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase",
           color: "var(--purple-400)", background: "oklch(0.72 0.14 305 / 0.15)",
           padding: "4px 10px", borderRadius: 999,

@@ -272,6 +272,7 @@ function SponsorPage() {
   return (
     <>
       <SponsorHero />
+      <DifferentDogsS />
       <SponsorStart selectedDog={selectedDog} onSponsor={onSponsor} />
       <SponsorPicker animals={available} status={status}
         selectedDog={selectedDog} setSelectedDog={setSelectedDog}
