@@ -167,7 +167,7 @@ function DonateHero() {
       <div className="wrap" style={{ textAlign: "center", maxWidth: 880, margin: "0 auto" }}>
         <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 16 }}>✦ Donate</div>
         <h1 className="display" style={{ fontSize: "clamp(40px, 6vw, 80px)", margin: "0 0 22px", color: "#fff", lineHeight: 1.05 }}>
-          Donate to Rescue and Rehabilitate <em>Dogs from the Meat Trade.</em>
+          Donate to Rescue and Rehabilitate <em>Dogs from the Dog Meat Trade.</em>
         </h1>
         <p style={{ fontSize: 17, color: "var(--on-dark-2)", margin: "0 auto", maxWidth: 620, lineHeight: 1.55 }}>
           Every dollar is tracked to rescue, transport, vet care, and the people who keep them alive.
@@ -184,7 +184,7 @@ function MissionSection() {
         <div className="dm-rule">
           <div className="eyebrow-dark" style={{ marginBottom: 16 }}>Where it goes</div>
           <p className="dm-body">
-            We pull dogs from holding pens in China and South Korea, heal what's broken, and put them on planes home. That's the work your gift pays for.
+            We rescue dogs from holding pens in China, heal what's broken, and put them on planes home. That's the work your gift pays for.
           </p>
           <p className="dm-body">
             Vet care, recovery, a flight home, a foster who keeps them safe until the right family says yes.
@@ -207,7 +207,7 @@ function HopePullquote() {
             </svg>
           </div>
           <p className="hope-lead">
-            Your monthly gift pulls voiceless victims out of holding pens and into safety. It rescues, it heals, it brings them home.
+            Your monthly gift helps us rescue more dogs from the dog meat trade and bring them to safety at our sanctuary. It rescues, it heals, it brings them home.
           </p>
           <p className="hope-emph">
             You give them the one thing they've never had. Hope.

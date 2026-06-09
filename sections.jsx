@@ -108,14 +108,14 @@ function Mission() {
         }}>
           <div>
             <h2 className="display display-serif-em" style={{ fontSize: "clamp(26px, 3.2vw, 42px)", margin: 0, color: "var(--ink)", lineHeight: 1.15 }}>
-              Our mission is to give <em>every</em> dog rescued from the meat trade a chance at a <em>loving</em>, safe life.
+              Our mission is to give <em>every</em> dog rescued from the dog meat trade a chance at a <em>loving</em>, safe life.
             </h2>
           </div>
           <div>
             <div className="eyebrow-dark" style={{ marginBottom: 6 }}>The scale of it</div>
             <div className="display" style={{ fontSize: 68, lineHeight: 1, color: "var(--ink)", marginBottom: 6 }}><CountUp to={30} suffix="M" /></div>
             <div style={{ fontSize: 15, color: "var(--ink-2)", marginBottom: 8 }}>
-              dogs are killed in Asia's meat trade every year.
+              dogs are killed in Asia's dog meat trade every year.
             </div>
             <div style={{
               fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 18, lineHeight: 1.35,
@@ -157,14 +157,14 @@ function Survivors({ onSponsor }) {
               Hopeful Survivors in Search of a Loving Home
             </h2>
             <p style={{ fontSize: 15, color: "var(--ink-2)", margin: "0 0 22px", maxWidth: 480, lineHeight: 1.6 }}>
-              We pull dogs from the meat trade, get them well, and place them with families ready to give a second chance.
+              We rescue dogs from the dog meat trade, get them well, and place them with families ready to give a second chance.
             </p>
             <Magnetic><a href="Adopt.html" className="btn btn-accent">Adopt Today <span className="arrow">→</span></a></Magnetic>
             <div style={{ background: "var(--purple-500)", color: "#fff", borderRadius: 18, padding: "22px 26px", marginTop: 28 }}>
               <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.72)", marginBottom: 8 }}>Where it began</div>
               <div className="display" style={{ fontSize: 22, marginBottom: 6 }}>Meet Sunny</div>
               <p style={{ fontSize: 14, lineHeight: 1.6, color: "rgba(255,255,255,0.92)", margin: 0 }}>
-                Sunny's rescue is the story that started it all, the dog whose journey to safety inspired the founding of Run 2 The Rescue. Every survivor since follows the trail he opened.
+                Sunny's rescue is the story that started it all, the dog whose journey to safety inspired the founding of Run 2 The Rescue. Every survivor since follows the trail she opened.
               </p>
             </div>
           </div>
@@ -246,8 +246,8 @@ function Survivors({ onSponsor }) {
 function Journey() {
   // Real R2R survivors. beforeFocal / afterFocal control CSS object-position.
   const items = [
-    { name: "Kronk",  before: IMG.kronkBefore,  after: IMG.kronkAfter,  story: "Pulled from a holding pen in Yulin. Featured in People Magazine." },
-    { name: "Alfie",  before: IMG.alfieBefore,  after: IMG.alfieAfter,  story: "From trauma to trust. Pulled from the trade and finding his way home." },
+    { name: "Kronk",  before: IMG.kronkBefore,  after: IMG.kronkAfter,  story: "Rescued from a holding pen in Yulin. Featured in People Magazine." },
+    { name: "Alfie",  before: IMG.alfieBefore,  after: IMG.alfieAfter,  story: "From trauma to trust. Rescued from the dog meat trade and finding his way home." },
     { name: "Gertie", before: IMG.gertieBefore, after: IMG.gertieAfter, story: "From fear to faith. Rescued from the trade and finding her people." },
     { name: "Honey",  before: IMG.honeyBefore,  after: IMG.honeyAfter,  story: "From forgotten to forever. A second chance, fully claimed.", beforeFocal: "20% center" },
   ];
@@ -353,7 +353,7 @@ function Feature() {
               Meet Kronk
             </h2>
             <p style={{ fontSize: 15, color: "var(--ink-2)", marginBottom: 22, maxWidth: 480, lineHeight: 1.65 }}>
-              Pulled from a holding pen in Yulin, Kronk now leaps through fresh snow a world away. His journey from the meat trade to a life of pure joy is proof of what a second chance makes possible, and it caught the eye of <b style={{ color: "var(--ink)" }}>People Magazine</b>.
+              Rescued from a holding pen in Yulin, Kronk now leaps through fresh snow a world away. His journey from the dog meat trade to a life of pure joy is proof of what a second chance makes possible, and it caught the eye of <b style={{ color: "var(--ink)" }}>People Magazine</b>.
             </p>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
               <a href="News.html" className="btn btn-accent">Read Kronk's Story <span className="arrow">→</span></a>
@@ -368,7 +368,7 @@ function Feature() {
 function Reality() {
   const imgs = [IMG.reality1, IMG.reality2, IMG.reality3];
   const labels = [
-    "Dogs crammed into stacked wire cages, awaiting the meat trade",
+    "Dogs crammed into stacked wire cages, awaiting the dog meat trade",
     "A dog presses toward the wire, one of dozens waiting",
     "Crowded behind chain-link, surviving on borrowed time",
   ];
@@ -475,7 +475,7 @@ function Voices() {
       <div className="wrap" style={{ maxWidth: 900 }}>
         <div style={{ textAlign: "center" }}>
           <p style={{ fontSize: 16, color: "var(--on-dark-2)", maxWidth: 620, margin: "0 auto 32px", lineHeight: 1.65 }}>
-            A beacon of hope for the activists who go in, and the voiceless victims they pull out. We fund the rescues, the medical care, the flights home, the forever families.
+            A beacon of hope for the activists who go in, and the voiceless victims they rescue. We fund the rescues, the medical care, the flights home, the forever families.
           </p>
           <div style={{
             borderLeft: "3px solid var(--purple-500)", paddingLeft: 20,
@@ -566,16 +566,10 @@ function Team() {
         </div>
 
         <div className="team-grid" style={{
-          display: "grid", gridTemplateColumns: "repeat(2, minmax(260px, 360px))",
-          gap: 28, justifyContent: "center", maxWidth: 780, margin: "0 auto 24px",
+          display: "grid", gridTemplateColumns: "1.4fr 1.4fr 1fr 1fr 1fr 1fr",
+          gap: 18, justifyContent: "center", maxWidth: 1320, margin: "0 auto", alignItems: "start",
         }}>
           {founders.map(p => <TeamCard key={p.name} p={p} featured />)}
-        </div>
-
-        <div className="team-grid" style={{
-          display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 230px))",
-          gap: 20, justifyContent: "center", maxWidth: 1000, margin: "0 auto", alignItems: "start",
-        }}>
           {team.map(p => <TeamCard key={p.name} p={p} />)}
         </div>
       </div>
@@ -660,7 +654,7 @@ function Footer() {
               <div style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 16, color: "#fff", lineHeight: 1.05 }}>Run 2 The<br />Rescue</div>
             </div>
             <p style={{ color: "var(--on-dark-2)", fontSize: 14, maxWidth: 340, margin: "0 0 20px" }}>
-              Saving lives, one rescue at a time. Dedicated to rescuing dogs from the meat trade and giving them a second chance at life.
+              Saving lives, one rescue at a time. Dedicated to rescuing dogs from the dog meat trade and giving them a second chance at life.
             </p>
             <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--purple-400)" }}>
               ✦ Run · Rescue · Repeat
@@ -674,6 +668,9 @@ function Footer() {
               </a>
               <a href="https://www.tiktok.com/@_run2therescue_" target="_blank" rel="noopener noreferrer" aria-label="Run 2 The Rescue on TikTok" style={{ width: 38, height: 38, borderRadius: "50%", background: "var(--plum-700)", display: "inline-flex", alignItems: "center", justifyContent: "center", color: "var(--on-dark-2)", transition: "background .2s ease, color .2s ease, transform .2s ease" }} onMouseEnter={e => { e.currentTarget.style.background = "var(--purple-500)"; e.currentTarget.style.color = "#fff"; e.currentTarget.style.transform = "translateY(-2px)"; }} onMouseLeave={e => { e.currentTarget.style.background = "var(--plum-700)"; e.currentTarget.style.color = "var(--on-dark-2)"; e.currentTarget.style.transform = "none"; }}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.89-4.51c.3 0 .59.05.85.13V9.4a6.34 6.34 0 0 0-1-.08A6.34 6.34 0 0 0 5.6 20.92a6.34 6.34 0 0 0 10.86-4.43V8.69a8.16 8.16 0 0 0 3.13 1.27V6.69z"/></svg>
+              </a>
+              <a href="https://www.youtube.com/@R2TRDogs" target="_blank" rel="noopener noreferrer" aria-label="Run 2 The Rescue on YouTube" style={{ width: 38, height: 38, borderRadius: "50%", background: "var(--plum-700)", display: "inline-flex", alignItems: "center", justifyContent: "center", color: "var(--on-dark-2)", transition: "background .2s ease, color .2s ease, transform .2s ease" }} onMouseEnter={e => { e.currentTarget.style.background = "var(--purple-500)"; e.currentTarget.style.color = "#fff"; e.currentTarget.style.transform = "translateY(-2px)"; }} onMouseLeave={e => { e.currentTarget.style.background = "var(--plum-700)"; e.currentTarget.style.color = "var(--on-dark-2)"; e.currentTarget.style.transform = "none"; }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.5a3 3 0 0 0-2.11-2.12C19.5 4 12 4 12 4s-7.5 0-9.39.38A3 3 0 0 0 .5 6.5 31.6 31.6 0 0 0 .12 12a31.6 31.6 0 0 0 .38 5.5 3 3 0 0 0 2.11 2.12C4.5 20 12 20 12 20s7.5 0 9.39-.38A3 3 0 0 0 23.5 17.5 31.6 31.6 0 0 0 23.88 12a31.6 31.6 0 0 0-.38-5.5zM9.75 15.5v-7l6.25 3.5-6.25 3.5z"/></svg>
               </a>
             </div>
           </div>
@@ -1010,7 +1007,7 @@ function RealityTeaser() {
           Every survivor comes from somewhere
         </h2>
         <p style={{ fontSize: 15, lineHeight: 1.65, color: "var(--on-dark-2)", margin: "0 auto 26px", maxWidth: 520 }}>
-          The dogs we rescue come from caged, crowded holding pens in East Asia. It's hard to look at. We put it behind a notice so you choose when to see it.
+          The dogs we rescue come from horrible circumstances and brutal conditions. It's hard to look at. We put it behind a notice so you choose when to see it.
         </p>
         <a href="Reality.html" className="btn btn-outline-light">See the reality they face <span className="arrow">→</span></a>
       </div>

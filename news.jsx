@@ -30,7 +30,7 @@ const PRESS = [
     id: "nypost-nyers",
     source: "New York Post",
     title: "Meet the NYers Saving Hundreds of Adorable Dogs From Ending Up on the Menu",
-    excerpt: "The New York Post profiles the New Yorkers behind Run 2 The Rescue and their mission to pull dogs out of the East Asia meat trade and into forever homes.",
+    excerpt: "The New York Post profiles the New Yorkers behind Run 2 The Rescue and their mission to rescue dogs from the East Asia dog meat trade and into forever homes.",
     href: "https://nypost.com/2026/04/26/us-news/meet-the-nyers-saving-hundreds-of-adorable-dogs-from-ending-up-on-the-menu/",
     date: "Apr 26, 2026",
   },

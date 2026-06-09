@@ -230,7 +230,7 @@ function RealityClips({ revealed }) {
           Footage from the trade
         </h2>
         <p style={{ fontSize: 15, lineHeight: 1.6, color: "var(--on-dark-2)", margin: "0 0 28px", maxWidth: 520 }}>
-          Short clips from the holding sites and markets our rescuers pull dogs out of.
+          Short clips from the holding sites and markets our rescuers rescue dogs from.
         </p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 280px))", gap: 18, justifyContent: "center" }}>
           {clips.map((src, i) => (
@@ -270,7 +270,7 @@ function RealityCTA() {
           This is what you interrupt
         </h2>
         <p style={{ fontSize: 16, lineHeight: 1.65, color: "var(--ink-2)", margin: "0 auto 28px", maxWidth: 520 }}>
-          Every door below reaches back into that picture and pulls a dog out of
+          Every door below reaches back into that picture and rescues a dog from
           it. Run to the rescue with love, and peace will follow.
         </p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>

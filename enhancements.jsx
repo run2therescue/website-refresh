@@ -77,15 +77,16 @@ function Magnetic({ children, strength = 0.25, ...rest }) {
 
 /* Live activity ticker strip */
 function LiveTicker() {
+  // PLACEHOLDER ticker content — on-brand lines, no fabricated events.
+  // Swap these for real stats/updates when available (e.g. dogs rescued this month,
+  // upcoming transport, latest adoption, sponsorship milestones).
   const items = [
-    "Bao just got cleared for adoption in Austin, TX",
-    "A new sponsor joined from Brooklyn, NY",
-    "Kronk crossed 2,400 People Magazine votes",
-    "Willa's foster family extended her stay by 30 days",
-    "Rescue flight #14 lands in LAX on Friday",
-    "Juno's family sent us her 1-year-home update ♡",
-    "$48 donated in memory of a beloved pet",
-    "Dr. Han cleared 6 survivors for travel this morning",
+    "Run · Rescue · Repeat",
+    "Rescuing dogs from the dog meat trade",
+    "From trauma to trust",
+    "Every survivor deserves a second chance",
+    "Adopt · Sponsor · Foster · Donate",
+    "Real stories and stats coming soon",
   ];
   return (
     <section style={{

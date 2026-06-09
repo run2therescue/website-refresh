@@ -98,8 +98,7 @@ function FosterHeroSplit() {
 function WhyFoster() {
   const items = [
     { icon: "🏠", title: "You're the first home they know", copy: "Many of our dogs have never slept on a bed, been called by a name, or felt safe. You're the one who teaches them that home is real." },
-    { icon: "✈️", title: "Fostering has an end date", copy: "Most last 2 to 8 weeks, from airport pickup to adoption match. We cover food, supplies, and vet care. You cover the couch." },
-    { icon: "💜", title: "Every foster creates space for the next rescue", copy: "Every dog you foster opens a spot for the next survivor waiting in Seoul or Yulin. You save two lives for every one in your home." },
+    { icon: "💜", title: "Every foster creates space for the next rescue", copy: "Every dog you foster opens a spot for the next survivor waiting in Yulin. You save two lives for every one in your home." },
   ];
   return (
     <section id="why" className="why-foster">

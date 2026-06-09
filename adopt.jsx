@@ -57,7 +57,7 @@ function AdoptHeroFilter() {
             Find your next <em>best friend.</em>
           </h1>
           <p style={{ fontSize: 17, color: "var(--on-dark-2)", margin: "0 auto", maxWidth: 560, lineHeight: 1.55 }}>
-            Pulled from the meat trade. Medically cleared. Ready for a home. Filter for a match, or scroll the whole family.
+            Rescued from the dog meat trade. Medically cleared. Ready for a home. Filter for a match, or scroll the whole family.
           </p>
         </div>
 
@@ -65,7 +65,6 @@ function AdoptHeroFilter() {
           <HeroStat num={count || 0} label="Dogs waiting" />
           <HeroStat num={800} suffix="+" label="Adopted since 2024" />
           <HeroStat num={2} label="Years rescuing" />
-          <HeroStat num={2} label="Countries · CN · KR" />
         </div>
       </div>
     </header>
@@ -495,8 +494,8 @@ const inputStyle = {
 function AdoptProcess() {
   const steps = [
     { n: "01", t: "Apply", d: "Fill out the application on any dog's profile. Takes 5 minutes." },
-    { n: "02", t: "Meet", d: "We schedule a video or in person meet and greet with your potential match." },
-    { n: "03", t: "Home check", d: "A quick home visit, virtual or in person, to confirm a safe environment." },
+    { n: "02", t: "Meet", d: "We schedule a video meet and greet with your potential match." },
+    { n: "03", t: "Home check", d: "A few photos or a short video of your space, so we can confirm a safe environment." },
     { n: "04", t: "Welcome home", d: "Sign the adoption agreement, pay the fee, and bring them home. Lifetime support included." },
   ];
   return (
@@ -510,7 +509,7 @@ function AdoptProcess() {
             Four steps, one new family member.
           </h2>
           <p style={{ color: "var(--on-dark-2)", fontSize: 15, margin: 0 }}>
-            Thorough, because every survivor deserves a forever match. Usually 1 to 3 weeks start to finish.
+            Thorough, because every survivor deserves a forever match.
           </p>
         </div>
         <div className="process-grid">
@@ -531,11 +530,11 @@ function AdoptProcess() {
 const ADOPT_FAQ = [
   {
     q: "Why rescue dogs from China instead of American shelters?",
-    a: "Both matter. We aren't here to argue otherwise. The dogs we bring home weren't going to be adopted into a Chinese shelter, they were headed for the meat trade with no rescue infrastructure around them. Our partners on the ground get them out, our team brings them stateside, and then we ask the same question every American shelter asks: who's the right family for this dog. Many of our adopters have shelter dogs at home already, this just adds one more saved life to the count."
+    a: "We work to save all dogs but have chosen to specialize in dog meat trade rescue because of the tremendous trauma suffered by these survivors. Our partners on the ground conduct high-risk rescues. Every rescued dog goes straight to the veterinarian to receive the care they need. The dogs are then rehabilitated and socialized at our sanctuary in China. When they are ready for their new homes, that's when you as an adopter step in."
   },
   {
     q: "Aren't these dogs too traumatized to be normal pets?",
-    a: "Most settle into normal pet life faster than people expect. The phrase we use is trauma to trust, not trauma to broken. A dog who has been caged still wants what every dog wants: a soft bed, a quiet routine, a person who shows up. We see the tail wag back within the first week of foster, the first real play bow within the first month, and a dog who acts like he's lived in your house forever within three to six months. We're transparent about the dogs who need more time, and we match those to experienced adopters."
+    a: "Most settle into normal family life faster than people expect. The phrase we use is trauma to trust. A dog who has been caged or abused still wants what every dog wants: a soft bed, a quiet routine, a person who shows up. And most of all, love. We have seen extraordinary transformations in these dogs once they are safe."
   },
   {
     q: "What medical care have they had before adoption?",
@@ -543,11 +542,11 @@ const ADOPT_FAQ = [
   },
   {
     q: "How are they with kids, other dogs, and cats?",
-    a: "It depends on the dog, and we tell you exactly what we know. Every profile is honest about who they've been observed with in foster: kids, other dogs, cats, men, women, leashes, stairs, car rides. We never sell a match. If a dog is still working through a fear, we say so, and we match accordingly. The goal isn't to place them fast, it's to place them once."
+    a: "It depends on the dog, and we tell you exactly what we know. Every profile is honest about what we have observed at our sanctuary: kids, other dogs, cats, men, women, leashes, stairs, car rides. We never sell a match. If a dog is still working through a fear, we say so, and we match accordingly. The goal isn't to place them fast, it's to place them once."
   },
   {
     q: "What support do I get after I bring them home?",
-    a: "Lifetime. That's not a slogan, it's the adoption contract. A dedicated coordinator answers texts and emails for as long as you have the dog. Our trainer network gives discounted intro sessions to every R2R adopter. And if life ever changes and you can't keep them, the contract requires the dog comes back to us, never to a shelter. We are their safety net forever."
+    a: "Lifetime. That's not a slogan, it's the adoption contract. A dedicated coordinator answers texts and emails for as long as you have the dog. And if life ever changes and you can't keep them, the contract requires the dog comes back to us, never to a shelter. We are their safety net forever."
   },
   {
     q: "How long until they feel like a normal dog at home?",

@@ -152,7 +152,7 @@ function FooterS() {
               <div style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 16, color: "#fff", lineHeight: 1.05 }}>Run 2 The<br />Rescue</div>
             </div>
             <p style={{ color: "var(--on-dark-2)", fontSize: 14, maxWidth: 340, margin: "0 0 18px" }}>
-              Saving lives, one rescue at a time. Dedicated to rescuing dogs from the meat trade and giving them a second chance at life.
+              Saving lives, one rescue at a time. Dedicated to rescuing dogs from the dog meat trade and giving them a second chance at life.
             </p>
             <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--purple-400)" }}>
               ✦ Run · Rescue · Repeat

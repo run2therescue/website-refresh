@@ -353,6 +353,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   justify-content: center;
 }
 
+/* Team row: 6-up on wide desktop, 3-up on tablet, 1-up on phone (phone rule below). */
+@media (max-width: 1080px) {
+  .team-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+}
+
 @media (max-width: 760px) {
   .nav-desktop { display: none !important; }
   .nav-hamburger { display: inline-flex; }

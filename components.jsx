@@ -189,22 +189,21 @@ function HeroCentered({ onDonate }) {
           maxWidth: 460, margin: "0 0 28px", fontSize: 17, lineHeight: 1.5,
           color: "var(--on-dark-2)",
         }}>
-          Rescuing dogs from the meat trade in East Asia and giving them a second chance at life.
+          Rescuing dogs from the dog meat trade in East Asia and giving them a second chance at life.
         </p>
         <div style={{ display: "flex", gap: 12, justifyContent: "flex-start", flexWrap: "wrap", marginBottom: 48 }}>
-          <Magnetic><button className="btn btn-accent" onClick={onDonate}>Donate Now</button></Magnetic>
-          <a href="#survivors" className="btn btn-outline-light">Meet Our Survivors</a>
+          <a href="#survivors" className="btn btn-accent">Meet Our Survivors</a>
+          <Magnetic><button className="btn btn-outline-light" onClick={onDonate}>Donate Now</button></Magnetic>
         </div>
 
         <div className="stat-row" style={{
-          display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 24,
+          display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24,
           maxWidth: 820, margin: "0", paddingTop: 32,
           borderTop: "1px solid var(--line-dark)",
         }}>
           <Stat num="1,200+" label="Dogs rescued" />
           <Stat num="800+" label="Forever homes" />
           <Stat num="2" label="Years on the ground" />
-          <Stat num="2" label="Countries · CN · KR" />
         </div>
       </div>
     </header>
@@ -237,11 +236,11 @@ function HeroSplit({ onDonate }) {
             Give Hope.<br />Change a Life.<br />Heal with <em>Love.</em>
           </h1>
           <p style={{ maxWidth: 500, fontSize: 18, color: "var(--on-dark-2)", marginBottom: 32 }}>
-            Rescuing dogs from the meat trade in East Asia and giving them a second chance at life.
+            Rescuing dogs from the dog meat trade in East Asia and giving them a second chance at life.
           </p>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-            <button className="btn btn-accent" onClick={onDonate}>Donate Now</button>
-            <a href="#survivors" className="btn btn-outline-light">Meet Our Survivors</a>
+            <a href="#survivors" className="btn btn-accent">Meet Our Survivors</a>
+            <button className="btn btn-outline-light" onClick={onDonate}>Donate Now</button>
           </div>
         </div>
         <div className="hero-media" style={{ position: "relative", minWidth: 0 }}>
@@ -288,7 +287,7 @@ function HeroEditorial({ onDonate }) {
         </h1>
         <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)", gap: 64, alignItems: "end" }}>
           <p style={{ fontSize: 20, color: "var(--on-dark-2)", maxWidth: 480 }}>
-            Rescuing dogs from the meat trade in East Asia and giving them a second chance at life.
+            Rescuing dogs from the dog meat trade in East Asia and giving them a second chance at life.
           </p>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
             <button className="btn btn-accent" onClick={onDonate}>Donate Now</button>
