@@ -534,7 +534,7 @@ function TeamCard({ p, featured }) {
       )}
       <div className="display" style={{ fontSize: featured ? 24 : 19, marginBottom: 4, color: "#fff" }}>{p.name}</div>
       <div style={{ fontSize: featured ? 11 : 10, fontFamily: "var(--font-mono)", letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--on-dark-3)", marginBottom: featured ? 14 : 10 }}>{p.role}</div>
-      <p style={{ color: "var(--on-dark-2)", fontSize: featured ? 14 : 13, margin: 0, lineHeight: 1.6, ...(featured ? {} : { display: "-webkit-box", WebkitLineClamp: 9, WebkitBoxOrient: "vertical", overflow: "hidden" }) }}>{p.copy}</p>
+      <p style={{ color: "var(--on-dark-2)", fontSize: featured ? 14 : 13, margin: 0, lineHeight: 1.6 }}>{p.copy}</p>
     </div>
   );
 }
