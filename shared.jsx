@@ -396,7 +396,7 @@ function DifferentDogsS() {
               >
                 <div style={{ aspectRatio: "1/1", overflow: "hidden", background: "var(--lav-200)", position: "relative" }}>
                   {img
-                    ? <ImgS src={img} alt={c.name} style={c.zoom ? { transform: `scale(${c.zoom})` } : undefined} />
+                    ? <ImgS src={img} alt={c.name} loading="eager" fetchpriority="high" style={c.zoom ? { transform: `scale(${c.zoom})` } : undefined} />
                     : <div aria-hidden="true" style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(160deg, var(--lav-200), var(--lav-100))" }}>
                         <span className="display" style={{ fontSize: 40, color: "var(--purple-400)" }}>{c.name[0]}</span>
                       </div>}
