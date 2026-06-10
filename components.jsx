@@ -164,6 +164,53 @@ function HeroVideoBG() {
   );
 }
 
+/* On load, a purple heart pops, beats, then bursts as the word "Love." scales in.
+   Inherits the hero's accent styling (italic, purple) via the <em>. The visible
+   "Love." text stays in the DOM for SEO/crawlers; reduced-motion shows it plainly. */
+function LoveReveal() {
+  return (
+    <em className="love-reveal" aria-label="Love.">
+      <span className="love-heart" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      </span>
+      <span className="love-text" aria-hidden="true">Love.</span>
+      <style>{`
+        .love-reveal { position: relative; display: inline-block; }
+        .love-reveal .love-text {
+          display: inline-block; opacity: 0; transform: scale(.35);
+          transform-origin: center 58%;
+          animation: loveTextIn .6s cubic-bezier(.2,.85,.25,1.25) .8s forwards;
+        }
+        .love-reveal .love-heart {
+          position: absolute; left: 50%; top: 50%; width: .8em; height: .8em;
+          transform: translate(-50%,-50%); color: var(--purple-400);
+          display: inline-flex; pointer-events: none;
+          animation: loveBeat .8s ease-in-out both, loveBurst .45s ease .7s forwards;
+        }
+        .love-reveal .love-heart svg { width: 100%; height: 100%; display: block; }
+        @keyframes loveBeat {
+          0% { transform: translate(-50%,-50%) scale(.4); opacity: 0; }
+          18% { opacity: 1; }
+          38% { transform: translate(-50%,-50%) scale(1.2); }
+          58% { transform: translate(-50%,-50%) scale(.92); }
+          78% { transform: translate(-50%,-50%) scale(1.08); }
+          100% { transform: translate(-50%,-50%) scale(1); }
+        }
+        @keyframes loveBurst { to { opacity: 0; transform: translate(-50%,-50%) scale(2.6); } }
+        @keyframes loveTextIn {
+          0% { opacity: 0; transform: scale(.35); }
+          65% { opacity: 1; transform: scale(1.06); }
+          100% { opacity: 1; transform: scale(1); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .love-reveal .love-text { opacity: 1; transform: none; animation: none; }
+          .love-reveal .love-heart { display: none; }
+        }
+      `}</style>
+    </em>
+  );
+}
+
 function HeroCentered({ onDonate }) {
   return (
     <header style={{ position: "relative", paddingTop: 32, paddingBottom: 56, overflow: "hidden" }}>
@@ -184,7 +231,7 @@ function HeroCentered({ onDonate }) {
           maxWidth: "13ch",
           color: "#fff",
         }}>
-          Give Hope.<br />Change a Life.<br />Heal with <em>Love.</em>
+          Give Hope.<br />Change a Life.<br />Heal with <LoveReveal />
         </h1>
         <p style={{
           maxWidth: 460, margin: "0 0 28px", fontSize: 17, lineHeight: 1.5,
