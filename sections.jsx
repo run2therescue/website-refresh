@@ -622,7 +622,7 @@ function Team() {
   const team = [
     { name: "Gregory Carrico", role: "Foster Dad & Volunteer", tag: "Volunteer", img: IMG.teamGreg, copy: "Lifelong animal lover and ringleader of a twelve-poodle pack (plus fosters) based in Upstate New York. The daily agenda: rehabilitation, well-being, fashion, and a lot of pup-cups. Greg champions senior and special-needs rescues and the joy of bringing them home. \"Are all these dogs yours?\" ~ everyone Gregory meets while walking his dogs." },
     { name: "Kirk", role: "Tech Wizard", tag: "Team", img: null, copy: "Bio coming soon." },
-    { name: "Aman", role: "Tech and AI Lead", tag: "Team", img: IMG.teamAman, copy: "10+ years in marketing analytics and consumer insights have left Aman a card-carrying data geek. Lately he's all-in on AI, cooking up products that solve real-world problems. The rest of his time belongs to Coco, his favorite drooler, who gets long walks on the St. Pete beach and a suspiciously generous ration of peanut-butter-and-banana ice cream." },
+    { name: "Aman Garg", role: "Tech and AI Lead", tag: "Team", img: IMG.teamAman, copy: "10+ years in marketing analytics and consumer insights have left Aman a card-carrying data geek. Lately he's all-in on AI, cooking up products that solve real-world problems. The rest of his time belongs to Coco, his favorite drooler, who gets long walks on the St. Pete beach and a suspiciously generous ration of peanut-butter-and-banana ice cream." },
   ];
   return (
     <section className="section-dark" style={{ padding: "92px 0", position: "relative", overflow: "hidden" }}>
