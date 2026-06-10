@@ -21,18 +21,18 @@
   display: grid;
   grid-template-columns: 1fr 1.05fr;
   gap: 72px;
-  align-items: start;
+  align-items: center;
 }
 @media (max-width: 900px) {
   .contact-grid { grid-template-columns: 1fr; gap: 48px; }
 }
 
 /* Left column */
-.contact-copy { display: flex; flex-direction: column; gap: 28px; }
+.contact-copy { display: flex; flex-direction: column; gap: 28px; text-align: center; align-items: center; }
 
 .reach-rule {
-  border-left: 3px solid var(--purple-500);
-  padding: 4px 0 4px 24px;
+  padding: 4px 0;
+  max-width: 460px;
 }
 .reach-body {
   font-size: 16px;
