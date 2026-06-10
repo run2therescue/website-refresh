@@ -620,7 +620,7 @@ function Team() {
     { name: "Bonnie Klapper", role: "Chief Operating Officer", tag: "Co-Founder", img: IMG.teamBonnie, copy: "I spent nearly two dozen years as a federal prosecutor in California and New York, dismantling drug cartels. Today, I put that same energy and skills into helping the animals. I am a vegan animal rights activist who provides pro bono support to dozens of animal-related nonprofits and activists on the ground. While I fight for all animals, dogs have always had my heart. I am honored to work with Brandy and Run 2 the Rescue to save these beautiful dog meat trade survivors." },
   ];
   const team = [
-    { name: "Gregory Carrico", role: "Foster Dad & Volunteer", tag: "Volunteer", img: IMG.teamGreg, copy: "Lifelong animal lover and ringleader of a twelve-poodle pack (plus fosters), run out of a not-so-secret bunker in Upstate New York. The daily agenda: rehabilitation, well-being, fashion, and pup-cups. He champions senior and special-needs rescues and the joy of bringing them home. \"Are all these dogs yours?\" ~ everyone Gregory meets while walking his dogs." },
+    { name: "Gregory Carrico", role: "Foster Dad & Volunteer", tag: "Volunteer", img: IMG.teamGreg, copy: "Lifelong animal lover and ringleader of a twelve-poodle pack (plus fosters) based in Upstate New York. The daily agenda: rehabilitation, well-being, fashion, and a lot of pup-cups. Greg champions senior and special-needs rescues and the joy of bringing them home. \"Are all these dogs yours?\" ~ everyone Gregory meets while walking his dogs." },
     { name: "Kirk", role: "Tech Wizard", tag: "Team", img: null, copy: "Bio coming soon." },
     { name: "Aman", role: "Tech Lead", tag: "Team", img: null, copy: "Bio coming soon." },
   ];
