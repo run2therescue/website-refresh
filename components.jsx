@@ -1,6 +1,33 @@
 /* Run 2 The Rescue, plum/lavender theme */
 const { useState, useEffect, useRef, useMemo } = React;
 
+/* Web3Forms submit for homepage forms (the homepage does not load shared.jsx,
+   which defines the same helper for subpages). KEEP THIS KEY IN SYNC WITH shared.jsx. */
+const WEB3FORMS_KEY = "f328982c-e9de-4611-8bf7-49034cfa2d21"; // routes to info@run2therescue.org
+async function submitForm(fields, formName) {
+  if (!WEB3FORMS_KEY || WEB3FORMS_KEY === "PASTE_KEY_HERE") {
+    console.log("[submitForm] Demo mode (no Web3Forms key set). Form:", formName, fields);
+    return { ok: false, demo: true };
+  }
+  try {
+    const res = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({
+        access_key: WEB3FORMS_KEY,
+        subject: `[R2TR Site] ${formName}`,
+        from_name: "Run 2 The Rescue Website",
+        ...fields,
+      }),
+    });
+    const data = await res.json();
+    return { ok: data.success === true };
+  } catch (e) {
+    console.warn("[submitForm] network error:", e);
+    return { ok: false, error: e.message };
+  }
+}
+
 /* Image dictionary. Real R2R photography where available, Unsplash stock fallback elsewhere. */
 const IMG = {
   hero: "assets/survivors-hero-crop.png",
