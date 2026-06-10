@@ -22,7 +22,7 @@ const PRESS = [
     id: "people-kronk",
     source: "People",
     title: "Injured Malamute with a Crooked Head and Sideways Walk Transforms After His Rescue from Dog Meat Trade",
-    excerpt: "Run 2 The Rescue helped Kronk the dog recuperate in China before flying the canine to the U.S. to find a forever home.",
+    excerpt: "Run 2 The Rescue helped Kronk recuperate in China before flying him to the U.S. to his forever home with founder Brandy Cherven.",
     href: "https://people.com/injured-malamute-with-crooked-head-transforms-after-dog-meat-farm-rescue-11904110",
     date: "2025",
   },

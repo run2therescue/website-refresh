@@ -30,7 +30,7 @@ function TriggerWarning({ open, onAccept, onDecline }) {
           A hard truth, handled with care
         </h2>
         <p style={{ fontSize: 15, lineHeight: 1.6, color: "var(--on-dark-2)", margin: "0 0 28px" }}>
-          This page shows where rescued dogs begin, caged and crowded in the meat
+          This page shows where rescued dogs begin, caged and crowded in the dog meat
           trade. The images and footage are not graphic, but they are distressing.
           Choose what's right for you: view everything, or keep the imagery hidden
           and still read every dog's story.
@@ -127,7 +127,7 @@ function RealityIntro({ revealed, onReveal }) {
           Voiceless victims of an industry built on fear
         </h2>
         <p style={{ fontSize: 16, lineHeight: 1.7, color: "var(--on-dark-2)", margin: "0 0 16px" }}>
-          Across China and South Korea, millions of dogs enter the meat trade
+          Across China, millions of dogs enter the dog meat trade
           every year. Many were stolen family pets. All of them are voiceless
           victims of an industry built on fear and silence.
         </p>
@@ -154,7 +154,7 @@ function RealityGallery({ revealed }) {
       img: "assets/reality-trade-context-1.jpg",
       alt: "Dogs crammed into small stacked wire cages",
       heading: "Stacked like freight",
-      body: "Dogs are packed several to a wire cage barely large enough for one, then stacked for transport. Many are former family pets; many have never touched solid ground. They arrive at holding sites already exhausted, already afraid.",
+      body: "Dogs are packed several to a wire cage barely large enough for one, then stacked for transport. Many are former family pets; many have never touched solid ground. They arrive at slaughter sites already exhausted, already afraid.",
     },
     {
       img: "assets/reality-trade-context-2.jpg",
@@ -166,25 +166,25 @@ function RealityGallery({ revealed }) {
       img: "assets/reality-trade-context-3.jpg",
       alt: "Dozens of dogs crowded together behind a chain-link fence",
       heading: "Counted by the dozen",
-      body: "Holding pens crowd dozens of dogs together, surviving on borrowed time. The scale is hard to hold in your mind. So we don't try to save ‘the dozens’, we save Kronk, then Honey, then the next one. One dog, one flight, one forever home at a time.",
+      body: "Slaughter pens crowd dozens of dogs together, surviving on borrowed time. The scale is hard to hold in your mind. This is the brutal reality we face. Now it's a race to bring them all to safety.",
     },
     {
       img: "assets/reality-beagle.png",
       alt: "A beagle looking out from a wire crate",
       heading: "Every breed, every kind",
-      body: "Beagles, retrievers, huskies, the trade takes family breeds of every kind, and many still wear the tag of a home they were taken from. This one waited inside a wire crate until a rescuer reached him.",
+      body: "Beagles, retrievers, huskies, poodles, Pomeranians, the dog meat trade takes breeds of every kind, and many still wear the tag of a home they were taken from.",
     },
     {
       img: "assets/reality-puppies.png",
       alt: "Two puppies behind a wire fence in a dirt yard",
       heading: "Born into it",
-      body: "Some survivors were stolen pets; others were born inside the trade and have known nothing else. Puppies are lifted out of these yards and given the start they should have had.",
+      body: "Some survivors were stolen pets; others were born inside the dog meat trade and have known nothing else.",
     },
     {
       img: "assets/reality-transport-cage.jpg",
       alt: "Dogs crammed into a stacked wire crate during transport",
       heading: "Crated for the road",
-      body: "Once caught, dogs are packed into wire crates and trucked between markets and holding sites, often for days. Interception during transport is one of the moments a rescue becomes possible.",
+      body: "Once caught, dogs are packed into wire crates and trucked between markets and slaughter sites, often for days. Interception during transport is one of the moments a rescue becomes possible.",
     },
   ];
   return (
