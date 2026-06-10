@@ -24,6 +24,11 @@ function mapAnimal(a) {
     ageMonths: a.ageMonths == null ? 999 : a.ageMonths,
     size: a.size || "",
     weight: a.weightLb != null ? a.weightLb + " lbs" : "",
+    ageText: a.ageText || "",
+    altered: a.altered || "",
+    inFoster: a.inFoster === true,
+    color: a.color || "",
+    pattern: a.pattern || "",
     bio: a.blurb || "",
     img: a.cover,
     gallery: photos,
@@ -382,7 +387,7 @@ function ProfileModal({ dog, fav, onFav, onClose }) {
                 <button onClick={onFav} style={{ fontSize: 22, color: fav ? "oklch(0.55 0.2 25)" : "var(--ink-3)", lineHeight: 1 }} aria-label="Favorite">{fav ? "♥" : "♡"}</button>
               </div>
               <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--purple-600)", fontWeight: 600, marginBottom: 20 }}>
-                {dog.breed}{dog.age ? ` · ${dog.age}` : ""}
+                {dog.breed}{(dog.ageText || dog.age) ? ` · ${dog.ageText || dog.age}` : ""}
               </div>
 
               <div className="stat-pair">
@@ -390,6 +395,9 @@ function ProfileModal({ dog, fav, onFav, onClose }) {
                 <div className="sp"><div className="k">Sex</div><div className="v">{dog.sex || "—"}</div></div>
                 <div className="sp"><div className="k">In care</div><div className="v">{dog.daysInCare != null ? `${dog.daysInCare} days` : "—"}</div></div>
                 <div className="sp"><div className="k">Good with</div><div className="v" style={{ textTransform: "capitalize" }}>{dog.good.length ? dog.good.join(", ") : "—"}</div></div>
+                {dog.altered && <div className="sp"><div className="k">Spay / neuter</div><div className="v">{dog.altered}</div></div>}
+                {(dog.color || dog.pattern) && <div className="sp"><div className="k">Coat</div><div className="v">{[dog.color, dog.pattern].filter(Boolean).join(" · ")}</div></div>}
+                {dog.inFoster && <div className="sp"><div className="k">Currently</div><div className="v">In a foster home</div></div>}
               </div>
 
               {dog.good.length > 0 && (

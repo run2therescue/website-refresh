@@ -87,7 +87,8 @@ function normalize(a) {
   if (!a || typeof a !== "object") return null;
   const photos = Array.isArray(a.Photos) ? a.Photos.filter(Boolean) : [];
   const cover = a.CoverPhoto || photos[0] || null;
-  const ageMonths = toInt(a.Age);
+  const dobMonths = monthsSinceUnix(a.DOBUnixTime);
+  const ageMonths = dobMonths != null ? dobMonths : toInt(a.Age);
   const weightLb = toFloat(a.CurrentWeightPounds);
   const breed = cleanBreed(a.Breed);
   const group = ageGroup(ageMonths);
@@ -112,7 +113,48 @@ function normalize(a) {
     goodWith: extractGoodWith(a.Attributes),
     daysInCare: daysSince(a.LastIntakeUnixTime),
     location: (a.CurrentLocation && a.CurrentLocation.Tier1) || "",
+    ageText: ageText(ageMonths),
+    altered: alteredText(a.Altered),
+    inFoster: a.InFoster === true,
+    color: cleanField(a.Color),
+    pattern: cleanField(a.Pattern),
   };
+}
+
+/* Exact age from date of birth -> whole months (more accurate than the
+   bucketed Age field). */
+function monthsSinceUnix(unix) {
+  const t = parseInt(unix, 10);
+  if (!Number.isFinite(t)) return null;
+  const months = Math.floor((Date.now() / 1000 - t) / (86400 * 30.4375));
+  return months >= 0 ? months : null;
+}
+
+/* "2 years, 3 months" / "7 months" — a human-readable precise age. */
+function ageText(months) {
+  if (months == null) return "";
+  if (months < 1) return "Under a month";
+  if (months < 12) return months + (months === 1 ? " month" : " months");
+  const y = Math.floor(months / 12);
+  const m = months % 12;
+  const yp = y + (y === 1 ? " year" : " years");
+  return m === 0 ? yp : yp + ", " + m + (m === 1 ? " month" : " months");
+}
+
+/* Spay/neuter status -> display string, or "" when unknown (so the UI hides it). */
+function alteredText(v) {
+  const s = String(v || "").trim().toLowerCase();
+  if (s === "spayed") return "Spayed";
+  if (s === "neutered") return "Neutered";
+  if (["yes", "true", "altered"].includes(s)) return "Spayed / Neutered";
+  if (["no", "false", "intact"].includes(s)) return "Not yet altered";
+  return "";
+}
+
+/* Trim a Shelterluv text field, hiding empties and "Unknown". */
+function cleanField(v) {
+  const s = String(v || "").trim();
+  return !s || /^unknown$/i.test(s) ? "" : s;
 }
 
 function toInt(v) {
@@ -213,5 +255,5 @@ function cleanText(s) {
 function composeBlurb(breed, group, sex) {
   const her = sex === "Female" ? "her" : sex === "Male" ? "him" : "them";
   const lead = group ? `A ${group.toLowerCase()} ${breed || "rescue dog"}` : (breed || "A rescue dog");
-  return `${lead}, rescued from the meat trade and waiting for the family that will call ${her} home.`;
+  return `${lead}, rescued from the dog meat trade and waiting for the family that will call ${her} home.`;
 }

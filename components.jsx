@@ -7,6 +7,7 @@ const IMG = {
   teamBrandy: "assets/Brandy_profile.jpg",
   teamBonnie: "assets/Bonnie_profile.jpg",
   teamGreg: "assets/Greg_profile.jpg",
+  teamAman: "assets/Aman_profile.JPG",
   kronk: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=900&q=80&auto=format",
   survivor1: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=700&q=80&auto=format",
   survivor2: "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?w=700&q=80&auto=format",
