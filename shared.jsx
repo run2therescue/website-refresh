@@ -23,7 +23,7 @@ const IMG_BANK = {
   family: "https://images.unsplash.com/photo-1583511655857-d19026eec1c3?w=900&q=80&auto=format",
 };
 
-/* Tiny inline paw, the brand's eyebrow/kicker mark (replaces the generic <PawGlyphS />) */
+/* Tiny inline paw, the brand's eyebrow/kicker mark (replaces the generic sparkle) */
 function PawGlyphS({ style = {} }) {
   return (
     <svg viewBox="0 0 64 64" fill="currentColor" aria-hidden="true"
@@ -207,7 +207,7 @@ function FooterS() {
 function FooterColS({ title, links }) {
   return (
     <div>
-      <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.18em", textTransform: "uppercase", color: "#fff", marginBottom: 18, fontWeight: 600 }}>{title}</div>
+      <div style={{ fontFamily: "var(--font-display)", fontSize: 12, letterSpacing: "0.1em", textTransform: "uppercase", color: "#fff", marginBottom: 18, fontWeight: 600 }}>{title}</div>
       <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
         {links.map(([l, h]) => (
           <a key={l} href={h} style={{ color: "var(--on-dark-2)", fontSize: 14, transition: "color .2s" }}

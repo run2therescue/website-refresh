@@ -73,7 +73,7 @@ function FosterHeroSplit() {
             <div className="needs-widget">
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
                 <span className="needs-dot" />
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.16em", textTransform: "uppercase", color: "#fff", fontWeight: 600 }}>Current Foster Needs</span>
+                <span style={{ fontFamily: "var(--font-display)", fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", color: "#fff", fontWeight: 600 }}>Current Foster Needs</span>
               </div>
               <div style={{ display: "flex", gap: 20, flexWrap: "wrap", fontSize: 13, color: "var(--on-dark-2)" }}>
                 <div><strong style={{ color: "#fff" }}>3 dogs</strong> arriving JFK · May 4</div>
@@ -152,8 +152,8 @@ function FosterJourney() {
           {stops.map((s, i) => (
             <div key={s.t} className="journey-stop reveal">
               <div className="dot" />
-              <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--purple-400)", marginBottom: 8, fontWeight: 600 }}>
-                Step {String(i + 1).padStart(2, "0")}
+              <div style={{ fontFamily: "var(--font-display)", fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--purple-400)", marginBottom: 8, fontWeight: 600 }}>
+                Step {i + 1}
               </div>
               <h4>{s.t}</h4>
               <p>{s.d}</p>
@@ -175,7 +175,7 @@ function FosterTestimonial() {
         <p className="big-quote">
           Fostering saved my life <em>just as much as</em> it saved theirs.
         </p>
-        <div style={{ textAlign: "center", fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--on-dark-3)" }}>
+        <div style={{ textAlign: "center", fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 12, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--on-dark-3)" }}>
           A Run 2 The Rescue Foster Parent
         </div>
       </div>

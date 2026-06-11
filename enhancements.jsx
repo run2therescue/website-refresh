@@ -191,7 +191,7 @@ function ImpactCalc({ onDonate }) {
                 border: "1px solid var(--purple-500)",
                 marginBottom: 24,
               }}>
-                <div style={{ fontSize: 13, color: "var(--purple-400)", fontFamily: "var(--font-mono)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 6 }}>
+                <div style={{ fontSize: 13, color: "var(--purple-400)", fontFamily: "var(--font-display)", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 6 }}>
                   ♡ Your ${amount} today
                 </div>
                 <div style={{ fontSize: 18, color: "#fff", lineHeight: 1.4 }}>

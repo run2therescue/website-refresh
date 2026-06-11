@@ -71,7 +71,7 @@ const IMG = {
   reality3: "assets/reality-trade-context-3.jpg",
 };
 
-/* Tiny inline paw, the brand's eyebrow/kicker mark (replaces the generic <PawGlyph />) */
+/* Tiny inline paw, the brand's eyebrow/kicker mark (replaces the generic sparkle) */
 function PawGlyph({ style = {} }) {
   return (
     <svg viewBox="0 0 64 64" fill="currentColor" aria-hidden="true"

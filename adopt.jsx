@@ -410,7 +410,7 @@ function ProfileModal({ dog, fav, onFav, onClose }) {
 
               {dog.videos.length > 0 && (
                 <div style={{ marginBottom: 20 }}>
-                  <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--ink-3)", marginBottom: 8, fontWeight: 600 }}>
+                  <div style={{ fontFamily: "var(--font-display)", fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--ink-3)", marginBottom: 8, fontWeight: 600 }}>
                     Watch {dog.name}
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>

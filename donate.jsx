@@ -90,7 +90,7 @@ function DafModal({ open, onClose }) {
           <div style={{ minWidth: 0 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
               <img src="assets/r2r-logo.png" alt="" style={{ width: 30, height: 30 }} />
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--ink-3)" }}>
+              <span style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 12, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--ink-3)" }}>
                 Donor Advised Fund
               </span>
             </div>
@@ -152,7 +152,7 @@ function DonateHero() {
         </div>
 
         <div className="give-card" id="give">
-          <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--purple-400)", marginBottom: 14 }}>
+          <div style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 12, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--purple-400)", marginBottom: 14 }}>
             Choose how to give
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>

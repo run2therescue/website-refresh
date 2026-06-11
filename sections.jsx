@@ -161,7 +161,7 @@ function Survivors({ onSponsor }) {
             </p>
             <Magnetic><a href="/adopt" className="btn btn-accent">Adopt Today <span className="arrow">→</span></a></Magnetic>
             <div style={{ background: "var(--purple-500)", color: "#fff", borderRadius: 18, padding: "22px 26px", marginTop: 28 }}>
-              <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.72)", marginBottom: 8 }}>Where it began</div>
+              <div style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.72)", marginBottom: 8 }}>Where it began</div>
               <div className="display" style={{ fontSize: 22, marginBottom: 6 }}>Meet Sunny</div>
               <p style={{ fontSize: 14, lineHeight: 1.6, color: "rgba(255,255,255,0.92)", margin: 0 }}>
                 Sunny's rescue is the story that started it all, the dog whose journey to safety inspired the founding of Run 2 The Rescue. Every survivor since follows the trail she opened.
@@ -470,7 +470,7 @@ function TeamCard({ p, featured }) {
         }}>{p.tag}</span>
       )}
       <div className="display" style={{ fontSize: featured ? 24 : 19, marginBottom: 4, color: "#fff" }}>{p.name}</div>
-      <div style={{ fontSize: featured ? 11 : 10, fontFamily: "var(--font-mono)", letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--on-dark-3)", marginBottom: featured ? 14 : 10 }}>{p.role}</div>
+      <div style={{ fontSize: featured ? 12 : 11, fontFamily: "var(--font-display)", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--on-dark-3)", marginBottom: featured ? 14 : 10 }}>{p.role}</div>
       <p style={{ color: "var(--on-dark-2)", fontSize: featured ? 14 : 13, margin: 0, lineHeight: 1.6 }}>{p.copy}</p>
     </div>
   );
@@ -560,7 +560,7 @@ function FinalCTA({ onDonate, onSubscribe }) {
           display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1.3fr)", gap: 32, alignItems: "start", textAlign: "left",
         }}>
           <div>
-            <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 8, fontWeight: 600 }}>Stay Connected</div>
+            <div style={{ fontFamily: "var(--font-display)", fontSize: 12, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 8, fontWeight: 600 }}>Stay Connected</div>
             <div style={{ fontSize: 13, color: "rgba(255,255,255,0.82)" }}>Get rescue updates and survivor stories in your inbox.</div>
           </div>
           <form className="cta-form" onSubmit={submitNewsletter}
@@ -639,7 +639,7 @@ function Footer() {
 function FooterCol({ title, links }) {
   return (
     <div>
-      <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.18em", textTransform: "uppercase", color: "#fff", marginBottom: 20, fontWeight: 600 }}>{title}</div>
+      <div style={{ fontFamily: "var(--font-display)", fontSize: 12, letterSpacing: "0.1em", textTransform: "uppercase", color: "#fff", marginBottom: 20, fontWeight: 600 }}>{title}</div>
       <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
         {links.map(([l, h]) => (
           <a key={l} href={h} style={{ color: "var(--on-dark-2)", fontSize: 14, transition: "color .2s" }}
@@ -906,7 +906,7 @@ function Testimonials() {
                 }}>{q.initials}</span>
                 <span style={{ display: "flex", flexDirection: "column", gap: 1, textAlign: "left" }}>
                   <span style={{ fontWeight: 600, fontSize: 13, color: "var(--ink)" }}>{q.name}</span>
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 9.5, letterSpacing: "0.07em", textTransform: "uppercase", color: "var(--purple-600)" }}>{q.detail}</span>
+                  <span style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 10.5, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--purple-600)" }}>{q.detail}</span>
                 </span>
               </figcaption>
             </figure>

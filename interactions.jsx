@@ -102,7 +102,7 @@ function DonateModal({ open, onClose }) {
           <div style={{ minWidth: 0 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
               <img src="assets/r2r-logo.png" alt="" style={{ width: 30, height: 30 }} />
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--ink-3)" }}>
+              <span style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 12, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--ink-3)" }}>
                 {isDaf ? "Donor Advised Fund" : "Make a donation"}
               </span>
             </div>
@@ -111,7 +111,7 @@ function DonateModal({ open, onClose }) {
             </h3>
             {isDaf && (
               <button type="button" onClick={() => setView("chooser")} style={{
-                marginTop: 8, fontSize: 12, fontFamily: "var(--font-mono)", color: "var(--purple-600)",
+                marginTop: 8, fontSize: 12, fontFamily: "var(--font-ui)", fontWeight: 600, color: "var(--purple-600)",
                 background: "transparent", border: 0, padding: 0, cursor: "pointer", letterSpacing: "0.04em",
               }}>← All options</button>
             )}
