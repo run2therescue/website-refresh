@@ -2,7 +2,10 @@
    the actual payment happens on the provider (Zeffy / PayPal / Venmo / DAF),
    opened in a new tab. Nothing is embedded.
    DAF is an info-only flow: we show the donor our legal name and EIN; they
-   recommend a grant from their DAF provider's portal. */
+   recommend a grant from their DAF provider's portal.
+
+   Layout: the giving methods live IN the hero (split layout), so a donor can
+   give without scrolling. Everything below is supporting material. */
 const { useState: dUS, useEffect: dUE } = React;
 
 const GIVE = {
@@ -16,21 +19,18 @@ function DonatePage() {
   return (
     <>
       <DonateHero />
-      <MissionSection />
-      <GiveSection />
-      <HopePullquote />
       <DirectedGiving />
       <DonateFAQ />
     </>
   );
 }
 
-/* A single giving-method row, styled for the dark "give" section.
+/* A single giving-method row, styled for the dark hero card.
    Renders as an anchor when `href` is set, or as a button when `onClick` is set
    (used by the DAF row, which opens an info popover instead of navigating). */
 function GiveRow({ href, onClick, name, note, badge }) {
   const baseStyle = {
-    display: "flex", alignItems: "center", gap: 14, padding: "18px 20px",
+    display: "flex", alignItems: "center", gap: 14, padding: "16px 18px",
     borderRadius: 14, border: "1.5px solid var(--line-dark)",
     background: "oklch(0.22 0.04 310 / 0.5)", textDecoration: "none",
     textAlign: "left", width: "100%", cursor: "pointer", font: "inherit",
@@ -124,97 +124,54 @@ function DafModal({ open, onClose }) {
   );
 }
 
-function GiveSection() {
+/* Hero with the giving methods built in: headline + "where it goes" on the
+   left, the chooser card on the right. A donor can complete their job (pick a
+   method) without scrolling. */
+function DonateHero() {
   const [dafOpen, setDafOpen] = dUS(false);
   return (
-    <section id="give" style={{ background: "var(--plum-900)", color: "#fff", padding: "80px 0" }}>
-      <div className="wrap" style={{ maxWidth: 620 }}>
-        <div style={{ textAlign: "center", marginBottom: 32 }}>
-          <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 16, justifyContent: "center" }}>✦ Give</div>
-          <h2 className="display" style={{ fontSize: "clamp(34px, 4.2vw, 56px)", color: "#fff", margin: "0 0 12px", lineHeight: 1.1 }}>
-            Choose how to <em>give</em>.
-          </h2>
-          <p style={{ color: "var(--on-dark-2)", fontSize: 16, margin: "0 auto", maxWidth: 500, lineHeight: 1.6 }}>
-            Every path is secure and tax deductible. Pick the one that's easiest for you.
+    <header className="donate-hero">
+      <PawS className="paw" style={{ top: 60, left: "6%", width: 52, height: 52, color: "#fff", opacity: 0.1 }} />
+      <PawS className="paw" style={{ bottom: 40, right: "4%", width: 68, height: 68, color: "#fff", opacity: 0.1 }} />
+      <div className="wrap donate-hero-grid">
+        <div className="donate-hero-copy">
+          <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 16 }}>✦ Donate</div>
+          <h1 className="display" style={{ fontSize: "clamp(34px, 4.6vw, 60px)", margin: "0 0 18px", color: "#fff", lineHeight: 1.06 }}>
+            Donate to Rescue and Rehabilitate <em>Dogs from the Dog Meat Trade.</em>
+          </h1>
+          <p style={{ fontSize: 16, color: "var(--on-dark-2)", margin: "0 0 22px", maxWidth: 480, lineHeight: 1.6 }}>
+            We rescue dogs from holding pens in China, heal what's broken, and put them on planes home. That's what your gift pays for: vet care, recovery, the flight home, and the foster who keeps them safe until the right family says yes.
+          </p>
+          <div className="donate-trust">
+            <span>501(c)(3) nonprofit</span>
+            <span aria-hidden="true">·</span>
+            <span>Tax deductible</span>
+            <span aria-hidden="true">·</span>
+            <span>EIN 99-4240461</span>
+          </div>
+        </div>
+
+        <div className="give-card" id="give">
+          <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--purple-400)", marginBottom: 14 }}>
+            Choose how to give
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <GiveRow href={GIVE.zeffyGeneral} name="Card or bank transfer" badge="No fees"
+              note="Secure checkout through Zeffy. Card, bank, or Apple/Google Pay." />
+            <GiveRow href={GIVE.paypal} name="PayPal"
+              note="Give with your PayPal balance or a linked card." />
+            <GiveRow href={GIVE.venmo} name="Venmo"
+              note="Send your gift straight from the Venmo app." />
+            <GiveRow onClick={() => setDafOpen(true)} name="Donor Advised Fund (DAF)"
+              note="Recommend a grant using our legal name and EIN." />
+          </div>
+          <p style={{ fontSize: 12, color: "var(--on-dark-3)", margin: "14px 0 0", textAlign: "center", lineHeight: 1.5 }}>
+            Every path is secure and tax deductible. One-time or monthly.
           </p>
         </div>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <GiveRow href={GIVE.zeffyGeneral} name="Card or bank transfer"
-            note="Secure checkout through Zeffy. Card, bank, or Apple/Google Pay." />
-          <GiveRow href={GIVE.paypal} name="PayPal"
-            note="Give with your PayPal balance or a linked card." />
-          <GiveRow href={GIVE.venmo} name="Venmo"
-            note="Send your gift straight from the Venmo app." />
-          <GiveRow onClick={() => setDafOpen(true)} name="Donor Advised Fund (DAF)"
-            note="Recommend a grant from your DAF using our legal name and EIN." />
-        </div>
-
-        <p style={{ fontSize: 12, color: "var(--on-dark-3)", marginTop: 18, textAlign: "center" }}>
-          Run 2 The Rescue is a 501(c)(3) nonprofit. Your gift is tax deductible. EIN 99-4240461.
-        </p>
       </div>
       <DafModal open={dafOpen} onClose={() => setDafOpen(false)} />
-    </section>
-  );
-}
-
-function DonateHero() {
-  return (
-    <header className="donate-hero">
-      <PawS className="paw" style={{ top: 80, left: "8%", width: 52, height: 52, color: "#fff", opacity: 0.1 }} />
-      <PawS className="paw" style={{ bottom: 60, right: "6%", width: 68, height: 68, color: "#fff", opacity: 0.1 }} />
-      <div className="wrap" style={{ textAlign: "center", maxWidth: 880, margin: "0 auto" }}>
-        <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 16 }}>✦ Donate</div>
-        <h1 className="display" style={{ fontSize: "clamp(40px, 6vw, 80px)", margin: "0 0 22px", color: "#fff", lineHeight: 1.05 }}>
-          Donate to Rescue and Rehabilitate <em>Dogs from the Dog Meat Trade.</em>
-        </h1>
-        <p style={{ fontSize: 17, color: "var(--on-dark-2)", margin: "0 auto", maxWidth: 620, lineHeight: 1.55 }}>
-          Every dollar is tracked to rescue, transport, vet care, and the people who keep them alive.
-        </p>
-      </div>
     </header>
-  );
-}
-
-function MissionSection() {
-  return (
-    <section className="donate-mission">
-      <div className="wrap" style={{ maxWidth: 820 }}>
-        <div className="dm-rule">
-          <div className="eyebrow-dark" style={{ marginBottom: 16 }}>Where it goes</div>
-          <p className="dm-body">
-            We rescue dogs from holding pens in China, heal what's broken, and put them on planes home. That's the work your gift pays for.
-          </p>
-          <p className="dm-body">
-            Vet care, recovery, a flight home, a foster who keeps them safe until the right family says yes.
-          </p>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function HopePullquote() {
-  return (
-    <section className="hope-section">
-      <div className="wrap" style={{ maxWidth: 720 }}>
-        <div className="hope-card reveal">
-          <div className="hope-icon" aria-hidden>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-              <polyline points="3.5 12 8 12 10 8.5 14 15.5 16 12 20.5 12" />
-            </svg>
-          </div>
-          <p className="hope-lead">
-            Your monthly gift helps us rescue more dogs from the dog meat trade and bring them to safety at our sanctuary. It rescues, it heals, it brings them home.
-          </p>
-          <p className="hope-emph">
-            You give them the one thing they've never had. Hope.
-          </p>
-        </div>
-      </div>
-    </section>
   );
 }
 
@@ -224,7 +181,7 @@ function DirectedGiving() {
       id: "medical",
       title: "Provide Urgent Medical Care",
       href: GIVE.zeffyGeneral,
-      body: "Emergency vet care, diagnostics, medications, and recovery support for courageous souls rescued from the dog meat trade, help them heal safely and quickly.",
+      body: "Emergency vet care, diagnostics, medications, and recovery support for dogs rescued from the dog meat trade, so they can heal safely and quickly.",
       icon: (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
@@ -247,9 +204,9 @@ function DirectedGiving() {
     <section className="directed-giving">
       <PawS className="paw paw-light" style={{ top: 40, right: "4%", width: 52, height: 52 }} />
       <div className="wrap">
-        <div style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 40px" }}>
+        <div style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 32px" }}>
           <div className="eyebrow-dark" style={{ marginBottom: 12 }}>Direct your gift</div>
-          <h2 className="display" style={{ fontSize: "clamp(30px, 4vw, 48px)", margin: 0, color: "var(--ink)" }}>
+          <h2 className="display" style={{ fontSize: "clamp(28px, 3.6vw, 44px)", margin: 0, color: "var(--ink)" }}>
             Or choose <em style={{ color: "var(--purple-600)" }}>where your dollars go.</em>
           </h2>
         </div>
@@ -267,6 +224,18 @@ function DirectedGiving() {
             </div>
           ))}
         </div>
+        <div className="hope-strip reveal">
+          <div className="hope-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+              <polyline points="3.5 12 8 12 10 8.5 14 15.5 16 12 20.5 12" />
+            </svg>
+          </div>
+          <p>
+            Prefer to give monthly? A recurring gift funds rescue after rescue, and keeps a survivor safe from the day we reach her to the day she's home.{" "}
+            <b>You give them the one thing they've never had. Hope.</b>
+          </p>
+        </div>
       </div>
     </section>
   );
@@ -282,10 +251,10 @@ function DonateFAQ() {
     { q: "Can I give from a Donor Advised Fund?", a: "Yes. Recommend a grant from your DAF provider (Fidelity Charitable, Schwab Charitable, Vanguard Charitable, etc.) using our legal name 'Run to the Rescue' (without the 2) and EIN 99-4240461. We typically receive DAF grants within 7 to 14 days." },
   ];
   return (
-    <section style={{ background: "var(--plum-900)", color: "#fff", padding: "96px 0 120px" }}>
+    <section style={{ background: "var(--plum-900)", color: "#fff", padding: "64px 0 80px" }}>
       <div className="wrap" style={{ maxWidth: 880 }}>
         <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 12 }}>✦ Questions</div>
-        <h2 className="display" style={{ fontSize: "clamp(32px, 4vw, 48px)", margin: "0 0 32px", color: "#fff" }}>
+        <h2 className="display" style={{ fontSize: "clamp(30px, 3.6vw, 44px)", margin: "0 0 28px", color: "#fff" }}>
           Before you give.
         </h2>
         {qs.map((item, i) => (

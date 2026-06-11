@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://new-s3.shelterluv.com" crossorigin />
 <link rel="preload" href="/api/animals" as="fetch" crossorigin="anonymous" />
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=13" />
+<link rel="stylesheet" href="styles.css?v=14" />
 <style>
   [data-paws="off"] .paw { display: none !important; }
 </style>
@@ -69,9 +69,9 @@
   window.__TWEAK_DEFAULTS__ = TWEAK_DEFAULTS;
 </script>
 
-<script type="text/babel" src="components.jsx?v=10"></script>
+<script type="text/babel" src="components.jsx?v=11"></script>
 <script type="text/babel" src="help-illustrations.jsx?v=4"></script>
-<script type="text/babel" src="sections.jsx?v=25"></script>
+<script type="text/babel" src="sections.jsx?v=26"></script>
 <script type="text/babel" src="interactions.jsx?v=7"></script>
 <script type="text/babel" src="enhancements.jsx?v=7"></script>
 
@@ -124,6 +124,7 @@ function App() {
       <Ways onDonate={openDonate} onSponsor={openSponsor} />
       <RealityTeaser />
       <Journey />
+      <Feature />
       <ImpactCalc onDonate={(amt) => openDonate()} />
       <Voices />
       <Testimonials />

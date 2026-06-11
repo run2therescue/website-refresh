@@ -83,6 +83,7 @@ function RealityHero({ revealed }) {
     <header style={{ position: "relative", paddingTop: 96, paddingBottom: 104, overflow: "hidden", minHeight: 520 }}>
       <div aria-hidden="true" style={{ position: "absolute", inset: 0, overflow: "hidden", zIndex: 0 }}>
         <video
+          ref={autoplayFixS}
           autoPlay muted loop playsInline
           poster="assets/reality-cage-poster.jpg"
           style={{
@@ -239,7 +240,7 @@ function RealityClips({ revealed }) {
               background: "oklch(0.16 0.03 310)", border: "1px solid var(--line-dark)",
             }}>
               <SensitiveMedia revealed={revealed}>
-                <video autoPlay muted loop playsInline preload="metadata" style={{
+                <video ref={autoplayFixS} autoPlay muted loop playsInline preload="metadata" style={{
                   width: "100%", height: "100%", objectFit: "cover", display: "block",
                   filter: "saturate(0.5) brightness(0.8)",
                 }}>

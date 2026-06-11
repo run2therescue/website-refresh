@@ -353,6 +353,21 @@ function BotcheckS() {
   );
 }
 
+/* Ref callback for autoplay background videos. React sets `muted` as a DOM
+   property only, so the attribute never reaches the markup — and mobile
+   browsers refuse to autoplay a video they can't see is muted. Set the
+   attribute by hand, nudge play(), and retry once on first touch (covers
+   iOS Low Power Mode, where autoplay is deferred until a gesture). */
+function autoplayFixS(v) {
+  if (!v) return;
+  v.muted = true;
+  v.defaultMuted = true;
+  v.setAttribute("muted", "");
+  const tryPlay = () => { const p = v.play(); if (p && p.catch) p.catch(() => {}); };
+  tryPlay();
+  window.addEventListener("touchstart", tryPlay, { passive: true, once: true });
+}
+
 async function submitForm(fields, formName) {
   if (botcheckTrippedS()) return { ok: true };
   if (!WEB3FORMS_KEY || WEB3FORMS_KEY === "PASTE_KEY_HERE") {
@@ -442,5 +457,5 @@ function DifferentDogsS() {
 
 Object.assign(window, {
   IMG_BANK, PawS, ImgS, NavS, FooterS, MagneticS, CountUpS, ScrollProgressS, useRevealS, useAnimalsS,
-  DifferentDogsS, submitForm, WEB3FORMS_KEY, BotcheckS,
+  DifferentDogsS, submitForm, WEB3FORMS_KEY, BotcheckS, autoplayFixS,
 });

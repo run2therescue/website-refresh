@@ -180,11 +180,30 @@ function Hero({ onDonate, variant }) {
 function HeroVideoBG() {
   // Cinematic hero: real footage of rescued dogs running free, darkened so the
   // headline stays legible. Poster frame shows instantly before the video loads.
+  //
+  // Mobile autoplay gotcha: React sets `muted` as a DOM *property*, so the
+  // attribute never appears in the markup — and iOS/Android only autoplay
+  // videos they can see are muted. Set the attribute by hand and nudge play();
+  // if Low Power Mode still blocks it, retry on the first touch.
+  const vidRef = useRef(null);
+  useEffect(() => {
+    const v = vidRef.current;
+    if (!v) return;
+    v.muted = true;
+    v.defaultMuted = true;
+    v.setAttribute("muted", "");
+    const tryPlay = () => { const p = v.play(); if (p && p.catch) p.catch(() => {}); };
+    tryPlay();
+    const onTouch = () => tryPlay();
+    window.addEventListener("touchstart", onTouch, { passive: true, once: true });
+    return () => window.removeEventListener("touchstart", onTouch);
+  }, []);
   return (
     <div aria-hidden="true" style={{
       position: "absolute", inset: 0, overflow: "hidden", zIndex: 0,
     }}>
       <video
+        ref={vidRef}
         autoPlay muted loop playsInline
         poster="assets/hero-meadow-poster.jpg"
         style={{

@@ -246,7 +246,7 @@ function Survivors({ onSponsor }) {
 function Journey() {
   // Real R2R survivors. beforeFocal / afterFocal control CSS object-position.
   const items = [
-    { name: "Kronk",  before: IMG.kronkBefore,  after: IMG.kronkAfter,  story: "Rescued from a holding pen in Yulin, now leaping through fresh snow a world away. His story made People Magazine.", link: { href: "/news", label: "Read Kronk's story" } },
+    { name: "Kronk",  before: IMG.kronkBefore,  after: IMG.kronkAfter,  story: "Rescued from a holding pen in Yulin. Featured in People Magazine." },
     { name: "Alfie",  before: IMG.alfieBefore,  after: IMG.alfieAfter,  story: "Rescued from the dog meat trade and finding his way home." },
     { name: "Gertie", before: IMG.gertieBefore, after: IMG.gertieAfter, story: "Rescued from the trade and finding her people." },
     { name: "Honey",  before: IMG.honeyBefore,  after: IMG.honeyAfter,  story: "From forgotten to a forever home of her own.", beforeFocal: "20% center" },
@@ -326,6 +326,41 @@ function Journey() {
                 </div>
               </article>
             ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Feature() {
+  return (
+    <section className="section-light" style={{ padding: "64px 0" }}>
+      <div className="wrap">
+        <div className="kronk-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 0.9fr) minmax(0, 1.1fr)", gap: 48, alignItems: "center" }}>
+          <div style={{
+            position: "relative", aspectRatio: "4/5", borderRadius: 20, overflow: "hidden",
+            background: "var(--lav-200)", boxShadow: "0 20px 48px -20px oklch(0.3 0.05 310 / 0.3)",
+            maxHeight: 440,
+          }}>
+            <Img src={IMG.kronkAfter} alt="Kronk, leaping through fresh snow" />
+          </div>
+          <div>
+            <span style={{
+              display: "inline-block", padding: "6px 14px", borderRadius: 999,
+              background: "var(--purple-soft)", color: "var(--purple-700)",
+              fontSize: 11, fontFamily: "var(--font-mono)", letterSpacing: "0.14em", textTransform: "uppercase",
+              marginBottom: 16, fontWeight: 500,
+            }}>✦ Featured Story</span>
+            <h2 className="display" style={{ fontSize: "clamp(34px, 4.4vw, 56px)", margin: "0 0 16px", color: "var(--ink)" }}>
+              Meet Kronk
+            </h2>
+            <p style={{ fontSize: 15, color: "var(--ink-2)", marginBottom: 22, maxWidth: 480, lineHeight: 1.65 }}>
+              Rescued from a holding pen in Yulin, Kronk now leaps through fresh snow a world away. His journey from the dog meat trade to a life of pure joy is proof of what a second chance makes possible, and it caught the eye of <b style={{ color: "var(--ink)" }}>People Magazine</b>.
+            </p>
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+              <a href="/news" className="btn btn-accent">Read Kronk's Story <span className="arrow">→</span></a>
+            </div>
           </div>
         </div>
       </div>
@@ -925,4 +960,4 @@ function RealityTeaser() {
   );
 }
 
-Object.assign(window, { Press, Mission, Survivors, Journey, RealityTeaser, Testimonials, Ways, Voices, Team, FinalCTA, Footer });
+Object.assign(window, { Press, Mission, Survivors, Journey, Feature, RealityTeaser, Testimonials, Ways, Voices, Team, FinalCTA, Footer });

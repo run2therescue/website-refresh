@@ -143,6 +143,12 @@ async function prerenderPage(browser, file) {
         el.classList.add('in');
         el.classList.remove('pre');
       });
+      // React sets video "muted" as a property only, so the serialized HTML
+      // would lack the attribute — and mobile browsers refuse to autoplay a
+      // video without it. Bake the attribute into the snapshot.
+      document.querySelectorAll('video[autoplay]').forEach(function (v) {
+        v.setAttribute('muted', '');
+      });
     })()`);
 
     const innerHTML = await page.evaluate('document.getElementById("root").innerHTML');

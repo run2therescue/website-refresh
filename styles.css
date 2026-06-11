@@ -518,8 +518,9 @@ html { scroll-behavior: smooth; }
   h1.display { font-size: clamp(33px, 8.6vw, 46px) !important; }
 }
 
-/* Compact sticky nav on phones — shorter bar, smaller logo */
-@media (max-width: 560px) {
+/* Compact sticky nav once the desktop links collapse to the hamburger —
+   shorter bar, smaller logo (matches the 760px nav breakpoint) */
+@media (max-width: 760px) {
   nav > .wrap { height: 78px !important; }
   nav > .wrap > a[aria-label="Run 2 The Rescue"] img {
     width: 58px !important; height: 58px !important;
