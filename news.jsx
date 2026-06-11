@@ -63,7 +63,7 @@ function NewsPage() {
         <PawS className="paw" style={{ top: 80, left: "6%", width: 56, height: 56, color: "#fff", opacity: 0.1 }} />
         <PawS className="paw" style={{ bottom: 40, right: "8%", width: 72, height: 72, color: "#fff", opacity: 0.1 }} />
         <div className="wrap" style={{ maxWidth: 820, textAlign: "center", margin: "0 auto" }}>
-          <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 16 }}>✦ Media Coverage</div>
+          <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 16 }}><PawGlyphS />Media Coverage</div>
           <h1 className="display" style={{ fontSize: "clamp(48px, 7vw, 96px)", margin: "0 0 18px", color: "#fff", lineHeight: 0.98 }}>
             In <em>The Press.</em>
           </h1>
@@ -76,7 +76,7 @@ function NewsPage() {
       <section className="featured-story-section">
         <div className="wrap">
           <article className="featured-story reveal">
-            <div className="featured-eyebrow">✦ {FEATURED.eyebrow}</div>
+            <div className="featured-eyebrow"><PawGlyphS />{FEATURED.eyebrow}</div>
             <h2 className="featured-title">{FEATURED.title}</h2>
             <div className="featured-video">
               <iframe
@@ -102,7 +102,7 @@ function NewsPage() {
       <section className="press-section">
         <div className="wrap">
           <div className="press-section-heading">
-            <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 10 }}>✦ More Coverage</div>
+            <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 10 }}><PawGlyphS />More Coverage</div>
             <h2 className="press-section-title">Other stories in the press.</h2>
           </div>
           <div className="press-grid">
@@ -128,7 +128,7 @@ function NewsPage() {
         <div className="wrap">
           <div className="newsletter-box reveal">
             <div>
-              <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 10 }}>✦ Newsletter</div>
+              <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 10 }}><PawGlyphS />Newsletter</div>
               <h3 className="headline">Get the monthly Survivor Circle.</h3>
               <p style={{ color: "var(--on-dark-2)", fontSize: 15, margin: 0, lineHeight: 1.6 }}>
                 One letter a month. New arrivals, field updates, and the occasional happy-ending photo that'll ruin your workday in the best way.

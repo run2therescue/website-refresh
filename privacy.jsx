@@ -43,7 +43,7 @@ function PrivacyPage() {
       <header className="section-dark" style={{ padding: "100px 0 64px", position: "relative", overflow: "hidden" }}>
         <PawS className="paw" style={{ top: 70, right: "8%", width: 60, height: 60, color: "#fff", opacity: 0.1 }} />
         <div className="wrap" style={{ maxWidth: 720 }}>
-          <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 14 }}>✦ Legal</div>
+          <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 14 }}><PawGlyphS />Legal</div>
           <h1 className="display" style={{ fontSize: "clamp(40px, 6vw, 76px)", margin: "0 0 16px", color: "#fff", lineHeight: 1.0 }}>
             Privacy Policy
           </h1>

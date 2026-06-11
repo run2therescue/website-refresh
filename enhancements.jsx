@@ -159,7 +159,7 @@ function ImpactCalc({ onDonate }) {
           <div style={{ position: "relative", zIndex: 1, display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)", gap: 56, alignItems: "center" }} className="mission-grid">
             <div>
               <div className="eyebrow" style={{ marginBottom: 16 }}>
-                <span style={{ color: "var(--purple-400)" }}>✦ </span>See your impact
+                <span style={{ color: "var(--purple-400)" }}><PawGlyph /></span>See your impact
               </div>
               <h2 className="display" style={{ fontSize: "clamp(36px, 4.8vw, 60px)", margin: "0 0 16px", color: "#fff", lineHeight: 1.05 }}>
                 Every dollar has a face.

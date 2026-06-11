@@ -23,6 +23,21 @@ const IMG_BANK = {
   family: "https://images.unsplash.com/photo-1583511655857-d19026eec1c3?w=900&q=80&auto=format",
 };
 
+/* Tiny inline paw, the brand's eyebrow/kicker mark (replaces the generic <PawGlyphS />) */
+function PawGlyphS({ style = {} }) {
+  return (
+    <svg viewBox="0 0 64 64" fill="currentColor" aria-hidden="true"
+      style={{ width: "1.05em", height: "1.05em", display: "inline-block", verticalAlign: "-0.16em", marginRight: 7, ...style }}>
+      <ellipse cx="14" cy="22" rx="7" ry="9"/>
+      <ellipse cx="32" cy="14" rx="7" ry="9"/>
+      <ellipse cx="50" cy="22" rx="7" ry="9"/>
+      <ellipse cx="22" cy="40" rx="6" ry="8"/>
+      <ellipse cx="42" cy="40" rx="6" ry="8"/>
+      <path d="M32 32 C18 32 14 48 22 54 C28 58 36 58 42 54 C50 48 46 32 32 32 Z"/>
+    </svg>
+  );
+}
+
 function PawS({ style = {}, className = "" }) {
   return (
     <svg className={`paw ${className}`} style={style} viewBox="0 0 64 64" fill="currentColor" aria-hidden="true">
@@ -154,8 +169,8 @@ function FooterS() {
             <p style={{ color: "var(--on-dark-2)", fontSize: 14, maxWidth: 340, margin: "0 0 18px" }}>
               Saving lives, one rescue at a time. Dedicated to rescuing dogs from the dog meat trade and giving them a second chance at life.
             </p>
-            <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--purple-400)" }}>
-              ✦ Run · Rescue · Repeat
+            <div style={{ fontFamily: "var(--font-display)", fontSize: 12, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--purple-400)" }}>
+              <PawGlyphS />Run · Rescue · Repeat
             </div>
             <div style={{ display: "flex", gap: 10, marginTop: 22 }}>
               <a href="https://www.facebook.com/people/Run-2-The-Rescue/61564710401329/" target="_blank" rel="noopener noreferrer" aria-label="Run 2 The Rescue on Facebook" style={{ width: 38, height: 38, borderRadius: "50%", background: "var(--plum-700)", display: "inline-flex", alignItems: "center", justifyContent: "center", color: "var(--on-dark-2)", transition: "background .2s ease, color .2s ease, transform .2s ease" }} onMouseEnter={e => { e.currentTarget.style.background = "var(--purple-500)"; e.currentTarget.style.color = "#fff"; e.currentTarget.style.transform = "translateY(-2px)"; }} onMouseLeave={e => { e.currentTarget.style.background = "var(--plum-700)"; e.currentTarget.style.color = "var(--on-dark-2)"; e.currentTarget.style.transform = "none"; }}>
@@ -435,10 +450,10 @@ function DifferentDogsS() {
                         <span className="display" style={{ fontSize: 40, color: "var(--purple-400)" }}>{c.name[0]}</span>
                       </div>}
                   <span style={{
-                    position: "absolute", top: 8, left: 8,
-                    fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: "0.08em", textTransform: "uppercase",
-                    padding: "4px 8px", borderRadius: 999,
-                    background: looking ? "var(--purple-500)" : "rgba(26,16,37,0.74)", color: "#fff",
+                    position: "absolute", top: 0, left: 0,
+                    fontFamily: "var(--font-display)", fontStyle: "italic", fontWeight: 600, fontSize: 11,
+                    padding: "4px 11px 5px", borderRadius: "0 0 12px 0",
+                    background: looking ? "var(--purple-500)" : "rgba(26,16,37,0.78)", color: "#fff",
                   }}>{looking ? "Looking" : "Forever home ♥"}</span>
                 </div>
                 <div style={{ padding: "10px 12px" }}>
@@ -457,5 +472,5 @@ function DifferentDogsS() {
 
 Object.assign(window, {
   IMG_BANK, PawS, ImgS, NavS, FooterS, MagneticS, CountUpS, ScrollProgressS, useRevealS, useAnimalsS,
-  DifferentDogsS, submitForm, WEB3FORMS_KEY, BotcheckS, autoplayFixS,
+  DifferentDogsS, submitForm, WEB3FORMS_KEY, BotcheckS, autoplayFixS, PawGlyphS,
 });

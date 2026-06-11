@@ -136,7 +136,7 @@ function SponsorHero() {
       <PawS className="paw" style={{ top: 140, right: "22%", width: 36, height: 36, color: "#fff", opacity: 0.08 }} />
 
       <div className="wrap" style={{ position: "relative", textAlign: "center", maxWidth: 820, margin: "0 auto" }}>
-        <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 24 }}>✦ Sponsor a Survivor</div>
+        <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 24 }}><PawGlyphS />Sponsor a Survivor</div>
         <h1 className="display" style={{ fontSize: "clamp(44px, 7vw, 96px)", margin: "0 0 20px", color: "#fff" }}>
           Be a <em>lifeline</em> while they wait.
         </h1>

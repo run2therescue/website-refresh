@@ -100,21 +100,23 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   font-weight: 700;
 }
 
+/* Eyebrow kickers: set in the display face (not mono) with a paw mark —
+   the brand's own voice, not a generic template label. */
 .eyebrow {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.22em;
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--on-dark-3);
-  font-weight: 500;
+  font-weight: 600;
 }
 .eyebrow-dark {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.22em;
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ink-3);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 /* Buttons — fully rounded, chunky */

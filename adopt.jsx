@@ -57,7 +57,7 @@ function AdoptHeroFilter() {
 
       <div className="wrap" style={{ position: "relative" }}>
         <div style={{ textAlign: "center", maxWidth: 820, margin: "0 auto 40px" }}>
-          <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 24 }}>✦ Adopt a Survivor</div>
+          <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 24 }}><PawGlyphS />Adopt a Survivor</div>
           <h1 className="display" style={{ fontSize: "clamp(48px, 7.6vw, 104px)", margin: "0 0 20px", color: "#fff" }}>
             Find your next <em>best friend.</em>
           </h1>
@@ -98,7 +98,7 @@ function AdoptHeroEditorial() {
       <div className="wrap">
         <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1.1fr)", gap: 64, alignItems: "center" }} className="hero-grid">
           <div>
-            <div className="eyebrow-dark" style={{ color: "var(--purple-600)", marginBottom: 24 }}>✦ This Week's Featured Survivor</div>
+            <div className="eyebrow-dark" style={{ color: "var(--purple-600)", marginBottom: 24 }}><PawGlyphS />This Week's Featured Survivor</div>
             <h1 className="display" style={{ fontSize: "clamp(44px, 6.8vw, 92px)", margin: "0 0 24px", color: "var(--ink)" }}>
               Meet <em>{feat ? feat.name : "our survivors"}.</em><br />Ready to come home.
             </h1>
@@ -520,7 +520,7 @@ function AdoptProcess() {
       <PawS className="paw paw-dark" style={{ bottom: 60, right: "6%", width: 52, height: 52 }} />
       <div className="wrap">
         <div style={{ textAlign: "center", maxWidth: 640, margin: "0 auto" }}>
-          <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 12 }}>✦ How adoption works</div>
+          <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 12 }}><PawGlyphS />How adoption works</div>
           <h2 className="display" style={{ fontSize: "clamp(32px, 4vw, 52px)", margin: "0 0 12px", color: "#fff" }}>
             Four steps, one new family member.
           </h2>
@@ -578,7 +578,7 @@ function AdoptFAQ() {
       <PawS className="paw paw-light" style={{ bottom: 60, right: "6%", width: 52, height: 52 }} />
       <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
         <div style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 40px" }}>
-          <div className="eyebrow-dark" style={{ marginBottom: 12 }}>✦ Honest answers</div>
+          <div className="eyebrow-dark" style={{ marginBottom: 12 }}><PawGlyphS />Honest answers</div>
           <h2 className="display" style={{ fontSize: "clamp(32px, 4vw, 52px)", margin: "0 0 12px", color: "var(--ink)" }}>
             The questions we get asked the most.
           </h2>

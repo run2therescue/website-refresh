@@ -24,7 +24,7 @@ function TriggerWarning({ open, onAccept, onDecline }) {
         boxShadow: "0 30px 80px oklch(0.05 0.02 310 / 0.6)",
       }}>
         <div className="eyebrow" style={{ justifyContent: "center", marginBottom: 18 }}>
-          <span style={{ color: "var(--purple-400)" }}>✦ </span>A content notice
+          <span style={{ color: "var(--purple-400)" }}><PawGlyphS /></span>A content notice
         </div>
         <h2 className="display" style={{ fontSize: "clamp(26px, 3.4vw, 38px)", margin: "0 0 14px", color: "#fff" }}>
           A hard truth, handled with care
@@ -104,7 +104,7 @@ function RealityHero({ revealed }) {
       </div>
       <div className="wrap" style={{ position: "relative", zIndex: 1, maxWidth: 760 }}>
         <div className="eyebrow" style={{ marginBottom: 22 }}>
-          <span style={{ color: "var(--purple-400)" }}>✦ </span>Before the second chance
+          <span style={{ color: "var(--purple-400)" }}><PawGlyphS /></span>Before the second chance
         </div>
         <h1 className="display" style={{ fontSize: "clamp(44px, 6.5vw, 88px)", margin: "0 0 18px", color: "#fff", lineHeight: 1.02 }}>
           The Reality They Face

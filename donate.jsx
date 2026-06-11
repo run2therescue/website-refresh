@@ -135,7 +135,7 @@ function DonateHero() {
       <PawS className="paw" style={{ bottom: 40, right: "4%", width: 68, height: 68, color: "#fff", opacity: 0.1 }} />
       <div className="wrap donate-hero-grid">
         <div className="donate-hero-copy">
-          <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 16 }}>✦ Donate</div>
+          <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 16 }}><PawGlyphS />Donate</div>
           <h1 className="display" style={{ fontSize: "clamp(34px, 4.6vw, 60px)", margin: "0 0 18px", color: "#fff", lineHeight: 1.06 }}>
             Donate to Rescue and Rehabilitate <em>Dogs from the Dog Meat Trade.</em>
           </h1>
@@ -253,7 +253,7 @@ function DonateFAQ() {
   return (
     <section style={{ background: "var(--plum-900)", color: "#fff", padding: "64px 0 80px" }}>
       <div className="wrap" style={{ maxWidth: 880 }}>
-        <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 12 }}>✦ Questions</div>
+        <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 12 }}><PawGlyphS />Questions</div>
         <h2 className="display" style={{ fontSize: "clamp(30px, 3.6vw, 44px)", margin: "0 0 28px", color: "#fff" }}>
           Before you give.
         </h2>

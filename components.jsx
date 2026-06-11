@@ -71,6 +71,21 @@ const IMG = {
   reality3: "assets/reality-trade-context-3.jpg",
 };
 
+/* Tiny inline paw, the brand's eyebrow/kicker mark (replaces the generic <PawGlyph />) */
+function PawGlyph({ style = {} }) {
+  return (
+    <svg viewBox="0 0 64 64" fill="currentColor" aria-hidden="true"
+      style={{ width: "1.05em", height: "1.05em", display: "inline-block", verticalAlign: "-0.16em", marginRight: 7, ...style }}>
+      <ellipse cx="14" cy="22" rx="7" ry="9"/>
+      <ellipse cx="32" cy="14" rx="7" ry="9"/>
+      <ellipse cx="50" cy="22" rx="7" ry="9"/>
+      <ellipse cx="22" cy="40" rx="6" ry="8"/>
+      <ellipse cx="42" cy="40" rx="6" ry="8"/>
+      <path d="M32 32 C18 32 14 48 22 54 C28 58 36 58 42 54 C50 48 46 32 32 32 Z"/>
+    </svg>
+  );
+}
+
 /* Paw print SVG */
 function Paw({ style = {}, className = "" }) {
   return (
@@ -284,7 +299,7 @@ function HeroCentered({ onDonate }) {
 
       <div className="wrap" style={{ textAlign: "left", position: "relative", zIndex: 1 }}>
         <div className="eyebrow" style={{ marginBottom: 32 }}>
-          <span style={{ color: "var(--purple-400)" }}>✦ </span>
+          <span style={{ color: "var(--purple-400)" }}><PawGlyph /></span>
           Run · Rescue · Repeat
         </div>
         <h1 className="display" style={{
@@ -335,7 +350,7 @@ function HeroSplit({ onDonate }) {
       }}>
         <div style={{ minWidth: 0 }}>
           <div className="eyebrow" style={{ marginBottom: 24 }}>
-            <span style={{ color: "var(--purple-400)" }}>✦ </span>
+            <span style={{ color: "var(--purple-400)" }}><PawGlyph /></span>
             501(c)(3) · est. 2024
           </div>
           <h1 className="display" style={{
@@ -386,7 +401,7 @@ function HeroEditorial({ onDonate }) {
       <Paw className="paw-dark" style={{ top: 90, right: "8%", width: 52, height: 52, color: "#fff", opacity: 0.18 }} />
       <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
         <div className="eyebrow" style={{ marginBottom: 40 }}>
-          <span style={{ color: "var(--purple-400)" }}>✦ </span>
+          <span style={{ color: "var(--purple-400)" }}><PawGlyph /></span>
           Run · Rescue · Repeat
         </div>
         <h1 className="display" style={{
@@ -459,4 +474,4 @@ function useAnimals() {
   return state;
 }
 
-Object.assign(window, { Paw, Img, IMG, Nav, Hero, Stat, HeroVideoBG, useAnimals, Botcheck });
+Object.assign(window, { Paw, PawGlyph, Img, IMG, Nav, Hero, Stat, HeroVideoBG, useAnimals, Botcheck });

@@ -23,7 +23,7 @@ function ContactPage() {
         <PawS className="paw" style={{ top: 80, right: "8%", width: 60, height: 60, color: "#fff", opacity: 0.1 }} />
         <PawS className="paw" style={{ bottom: 40, left: "6%", width: 52, height: 52, color: "#fff", opacity: 0.1 }} />
         <div className="wrap" style={{ maxWidth: 820, textAlign: "center", margin: "0 auto" }}>
-          <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 16 }}>✦ Get in touch</div>
+          <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 16 }}><PawGlyphS />Get in touch</div>
           <h1 className="display" style={{ fontSize: "clamp(48px, 7vw, 88px)", margin: "0 0 18px", color: "#fff", lineHeight: 0.98 }}>
             We'd love to <em>hear from you.</em>
           </h1>

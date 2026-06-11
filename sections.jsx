@@ -279,7 +279,7 @@ function Journey() {
         }}>
           <div className="journey-sticky" style={{ position: "sticky", top: 128, alignSelf: "start" }}>
             <div className="eyebrow-dark" style={{ marginBottom: 14 }}>
-              <span style={{ color: "var(--purple-500)" }}>✦ </span>From trauma to trust
+              <span style={{ color: "var(--purple-500)" }}><PawGlyph /></span>From trauma to trust
             </div>
             <h2 className="display" style={{ fontSize: "clamp(34px, 4.2vw, 60px)", margin: "0 0 16px", color: "var(--ink)" }}>
               Their Journey to a New Life
@@ -298,24 +298,24 @@ function Journey() {
                   <div style={{ position: "relative", background: "var(--plum-700)", overflow: "hidden" }}>
                     <Img src={it.before} alt={`${it.name} before rescue`} style={{ filter: "saturate(0.5) brightness(0.85)", objectPosition: it.beforeFocal || "center" }} />
                     <span style={{
-                      position: "absolute", top: 12, left: 12,
-                      background: "var(--plum-900)", color: "#fff", fontSize: 10,
-                      padding: "4px 10px", borderRadius: 999,
-                      fontFamily: "var(--font-mono)", letterSpacing: "0.1em", textTransform: "uppercase",
+                      position: "absolute", top: 0, left: 0,
+                      background: "oklch(0.18 0.035 310 / 0.88)", color: "#fff", fontSize: 13,
+                      padding: "6px 14px 7px", borderRadius: "0 0 14px 0",
+                      fontFamily: "var(--font-display)", fontStyle: "italic", fontWeight: 600,
                     }}>Before</span>
                   </div>
                   <div style={{ position: "relative", overflow: "hidden" }}>
                     <Img src={it.after} alt={`${it.name} after rescue`} style={{ objectPosition: it.afterFocal || "center" }} />
                     <span style={{
-                      position: "absolute", top: 12, left: 12,
-                      background: "#fff", color: "var(--ink)", fontSize: 10,
-                      padding: "4px 10px", borderRadius: 999,
-                      fontFamily: "var(--font-mono)", letterSpacing: "0.1em", textTransform: "uppercase",
+                      position: "absolute", top: 0, left: 0,
+                      background: "rgba(255,255,255,0.94)", color: "var(--ink)", fontSize: 13,
+                      padding: "6px 14px 7px", borderRadius: "0 0 14px 0",
+                      fontFamily: "var(--font-display)", fontStyle: "italic", fontWeight: 600,
                     }}>After</span>
                   </div>
                 </div>
                 <div style={{ padding: "22px 24px", display: "flex", alignItems: "baseline", gap: 14 }}>
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 12, fontWeight: 600, color: "var(--purple-500)", flexShrink: 0 }}>0{i + 1}</span>
+                  <span className="display" style={{ fontSize: 28, fontWeight: 700, fontStyle: "italic", color: "var(--purple-400)", opacity: 0.55, flexShrink: 0, lineHeight: 1 }}>{i + 1}</span>
                   <div>
                     <div className="display" style={{ fontSize: 26, marginBottom: 4, color: "var(--ink)" }}>{it.name}</div>
                     <p style={{ margin: 0, color: "var(--ink-2)", fontSize: 14, lineHeight: 1.55 }}>
@@ -349,9 +349,9 @@ function Feature() {
             <span style={{
               display: "inline-block", padding: "6px 14px", borderRadius: 999,
               background: "var(--purple-soft)", color: "var(--purple-700)",
-              fontSize: 11, fontFamily: "var(--font-mono)", letterSpacing: "0.14em", textTransform: "uppercase",
-              marginBottom: 16, fontWeight: 500,
-            }}>✦ Featured Story</span>
+              fontSize: 12, fontFamily: "var(--font-display)", letterSpacing: "0.1em", textTransform: "uppercase",
+              marginBottom: 16, fontWeight: 600,
+            }}><PawGlyph />Featured Story</span>
             <h2 className="display" style={{ fontSize: "clamp(34px, 4.4vw, 56px)", margin: "0 0 16px", color: "var(--ink)" }}>
               Meet Kronk
             </h2>
@@ -493,7 +493,7 @@ function Team() {
       <Paw className="paw-dark" style={{ bottom: 80, left: "5%", width: 56, height: 56 }} />
       <div className="wrap">
         <div style={{ textAlign: "center", marginBottom: 40 }}>
-          <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 12 }}>✦ Leadership</div>
+          <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 12 }}><PawGlyph />Leadership</div>
           <h2 className="display" style={{ fontSize: "clamp(36px, 5vw, 64px)", margin: "0 0 12px", color: "#fff" }}>
             The team behind the mission
           </h2>
@@ -600,8 +600,8 @@ function Footer() {
             <p style={{ color: "var(--on-dark-2)", fontSize: 14, maxWidth: 340, margin: "0 0 20px" }}>
               Saving lives, one rescue at a time. Dedicated to rescuing dogs from the dog meat trade and giving them a second chance at life.
             </p>
-            <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--purple-400)" }}>
-              ✦ Run · Rescue · Repeat
+            <div style={{ fontFamily: "var(--font-display)", fontSize: 12, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--purple-400)" }}>
+              <PawGlyph />Run · Rescue · Repeat
             </div>
             <div style={{ display: "flex", gap: 10, marginTop: 22 }}>
               <a href="https://www.facebook.com/people/Run-2-The-Rescue/61564710401329/" target="_blank" rel="noopener noreferrer" aria-label="Run 2 The Rescue on Facebook" style={{ width: 38, height: 38, borderRadius: "50%", background: "var(--plum-700)", display: "inline-flex", alignItems: "center", justifyContent: "center", color: "var(--on-dark-2)", transition: "background .2s ease, color .2s ease, transform .2s ease" }} onMouseEnter={e => { e.currentTarget.style.background = "var(--purple-500)"; e.currentTarget.style.color = "#fff"; e.currentTarget.style.transform = "translateY(-2px)"; }} onMouseLeave={e => { e.currentTarget.style.background = "var(--plum-700)"; e.currentTarget.style.color = "var(--on-dark-2)"; e.currentTarget.style.transform = "none"; }}>
@@ -736,7 +736,7 @@ function ShareStoryModal({ open, onClose }) {
             <form onSubmit={submit}>
               <Botcheck />
               <div className="eyebrow-dark" style={{ marginBottom: 10 }}>
-                <span style={{ color: "var(--purple-500)" }}>✦ </span>A happy tail
+                <span style={{ color: "var(--purple-500)" }}><PawGlyph /></span>A happy tail
               </div>
               <h2 className="display" style={{ fontSize: 30, margin: "0 0 8px", color: "var(--ink)", lineHeight: 1.15 }}>
                 Share your survivor's story
@@ -869,7 +869,7 @@ function Testimonials() {
       <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
         <div style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 36px" }}>
           <div className="eyebrow" style={{ justifyContent: "center", marginBottom: 14, color: "var(--ink-3)" }}>
-            <span style={{ color: "var(--purple-500)" }}>✦ </span>From families who said yes
+            <span style={{ color: "var(--purple-500)" }}><PawGlyph /></span>From families who said yes
           </div>
           <h2 className="display" style={{ fontSize: "clamp(32px, 4.4vw, 56px)", margin: 0, color: "var(--ink)" }}>
             A second chance, in their own words
@@ -946,7 +946,7 @@ function RealityTeaser() {
       <Paw className="paw-dark" style={{ bottom: 28, right: "7%", width: 44, height: 44 }} />
       <div className="wrap" style={{ maxWidth: 700, margin: "0 auto", textAlign: "center", position: "relative", zIndex: 1 }}>
         <div className="eyebrow" style={{ justifyContent: "center", marginBottom: 16 }}>
-          <span style={{ color: "var(--purple-400)" }}>✦ </span>Before the rescue
+          <span style={{ color: "var(--purple-400)" }}><PawGlyph /></span>Before the rescue
         </div>
         <h2 className="display" style={{ fontSize: "clamp(30px, 3.8vw, 50px)", margin: "0 0 14px", color: "#fff" }}>
           Every survivor comes from somewhere

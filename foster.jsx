@@ -15,7 +15,7 @@ function FosterHeroNarrative() {
       <PawS className="paw" style={{ top: 140, right: "20%", width: 36, height: 36, color: "#fff", opacity: 0.08 }} />
 
       <div className="wrap" style={{ position: "relative", textAlign: "center", maxWidth: 860, margin: "0 auto" }}>
-        <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 24 }}>✦ Join the Foster Team</div>
+        <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 24 }}><PawGlyphS />Join the Foster Team</div>
         <h1 className="display" style={{
           fontSize: "clamp(48px, 7.8vw, 108px)", margin: "0 0 24px", color: "#fff",
         }}>Fostering saves <em>lives.</em></h1>
@@ -58,7 +58,7 @@ function FosterHeroSplit() {
       <div className="wrap">
         <div className="split-hero-grid">
           <div className="split-hero-copy">
-            <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 24 }}>✦ Join the Foster Team</div>
+            <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 24 }}><PawGlyphS />Join the Foster Team</div>
             <h1 className="display" style={{
               fontSize: "clamp(44px, 6.4vw, 88px)", margin: "0 0 20px", color: "#fff",
             }}>Open your home. <em>Save a life.</em></h1>
@@ -140,7 +140,7 @@ function FosterJourney() {
       <PawS className="paw paw-dark" style={{ bottom: 40, left: "4%", width: 48, height: 48 }} />
       <div className="wrap">
         <div style={{ textAlign: "center", maxWidth: 620, margin: "0 auto" }}>
-          <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 12 }}>✦ How fostering works</div>
+          <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 12 }}><PawGlyphS />How fostering works</div>
           <h2 className="display" style={{ fontSize: "clamp(30px, 3.8vw, 48px)", margin: "0 0 12px", color: "#fff" }}>
             Four stops, one journey home.
           </h2>
