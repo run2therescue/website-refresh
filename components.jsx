@@ -132,7 +132,7 @@ function Nav({ onDonate }) {
         </a>
         <div className="nav-desktop" style={{ display: "flex", alignItems: "center", gap: 32 }}>
           <div className="nav-links" style={{ display: "flex", gap: 28, fontSize: 14 }}>
-            {[["Adopt", "/adopt"], ["Sponsor", "/sponsor"], ["Foster", "/foster"], ["News", "/news"], ["Merch", "/merch"], ["Contact", "/contact"]].map(([l, h]) => (
+            {[["Adopt", "/adopt"], ["Sponsor", "/sponsor"], ["Foster", "/foster"], ["Donate", "/donate"], ["News", "/news"], ["Merch", "/merch"], ["Contact", "/contact"]].map(([l, h]) => (
               <a key={l} href={h} style={{ color: "var(--on-dark-2)", transition: "color .2s" }}
                 onMouseEnter={e => e.currentTarget.style.color = "#fff"}
                 onMouseLeave={e => e.currentTarget.style.color = "var(--on-dark-2)"}>{l}</a>

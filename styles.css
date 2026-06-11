@@ -279,6 +279,12 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 @media (max-width: 880px) {
   .nav-links { gap: 12px !important; font-size: 12px !important; }
 }
+/* Mid widths: the links + Donate button don't both fit — the button used to
+   get pushed off the right edge. Donate is a text link too, so drop the
+   button until the bar has room. */
+@media (max-width: 1000px) {
+  .nav-donate-desktop { display: none !important; }
+}
 
 /* Hamburger button — hidden at desktop, shown at ≤760px */
 .nav-hamburger {
