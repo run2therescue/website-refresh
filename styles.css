@@ -567,3 +567,23 @@ html { scroll-behavior: smooth; }
   .section-light, .section-dark { padding-top: 52px !important; padding-bottom: 52px !important; }
   .wrap { padding-left: 20px !important; padding-right: 20px !important; }
 }
+.r2r-run-italicize {
+     display: inline-block;
+     font-style: oblique 0deg;
+     animation: r2rRunItalic 1.6s cubic-bezier(.4, 0, .2, 1) 0.4s forwards;
+     transform-origin: left center;
+   }
+
+   @keyframes r2rRunItalic {
+     0%   { font-style: oblique 0deg; }
+     100% { font-style: oblique 12deg; }
+   }
+
+   @media (prefers-reduced-motion: reduce) {
+     .r2r-run-italicize {
+       animation: none;
+       font-style: oblique 12deg;
+     }
+   }
+
+Add r2r-run-italicize animation styles
