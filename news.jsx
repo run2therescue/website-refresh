@@ -135,6 +135,7 @@ function NewsPage() {
               </p>
             </div>
             <form onSubmit={nlSubmit} style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+              <BotcheckS />
               <input
                 type="email"
                 required

@@ -220,12 +220,12 @@ function SponsorPicker({ animals, status, selectedDog, setSelectedDog, onSponsor
             Every sponsorship reaches a <em style={{ color: "var(--purple-600)" }}>real dog</em>.
           </h2>
           <p style={{ color: "var(--ink-2)", fontSize: 14, margin: 0 }}>
-            Tap a survivor to pair your monthly gift with them — you'll confirm the amount in the next step.
+            Tap a survivor to pair your monthly gift with them. You'll confirm the amount in the next step.
           </p>
         </div>
         {status === "error" ? (
           <p style={{ textAlign: "center", color: "var(--ink-3)", fontSize: 14, marginTop: 24 }}>
-            Our live dog list is briefly unavailable — you can still start a sponsorship and we'll match you.
+            Our live dog list is briefly unavailable. You can still start a sponsorship and we'll match you.
           </p>
         ) : (
           <div className="pick-grid">

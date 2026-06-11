@@ -96,7 +96,7 @@ function Press() {
 
 function Mission() {
   return (
-    <section id="mission" className="section-light" style={{ padding: "72px 0", position: "relative", overflow: "hidden" }}>
+    <section id="mission" className="section-light" style={{ padding: "56px 0", position: "relative", overflow: "hidden" }}>
       <Paw className="paw-light" style={{ top: 40, right: "6%", width: 44, height: 44 }} />
       <Paw className="paw-light" style={{ bottom: 40, left: "6%", width: 40, height: 40 }} />
       <div className="wrap">
@@ -145,12 +145,12 @@ function Survivors({ onSponsor }) {
   const available = animals.filter((a) => a.available !== false);
   const dogs = available.slice(0, 4);
   return (
-    <section id="survivors" className="section-light" style={{ padding: "72px 0 24px", position: "relative", overflow: "hidden" }}>
+    <section id="survivors" className="section-light" style={{ padding: "56px 0 16px", position: "relative", overflow: "hidden" }}>
       <Paw className="paw-light" style={{ top: 40, left: "5%", width: 40, height: 40 }} />
       <div className="wrap">
         <div className="survivors-hero" style={{
           display: "grid", gridTemplateColumns: "minmax(0, 1.08fr) minmax(0, 0.92fr)",
-          gap: 44, alignItems: "stretch", marginBottom: 56,
+          gap: 44, alignItems: "stretch", marginBottom: 44,
         }}>
           <div>
             <h2 className="display" style={{ fontSize: "clamp(34px, 4.4vw, 56px)", margin: "0 0 16px", color: "var(--ink)" }}>
@@ -159,7 +159,7 @@ function Survivors({ onSponsor }) {
             <p style={{ fontSize: 15, color: "var(--ink-2)", margin: "0 0 22px", maxWidth: 480, lineHeight: 1.6 }}>
               We rescue dogs from the dog meat trade, get them well, and place them with families ready to give a second chance.
             </p>
-            <Magnetic><a href="Adopt.html" className="btn btn-accent">Adopt Today <span className="arrow">→</span></a></Magnetic>
+            <Magnetic><a href="/adopt" className="btn btn-accent">Adopt Today <span className="arrow">→</span></a></Magnetic>
             <div style={{ background: "var(--purple-500)", color: "#fff", borderRadius: 18, padding: "22px 26px", marginTop: 28 }}>
               <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.72)", marginBottom: 8 }}>Where it began</div>
               <div className="display" style={{ fontSize: 22, marginBottom: 6 }}>Meet Sunny</div>
@@ -180,7 +180,7 @@ function Survivors({ onSponsor }) {
           <h3 className="display" style={{ fontSize: "clamp(21px, 2.5vw, 30px)", margin: 0, color: "var(--ink)" }}>
             A few of our survivors
           </h3>
-          <a href="Adopt.html" style={{
+          <a href="/adopt" style={{
             display: "inline-flex", alignItems: "center", gap: 6,
             fontWeight: 600, fontSize: 14, color: "var(--purple-600)", transition: "color .2s",
           }}
@@ -246,10 +246,10 @@ function Survivors({ onSponsor }) {
 function Journey() {
   // Real R2R survivors. beforeFocal / afterFocal control CSS object-position.
   const items = [
-    { name: "Kronk",  before: IMG.kronkBefore,  after: IMG.kronkAfter,  story: "Rescued from a holding pen in Yulin. Featured in People Magazine." },
-    { name: "Alfie",  before: IMG.alfieBefore,  after: IMG.alfieAfter,  story: "From trauma to trust. Rescued from the dog meat trade and finding his way home." },
-    { name: "Gertie", before: IMG.gertieBefore, after: IMG.gertieAfter, story: "From fear to faith. Rescued from the trade and finding her people." },
-    { name: "Honey",  before: IMG.honeyBefore,  after: IMG.honeyAfter,  story: "From forgotten to forever. A second chance, fully claimed.", beforeFocal: "20% center" },
+    { name: "Kronk",  before: IMG.kronkBefore,  after: IMG.kronkAfter,  story: "Rescued from a holding pen in Yulin, now leaping through fresh snow a world away. His story made People Magazine.", link: { href: "/news", label: "Read Kronk's story" } },
+    { name: "Alfie",  before: IMG.alfieBefore,  after: IMG.alfieAfter,  story: "Rescued from the dog meat trade and finding his way home." },
+    { name: "Gertie", before: IMG.gertieBefore, after: IMG.gertieAfter, story: "Rescued from the trade and finding her people." },
+    { name: "Honey",  before: IMG.honeyBefore,  after: IMG.honeyAfter,  story: "From forgotten to a forever home of her own.", beforeFocal: "20% center" },
   ];
   // Scroll-velocity reactive: the card track lags a few pixels with scroll
   // speed, then settles, gentle "this page responds to you" motion.
@@ -270,7 +270,7 @@ function Journey() {
     return () => { window.removeEventListener("scroll", onScroll); cancelAnimationFrame(raf); };
   }, []);
   return (
-    <section className="section-light" style={{ padding: "72px 0 96px", position: "relative" }}>
+    <section className="section-light" style={{ padding: "56px 0 72px", position: "relative" }}>
       <Paw className="paw-light" style={{ top: 40, left: "5%", width: 44, height: 44 }} />
       <div className="wrap">
         <div className="journey-pinned" style={{
@@ -285,7 +285,7 @@ function Journey() {
               Their Journey to a New Life
             </h2>
             <p style={{ color: "var(--ink-2)", fontSize: 16, lineHeight: 1.6, margin: 0, maxWidth: 360 }}>
-              From trauma to trust, from fear to faith. Four survivors, scroll through the moment each one's story turned.
+              Four survivors, before and after the moment everything changed.
             </p>
           </div>
           <div ref={trackRef} style={{ display: "flex", flexDirection: "column", gap: 28, willChange: "transform" }}>
@@ -318,7 +318,10 @@ function Journey() {
                   <span style={{ fontFamily: "var(--font-mono)", fontSize: 12, fontWeight: 600, color: "var(--purple-500)", flexShrink: 0 }}>0{i + 1}</span>
                   <div>
                     <div className="display" style={{ fontSize: 26, marginBottom: 4, color: "var(--ink)" }}>{it.name}</div>
-                    <p style={{ margin: 0, color: "var(--ink-2)", fontSize: 14, lineHeight: 1.55 }}>{it.story}</p>
+                    <p style={{ margin: 0, color: "var(--ink-2)", fontSize: 14, lineHeight: 1.55 }}>
+                      {it.story}
+                      {it.link && <> <a href={it.link.href} style={{ fontWeight: 600, color: "var(--purple-600)", whiteSpace: "nowrap" }}>{it.link.label} <span className="arrow">→</span></a></>}
+                    </p>
                   </div>
                 </div>
               </article>
@@ -330,116 +333,15 @@ function Journey() {
   );
 }
 
-function Feature() {
-  return (
-    <section className="section-light" style={{ padding: "64px 0" }}>
-      <div className="wrap">
-        <div className="kronk-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 0.9fr) minmax(0, 1.1fr)", gap: 48, alignItems: "center" }}>
-          <div style={{
-            position: "relative", aspectRatio: "4/5", borderRadius: 20, overflow: "hidden",
-            background: "var(--lav-200)", boxShadow: "0 20px 48px -20px oklch(0.3 0.05 310 / 0.3)",
-            maxHeight: 440,
-          }}>
-            <Img src={IMG.kronkAfter} alt="Kronk, leaping through fresh snow" />
-          </div>
-          <div>
-            <span style={{
-              display: "inline-block", padding: "6px 14px", borderRadius: 999,
-              background: "var(--purple-soft)", color: "var(--purple-700)",
-              fontSize: 11, fontFamily: "var(--font-mono)", letterSpacing: "0.14em", textTransform: "uppercase",
-              marginBottom: 16, fontWeight: 500,
-            }}>✦ Featured Story</span>
-            <h2 className="display" style={{ fontSize: "clamp(34px, 4.4vw, 56px)", margin: "0 0 16px", color: "var(--ink)" }}>
-              Meet Kronk
-            </h2>
-            <p style={{ fontSize: 15, color: "var(--ink-2)", marginBottom: 22, maxWidth: 480, lineHeight: 1.65 }}>
-              Rescued from a holding pen in Yulin, Kronk now leaps through fresh snow a world away. His journey from the dog meat trade to a life of pure joy is proof of what a second chance makes possible, and it caught the eye of <b style={{ color: "var(--ink)" }}>People Magazine</b>.
-            </p>
-            <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-              <a href="News.html" className="btn btn-accent">Read Kronk's Story <span className="arrow">→</span></a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Reality() {
-  const imgs = [IMG.reality1, IMG.reality2, IMG.reality3];
-  const labels = [
-    "Dogs crammed into stacked wire cages, awaiting the dog meat trade",
-    "A dog presses toward the wire, one of dozens waiting",
-    "Crowded behind chain-link, surviving on borrowed time",
-  ];
-  return (
-    <section className="section-dark" style={{ padding: "72px 0", position: "relative", overflow: "hidden" }}>
-      <Paw className="paw-dark" style={{ top: 40, right: "5%", width: 44, height: 44 }} />
-      <Paw className="paw-dark" style={{ bottom: 40, left: "4%", width: 44, height: 44 }} />
-      <div className="wrap">
-        <div style={{ textAlign: "center", maxWidth: 680, margin: "0 auto 36px" }}>
-          <h2 className="display" style={{ fontSize: "clamp(34px, 4.4vw, 56px)", margin: "0 0 12px", color: "var(--purple-400)" }}>
-            The Reality They Face
-          </h2>
-          <p style={{ fontSize: 15, color: "var(--on-dark-2)", margin: 0 }}>
-            From trauma to trust, from fear to faith. Every face is a testament to resilience.
-          </p>
-        </div>
-        <div style={{
-          display: "grid", gridTemplateColumns: "repeat(12, 1fr)",
-          gridAutoRows: "minmax(0, 150px)",
-          gap: 14,
-        }}>
-          {[
-            { c: "span 7", r: "span 2", img: imgs[0], label: labels[0] },
-            { c: "span 5", r: "span 1", img: imgs[1], label: labels[1] },
-            { c: "span 5", r: "span 1", img: imgs[2], label: labels[2] },
-            { c: "span 12", r: "span 2", video: "assets/reality-cage-clip.mp4", poster: "assets/reality-cage-poster.jpg", label: "Dozens crowd a single kennel, waiting, this is what every rescue interrupts" },
-          ].map((it, i) => (
-            <div key={i} style={{
-              gridColumn: it.c, gridRow: it.r,
-              borderRadius: 20, overflow: "hidden", background: "var(--plum-700)",
-              position: "relative",
-            }}>
-              {it.video ? (
-                <video
-                  autoPlay muted loop playsInline preload="metadata"
-                  poster={it.poster}
-                  style={{
-                    width: "100%", height: "100%", objectFit: "cover",
-                    display: "block", filter: "saturate(0.4) brightness(0.75)",
-                  }}
-                >
-                  <source src={it.video} type="video/mp4" />
-                </video>
-              ) : (
-                <Img src={it.img} alt={it.label} style={{ filter: "saturate(0.4) brightness(0.75)" }} />
-              )}
-              <div style={{
-                position: "absolute", inset: 0,
-                background: "linear-gradient(180deg, transparent 50%, oklch(0.14 0.03 310 / 0.7))",
-              }} />
-              <span style={{
-                position: "absolute", bottom: 16, left: 20, right: 20,
-                color: "var(--on-dark-2)", fontSize: 12,
-              }}>{it.label}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function Ways({ onDonate, onSponsor }) {
   const items = [
-    { title: "Adopt a Survivor", kind: "adopt",   href: "Adopt.html" },
-    { title: "Become a Foster",  kind: "foster",  href: "Foster.html" },
-    { title: "Sponsor a Dog",    kind: "sponsor", href: "Sponsor.html" },
-    { title: "Make a Donation",  kind: "donate",  href: "Donate.html" },
+    { title: "Adopt a Survivor", kind: "adopt",   href: "/adopt" },
+    { title: "Become a Foster",  kind: "foster",  href: "/foster" },
+    { title: "Sponsor a Dog",    kind: "sponsor", href: "/sponsor" },
+    { title: "Make a Donation",  kind: "donate",  href: "/donate" },
   ];
   return (
-    <section id="ways" className="section-light" style={{ padding: "64px 0 72px", position: "relative", overflow: "hidden" }}>
+    <section id="ways" className="section-light" style={{ padding: "52px 0 60px", position: "relative", overflow: "hidden" }}>
       <Paw className="paw-light" style={{ top: 40, left: "5%", width: 44, height: 44 }} />
       <Paw className="paw-light" style={{ top: 30, right: "6%", width: 40, height: 40 }} />
       <div className="wrap">
@@ -448,7 +350,7 @@ function Ways({ onDonate, onSponsor }) {
             How You Can Help
           </h2>
           <p style={{ color: "var(--ink-2)", fontSize: 15, margin: 0 }}>
-            Four doors. Pick yours.
+            However you choose to help, a survivor gets closer to home.
           </p>
         </div>
         <div className="ways-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14 }}>
@@ -471,15 +373,15 @@ function Ways({ onDonate, onSponsor }) {
 
 function Voices() {
   return (
-    <section className="section-dark-2" style={{ padding: "72px 0", position: "relative" }}>
+    <section className="section-dark-2" style={{ padding: "52px 0", position: "relative" }}>
       <div className="wrap" style={{ maxWidth: 900 }}>
         <div style={{ textAlign: "center" }}>
-          <p style={{ fontSize: 16, color: "var(--on-dark-2)", maxWidth: 620, margin: "0 auto 32px", lineHeight: 1.65 }}>
-            A beacon of hope for the activists who go in, and the voiceless victims they rescue. We fund the rescues, the medical care, the flights home, the forever families.
+          <p style={{ fontSize: 16, color: "var(--on-dark-2)", maxWidth: 620, margin: "0 auto 28px", lineHeight: 1.65 }}>
+            A beacon of hope for the activists who go in, and the dogs they carry out.
           </p>
           <div style={{
             borderLeft: "3px solid var(--purple-500)", paddingLeft: 20,
-            maxWidth: 520, margin: "0 auto 48px", textAlign: "left",
+            maxWidth: 520, margin: "0 auto 36px", textAlign: "left",
           }}>
             <div style={{ fontStyle: "italic", fontSize: 19, color: "#fff", marginBottom: 10 }}>
               "Run to the rescue with love, and peace will follow."
@@ -539,80 +441,6 @@ function TeamCard({ p, featured }) {
   );
 }
 
-function DifferentDogs({ onSponsor }) {
-  // Curated "different is just different" feature. Kronk and Honey are alumni
-  // (static photos); Twitch and Sweet Pea pull live from Shelterluv by name so
-  // their photo, breed, age, and availability stay current.
-  const { animals } = useAnimals();
-  const find = (n) => animals.find(a => (a.name || "").trim().toLowerCase() === n.toLowerCase());
-  const cards = [
-    { name: "Kronk", img: IMG.kronkAfter, status: "home", note: "Rescued from a holding pen in Yulin and featured in People Magazine. Proof of what a second chance makes possible." },
-    { name: "Twitch", status: "looking", live: find("Twitch") },
-    { name: "Honey", img: IMG.honeyAfter, status: "home", note: "From frightened to flourishing. Honey's before and after says everything about the road from fear to faith." },
-    { name: "Sweet Pea", status: "looking", live: find("Sweet Pea") },
-  ];
-  return (
-    <section className="section-light" style={{ padding: "88px 0", position: "relative", overflow: "hidden" }}>
-      <Paw className="paw-light" style={{ top: 48, right: "6%", width: 46, height: 46 }} />
-      <Paw className="paw-light" style={{ bottom: 56, left: "5%", width: 40, height: 40 }} />
-      <div className="wrap">
-        <div style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 48px" }}>
-          <div className="eyebrow" style={{ color: "var(--purple-600)", marginBottom: 12 }}>✦ Different Dogs</div>
-          <h2 className="display" style={{ fontSize: "clamp(34px, 4.4vw, 56px)", margin: "0 0 12px", color: "var(--ink)" }}>
-            Meet Our Different Dogs
-          </h2>
-          <p style={{ fontSize: 16, color: "var(--ink-2)", margin: 0, lineHeight: 1.6 }}>
-            Because different isn't bad. It's just different. Seniors, special needs, and the wonderfully one-of-a-kind, every one of them worth showing up for.
-          </p>
-        </div>
-        <div className="ways-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 20, alignItems: "stretch" }}>
-          {cards.map(c => {
-            const looking = c.status === "looking";
-            const img = c.img || (c.live && c.live.cover) || null;
-            const note = c.note || (c.live && c.live.blurb) || "";
-            const meta = looking
-              ? [c.live && c.live.breed, c.live && c.live.ageGroup].filter(Boolean).join(" · ")
-              : "Alumni";
-            return (
-              <article key={c.name} className="reveal" onClick={looking ? () => onSponsor(c.name) : undefined} style={{
-                background: "#fff", borderRadius: 20, overflow: "hidden",
-                cursor: looking ? "pointer" : "default", height: "100%",
-                display: "flex", flexDirection: "column",
-                transition: "transform .25s ease, box-shadow .25s ease",
-              }}
-                onMouseEnter={e => { if (looking) { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "var(--shadow)"; } }}
-                onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}
-              >
-                <div style={{ aspectRatio: "4/5", overflow: "hidden", background: "var(--lav-200)", position: "relative" }}>
-                  {img
-                    ? <Img src={img} alt={c.name} />
-                    : <div aria-hidden="true" style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(160deg, var(--lav-200), var(--lav-100))" }}>
-                        <span className="display" style={{ fontSize: 52, color: "var(--purple-400)" }}>{c.name[0]}</span>
-                      </div>}
-                  <span style={{
-                    position: "absolute", top: 12, left: 12,
-                    fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase",
-                    padding: "5px 10px", borderRadius: 999,
-                    background: looking ? "var(--purple-500)" : "rgba(26,16,37,0.74)", color: "#fff",
-                  }}>{looking ? "Looking for a home" : "Forever home ♥"}</span>
-                </div>
-                <div style={{ padding: 18, display: "flex", flexDirection: "column", gap: 6, flex: 1 }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
-                    <div className="display" style={{ fontSize: 22, color: "var(--ink)" }}>{c.name}</div>
-                    {meta && <span style={{ fontSize: 10, fontFamily: "var(--font-mono)", letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--purple-600)", textAlign: "right", flexShrink: 0 }}>{meta}</span>}
-                  </div>
-                  {note && <p style={{ margin: 0, fontSize: 13, color: "var(--ink-2)", lineHeight: 1.5, display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{note}</p>}
-                  {looking && <span style={{ marginTop: "auto", paddingTop: 8, fontWeight: 600, fontSize: 13, color: "var(--purple-600)" }}>Sponsor or adopt →</span>}
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function Team() {
   // Founders render large; the growing team renders in a uniform, equal-height row below.
   const founders = [
@@ -625,11 +453,11 @@ function Team() {
     { name: "Aman Garg", role: "Tech and AI Lead", tag: "Team", img: IMG.teamAman, copy: "10+ years in marketing analytics and consumer insights have left Aman a card-carrying data geek. Lately he's all-in on AI, cooking up products that solve real-world problems. The rest of his time belongs to Coco, his favorite drooler, who gets long walks on the St. Pete beach and a suspiciously generous ration of peanut-butter-and-banana ice cream." },
   ];
   return (
-    <section className="section-dark" style={{ padding: "92px 0", position: "relative", overflow: "hidden" }}>
+    <section className="section-dark" style={{ padding: "64px 0", position: "relative", overflow: "hidden" }}>
       <Paw className="paw-dark" style={{ top: 60, right: "6%", width: 52, height: 52 }} />
       <Paw className="paw-dark" style={{ bottom: 80, left: "5%", width: 56, height: 56 }} />
       <div className="wrap">
-        <div style={{ textAlign: "center", marginBottom: 56 }}>
+        <div style={{ textAlign: "center", marginBottom: 40 }}>
           <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 12 }}>✦ Leadership</div>
           <h2 className="display" style={{ fontSize: "clamp(36px, 5vw, 64px)", margin: "0 0 12px", color: "#fff" }}>
             The team behind the mission
@@ -672,7 +500,7 @@ function FinalCTA({ onDonate, onSubscribe }) {
   };
   return (
     <section id="contact" style={{
-      padding: "80px 0", position: "relative", overflow: "hidden",
+      padding: "64px 0", position: "relative", overflow: "hidden",
       background: "linear-gradient(180deg, oklch(0.54 0.12 305) 0%, oklch(0.44 0.11 305) 100%)",
       color: "#fff",
     }}>
@@ -686,7 +514,7 @@ function FinalCTA({ onDonate, onSubscribe }) {
         <p style={{ fontSize: 18, color: "rgba(255,255,255,0.88)", maxWidth: 560, margin: "0 auto 32px" }}>
           Your gift puts the next survivor on a plane home.
         </p>
-        <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginBottom: 72 }}>
+        <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginBottom: 56 }}>
           <button className="btn btn-light" onClick={onDonate}>Donate Now</button>
           <a href="#ways" className="btn btn-outline-light">Get Involved</a>
         </div>
@@ -702,6 +530,7 @@ function FinalCTA({ onDonate, onSubscribe }) {
           </div>
           <form className="cta-form" onSubmit={submitNewsletter}
             style={{ display: "flex", gap: 8 }}>
+            <Botcheck />
             <input
               type="email" className="cta-email"
               placeholder={subbed ? "Subscribed ♡" : "Email address"}
@@ -754,8 +583,8 @@ function Footer() {
               </a>
             </div>
           </div>
-          <FooterCol title="Get Involved" links={[["Adopt","Adopt.html"],["Foster","Foster.html"],["Sponsor","Sponsor.html"],["Donate","Donate.html"]]} />
-          <FooterCol title="Resources" links={[["News","News.html"],["Contact","Contact.html"],["Home","index.html"]]} />
+          <FooterCol title="Get Involved" links={[["Adopt","/adopt"],["Foster","/foster"],["Sponsor","/sponsor"],["Donate","/donate"]]} />
+          <FooterCol title="Resources" links={[["News","/news"],["Contact","/contact"],["Home","/"]]} />
         </div>
         <div style={{
           paddingTop: 24, display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 16,
@@ -764,7 +593,7 @@ function Footer() {
           <div>© 2026 Run 2 The Rescue · 501(c)(3) Nonprofit · EIN 99-4240461</div>
           <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
             <a href="assets/r2r-501c3-determination.pdf?v=1" target="_blank" rel="noopener noreferrer" style={{ color: "var(--on-dark-2)" }}>501(c)(3) Determination Letter</a>
-            <a href="Privacy.html" style={{ color: "var(--on-dark-2)" }}>Privacy Policy</a>
+            <a href="/privacy" style={{ color: "var(--on-dark-2)" }}>Privacy Policy</a>
           </div>
         </div>
       </div>
@@ -870,6 +699,7 @@ function ShareStoryModal({ open, onClose }) {
         <div style={{ padding: "34px 36px 32px" }}>
           {(step === "form" || step === "sending") && (
             <form onSubmit={submit}>
+              <Botcheck />
               <div className="eyebrow-dark" style={{ marginBottom: 10 }}>
                 <span style={{ color: "var(--purple-500)" }}>✦ </span>A happy tail
               </div>
@@ -998,7 +828,7 @@ function Testimonials() {
     // Future verbatims drop in here.
   ];
   return (
-    <section className="section-light" style={{ padding: "64px 0", position: "relative", overflow: "hidden" }}>
+    <section className="section-light" style={{ padding: "52px 0", position: "relative", overflow: "hidden" }}>
       <Paw className="paw-light" style={{ top: 44, left: "5%", width: 42, height: 42 }} />
       <Paw className="paw-light" style={{ bottom: 40, right: "6%", width: 50, height: 50 }} />
       <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
@@ -1076,7 +906,7 @@ function Testimonials() {
 /* Homepage teaser linking to the standalone Reality page */
 function RealityTeaser() {
   return (
-    <section className="section-dark" style={{ padding: "64px 0", position: "relative", overflow: "hidden" }}>
+    <section className="section-dark" style={{ padding: "52px 0", position: "relative", overflow: "hidden" }}>
       <Paw className="paw-dark" style={{ top: 28, left: "6%", width: 40, height: 40 }} />
       <Paw className="paw-dark" style={{ bottom: 28, right: "7%", width: 44, height: 44 }} />
       <div className="wrap" style={{ maxWidth: 700, margin: "0 auto", textAlign: "center", position: "relative", zIndex: 1 }}>
@@ -1089,10 +919,10 @@ function RealityTeaser() {
         <p style={{ fontSize: 15, lineHeight: 1.65, color: "var(--on-dark-2)", margin: "0 auto 26px", maxWidth: 520 }}>
           The dogs we rescue come from horrible circumstances and brutal conditions. It's hard to look at. We put it behind a notice so you choose when to see it.
         </p>
-        <a href="Reality.html" className="btn btn-outline-light">See the reality they face <span className="arrow">→</span></a>
+        <a href="/reality" className="btn btn-outline-light">See the reality they face <span className="arrow">→</span></a>
       </div>
     </section>
   );
 }
 
-Object.assign(window, { Press, Mission, Survivors, Journey, Feature, Reality, RealityTeaser, Testimonials, Ways, Voices, Team, DifferentDogs, FinalCTA, Footer });
+Object.assign(window, { Press, Mission, Survivors, Journey, RealityTeaser, Testimonials, Ways, Voices, Team, FinalCTA, Footer });

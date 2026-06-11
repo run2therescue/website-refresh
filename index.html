@@ -14,11 +14,11 @@
 <meta property="og:title" content="Run 2 The Rescue · Adopt a Survivor of the Dog Meat Trade" />
 <meta property="og:description" content="Run 2 The Rescue is a 501(c)(3) nonprofit rescuing dogs from the East Asia dog meat trade, providing medical care, and placing survivors in loving forever homes." />
 <meta property="og:url" content="https://run2therescue.org/" />
-<meta property="og:image" content="https://run2therescue.org/assets/sunny.jpg" />
+<meta property="og:image" content="https://run2-rescuedemo.vercel.app/assets/sunny.jpg" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Run 2 The Rescue · Adopt a Survivor of the Dog Meat Trade" />
 <meta name="twitter:description" content="Run 2 The Rescue is a 501(c)(3) nonprofit rescuing dogs from the East Asia dog meat trade, providing medical care, and placing survivors in loving forever homes." />
-<meta name="twitter:image" content="https://run2therescue.org/assets/sunny.jpg" />
+<meta name="twitter:image" content="https://run2-rescuedemo.vercel.app/assets/sunny.jpg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="preconnect" href="https://new-s3.shelterluv.com" crossorigin />
@@ -56,8 +56,8 @@
 <body>
 <div id="root"></div>
 
-<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" integrity="sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" integrity="sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 
 <script>
@@ -69,11 +69,11 @@
   window.__TWEAK_DEFAULTS__ = TWEAK_DEFAULTS;
 </script>
 
-<script type="text/babel" src="components.jsx?v=9"></script>
+<script type="text/babel" src="components.jsx?v=10"></script>
 <script type="text/babel" src="help-illustrations.jsx?v=4"></script>
-<script type="text/babel" src="sections.jsx?v=24"></script>
-<script type="text/babel" src="interactions.jsx?v=6"></script>
-<script type="text/babel" src="enhancements.jsx?v=6"></script>
+<script type="text/babel" src="sections.jsx?v=25"></script>
+<script type="text/babel" src="interactions.jsx?v=7"></script>
+<script type="text/babel" src="enhancements.jsx?v=7"></script>
 
 <script type="text/babel">
 const { useState, useEffect } = React;
@@ -124,7 +124,6 @@ function App() {
       <Ways onDonate={openDonate} onSponsor={openSponsor} />
       <RealityTeaser />
       <Journey />
-      <Feature />
       <ImpactCalc onDonate={(amt) => openDonate()} />
       <Voices />
       <Testimonials />

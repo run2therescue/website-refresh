@@ -169,13 +169,13 @@ function RealityGallery({ revealed }) {
       body: "Slaughter pens crowd dozens of dogs together, surviving on borrowed time. The scale is hard to hold in your mind. This is the brutal reality we face. Now it's a race to bring them all to safety.",
     },
     {
-      img: "assets/reality-beagle.png",
+      img: "assets/reality-beagle.webp",
       alt: "A beagle looking out from a wire crate",
       heading: "Every breed, every kind",
       body: "Beagles, retrievers, huskies, poodles, Pomeranians, the dog meat trade takes breeds of every kind, and many still wear the tag of a home they were taken from.",
     },
     {
-      img: "assets/reality-puppies.png",
+      img: "assets/reality-puppies.webp",
       alt: "Two puppies behind a wire fence in a dirt yard",
       heading: "Born into it",
       body: "Some survivors were stolen pets; others were born inside the dog meat trade and have known nothing else.",
@@ -257,10 +257,10 @@ function RealityClips({ revealed }) {
 /* ---- Closing CTA: doors out of the picture ------------------------------ */
 function RealityCTA() {
   const doors = [
-    ["Meet the survivors", "Adopt.html"],
-    ["Fund a flight", "Sponsor.html"],
-    ["Donate", "Donate.html"],
-    ["Foster a survivor", "Foster.html"],
+    ["Meet the survivors", "/adopt"],
+    ["Fund a flight", "/sponsor"],
+    ["Donate", "/donate"],
+    ["Foster a survivor", "/foster"],
   ];
   return (
     <section className="section-light" style={{ padding: "80px 0", position: "relative", overflow: "hidden" }}>

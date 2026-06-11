@@ -4,7 +4,23 @@ const { useState, useEffect, useRef, useMemo } = React;
 /* Web3Forms submit for homepage forms (the homepage does not load shared.jsx,
    which defines the same helper for subpages). KEEP THIS KEY IN SYNC WITH shared.jsx. */
 const WEB3FORMS_KEY = "f328982c-e9de-4611-8bf7-49034cfa2d21"; // routes to info@run2therescue.org
+
+/* Honeypot. Humans never see the hidden botcheck field; form-filling bots
+   complete it. If it has a value at submit time, drop the submission silently
+   (the bot still sees the normal thank-you). */
+function botcheckTripped() {
+  return Array.from(document.querySelectorAll('input[name="botcheck"]'))
+    .some((i) => i.checked || (i.value || "").trim() !== "");
+}
+function Botcheck() {
+  return (
+    <input type="text" name="botcheck" tabIndex={-1} autoComplete="off" aria-hidden="true"
+      style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0, pointerEvents: "none" }} />
+  );
+}
+
 async function submitForm(fields, formName) {
+  if (botcheckTripped()) return { ok: true };
   if (!WEB3FORMS_KEY || WEB3FORMS_KEY === "PASTE_KEY_HERE") {
     console.log("[submitForm] Demo mode (no Web3Forms key set). Form:", formName, fields);
     return { ok: false, demo: true };
@@ -30,7 +46,7 @@ async function submitForm(fields, formName) {
 
 /* Image dictionary. Real R2R photography where available, Unsplash stock fallback elsewhere. */
 const IMG = {
-  hero: "assets/survivors-hero-crop.png",
+  hero: "assets/survivors-hero-crop.webp",
   teamBrandy: "assets/Brandy_profile.jpg",
   teamBonnie: "assets/Bonnie_profile.jpg",
   teamGreg: "assets/Greg_profile.jpg",
@@ -45,10 +61,10 @@ const IMG = {
   kronkAfter:  "assets/kronk-after-snow.jpg",
   alfieBefore: "assets/alfie-before-rescue.jpg",
   alfieAfter:  "assets/alfie-after-portrait.jpg",
-  gertieBefore:"assets/gertie-before-rescue.png",
+  gertieBefore:"assets/gertie-before-rescue.webp",
   gertieAfter: "assets/gertie-after-portrait.jpg",
   honeyBefore: "assets/honey-before-rescue.jpg?v=2",
-  honeyAfter:  "assets/honey-after-portrait.png",
+  honeyAfter:  "assets/honey-after-portrait.webp",
   voice: "https://images.unsplash.com/photo-1450778869180-41d0601e046e?w=800&q=80&auto=format",
   reality1: "assets/reality-trade-context-1.jpg",
   reality2: "assets/reality-trade-context-2.jpg",
@@ -95,10 +111,10 @@ function Nav({ onDonate }) {
     return () => { document.body.style.overflow = ""; };
   }, [menuOpen]);
   const mobileLinks = [
-    ["Adopt", "Adopt.html"], ["Sponsor", "Sponsor.html"], ["Foster", "Foster.html"],
-    ["Donate", "Donate.html"], ["News", "News.html"], ["Merch", "Merch.html"], ["Contact", "Contact.html"],
+    ["Adopt", "/adopt"], ["Sponsor", "/sponsor"], ["Foster", "/foster"],
+    ["Donate", "/donate"], ["News", "/news"], ["Merch", "/merch"], ["Contact", "/contact"],
   ];
-  const handleDonate = onDonate || (() => { window.location.href = "Donate.html"; });
+  const handleDonate = onDonate || (() => { window.location.href = "/donate"; });
   return (
     <nav style={{
       position: "sticky", top: 0, zIndex: 50,
@@ -108,7 +124,7 @@ function Nav({ onDonate }) {
       transition: "background .3s ease, border-color .3s ease",
     }}>
       <div className="wrap" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: 120, gap: 16 }}>
-        <a href="index.html" aria-label="Run 2 The Rescue" style={{ display: "flex", alignItems: "center", gap: 12, flexShrink: 0 }}>
+        <a href="/" aria-label="Run 2 The Rescue" style={{ display: "flex", alignItems: "center", gap: 12, flexShrink: 0 }}>
           <img src="assets/r2r-logo.png" alt="" style={{ width: 104, height: 104 }} />
           <div style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 15, lineHeight: 1.05, color: "#fff" }}>
             Run 2 The<br />Rescue
@@ -116,7 +132,7 @@ function Nav({ onDonate }) {
         </a>
         <div className="nav-desktop" style={{ display: "flex", alignItems: "center", gap: 32 }}>
           <div className="nav-links" style={{ display: "flex", gap: 28, fontSize: 14 }}>
-            {[["Adopt", "Adopt.html"], ["Sponsor", "Sponsor.html"], ["Foster", "Foster.html"], ["News", "News.html"], ["Merch", "Merch.html"], ["Contact", "Contact.html"]].map(([l, h]) => (
+            {[["Adopt", "/adopt"], ["Sponsor", "/sponsor"], ["Foster", "/foster"], ["News", "/news"], ["Merch", "/merch"], ["Contact", "/contact"]].map(([l, h]) => (
               <a key={l} href={h} style={{ color: "var(--on-dark-2)", transition: "color .2s" }}
                 onMouseEnter={e => e.currentTarget.style.color = "#fff"}
                 onMouseLeave={e => e.currentTarget.style.color = "var(--on-dark-2)"}>{l}</a>
@@ -424,4 +440,4 @@ function useAnimals() {
   return state;
 }
 
-Object.assign(window, { Paw, Img, IMG, Nav, Hero, Stat, HeroVideoBG, useAnimals });
+Object.assign(window, { Paw, Img, IMG, Nav, Hero, Stat, HeroVideoBG, useAnimals, Botcheck });

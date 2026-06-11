@@ -59,15 +59,15 @@ function NavS({ active = "home", onDonate }) {
     return () => { document.body.style.overflow = ""; };
   }, [menuOpen]);
   const links = [
-    { id: "adopt", label: "Adopt", href: "Adopt.html" },
-    { id: "sponsor", label: "Sponsor", href: "Sponsor.html" },
-    { id: "foster", label: "Foster", href: "Foster.html" },
-    { id: "donate", label: "Donate", href: "Donate.html" },
-    { id: "news", label: "News", href: "News.html" },
-    { id: "merch", label: "Merch", href: "Merch.html" },
-    { id: "contact", label: "Contact", href: "Contact.html" },
+    { id: "adopt", label: "Adopt", href: "/adopt" },
+    { id: "sponsor", label: "Sponsor", href: "/sponsor" },
+    { id: "foster", label: "Foster", href: "/foster" },
+    { id: "donate", label: "Donate", href: "/donate" },
+    { id: "news", label: "News", href: "/news" },
+    { id: "merch", label: "Merch", href: "/merch" },
+    { id: "contact", label: "Contact", href: "/contact" },
   ];
-  const handleDonate = onDonate || (() => { window.location.href = "Donate.html"; });
+  const handleDonate = onDonate || (() => { window.location.href = "/donate"; });
   return (
     <nav style={{
       position: "sticky", top: 0, zIndex: 50,
@@ -77,7 +77,7 @@ function NavS({ active = "home", onDonate }) {
       transition: "background .3s ease, border-color .3s ease",
     }}>
       <div className="wrap" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: 116, gap: 16 }}>
-        <a href="index.html" aria-label="Run 2 The Rescue" style={{ display: "flex", alignItems: "center", gap: 12, flexShrink: 0 }}>
+        <a href="/" aria-label="Run 2 The Rescue" style={{ display: "flex", alignItems: "center", gap: 12, flexShrink: 0 }}>
           <img src="assets/r2r-logo.png" alt="" style={{ width: 96, height: 96 }} />
           <div style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 15, lineHeight: 1.05, color: "#fff", whiteSpace: "nowrap" }}>
             Run 2 The<br />Rescue
@@ -172,8 +172,8 @@ function FooterS() {
               </a>
             </div>
           </div>
-          <FooterColS title="Get Involved" links={[["Adopt","Adopt.html"],["Foster","Foster.html"],["Sponsor","Sponsor.html"],["Donate","Donate.html"]]} />
-          <FooterColS title="Resources" links={[["News","News.html"],["Contact","Contact.html"],["Home","index.html"]]} />
+          <FooterColS title="Get Involved" links={[["Adopt","/adopt"],["Foster","/foster"],["Sponsor","/sponsor"],["Donate","/donate"]]} />
+          <FooterColS title="Resources" links={[["News","/news"],["Contact","/contact"],["Home","/"]]} />
         </div>
         <div style={{
           paddingTop: 22, display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 16,
@@ -182,7 +182,7 @@ function FooterS() {
           <div>© 2026 Run 2 The Rescue · 501(c)(3) Nonprofit · EIN 99-4240461</div>
           <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
             <a href="assets/r2r-501c3-determination.pdf?v=1" target="_blank" rel="noopener noreferrer" style={{ color: "var(--on-dark-2)" }}>501(c)(3) Determination Letter</a>
-            <a href="Privacy.html" style={{ color: "var(--on-dark-2)" }}>Privacy Policy</a>
+            <a href="/privacy" style={{ color: "var(--on-dark-2)" }}>Privacy Policy</a>
           </div>
         </div>
       </div>
@@ -226,9 +226,13 @@ function MagneticS({ children, strength = 0.25 }) {
 
 /* Count-up number when visible */
 function CountUpS({ to, duration = 1400, suffix = "", prefix = "" }) {
-  const [n, setN] = useStateS(0);
+  /* In the CI prerender (headless Chrome), show the final value immediately so
+     the baked snapshot reads real numbers, never the pre-animation zeros. */
+  const prerendering = typeof navigator !== "undefined" && navigator.webdriver === true;
+  const [n, setN] = useStateS(prerendering ? to : 0);
   const ref = useRefS(null);
   useEffectS(() => {
+    if (prerendering) return;
     const el = ref.current; if (!el) return;
     const io = new IntersectionObserver(entries => {
       if (entries[0].isIntersecting) {
@@ -335,7 +339,22 @@ function useAnimalsS() {
 --------------------------------------------------------------- */
 const WEB3FORMS_KEY = "f328982c-e9de-4611-8bf7-49034cfa2d21"; // single key, all forms route to info@run2therescue.org
 
+/* Honeypot. Humans never see the hidden botcheck field; form-filling bots
+   complete it. If it has a value at submit time, drop the submission silently
+   (the bot still sees the normal thank-you). */
+function botcheckTrippedS() {
+  return Array.from(document.querySelectorAll('input[name="botcheck"]'))
+    .some((i) => i.checked || (i.value || "").trim() !== "");
+}
+function BotcheckS() {
+  return (
+    <input type="text" name="botcheck" tabIndex={-1} autoComplete="off" aria-hidden="true"
+      style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0, pointerEvents: "none" }} />
+  );
+}
+
 async function submitForm(fields, formName) {
+  if (botcheckTrippedS()) return { ok: true };
   if (!WEB3FORMS_KEY || WEB3FORMS_KEY === "PASTE_KEY_HERE") {
     console.log("[submitForm] Demo mode (no Web3Forms key set). Form:", formName, fields);
     return { ok: false, demo: true };
@@ -369,7 +388,7 @@ function DifferentDogsS() {
     { name: "Twitch", status: "looking", live: find("Twitch"), zoom: 1.12 },
     { name: "Sweet Pea", status: "looking", live: find("Sweet Pea") },
     { name: "Kronk", img: "assets/kronk-after-snow.jpg", status: "home" },
-    { name: "Honey", img: "assets/honey-after-portrait.png", status: "home" },
+    { name: "Honey", img: "assets/honey-after-portrait.webp", status: "home" },
   ];
   return (
     <section className="section-light" style={{ padding: "44px 0 28px" }}>
@@ -423,5 +442,5 @@ function DifferentDogsS() {
 
 Object.assign(window, {
   IMG_BANK, PawS, ImgS, NavS, FooterS, MagneticS, CountUpS, ScrollProgressS, useRevealS, useAnimalsS,
-  DifferentDogsS, submitForm, WEB3FORMS_KEY,
+  DifferentDogsS, submitForm, WEB3FORMS_KEY, BotcheckS,
 });

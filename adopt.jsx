@@ -242,7 +242,7 @@ function AdoptDirectory() {
             <div style={{ fontSize: 40, marginBottom: 12 }}>🐾</div>
             <div className="display" style={{ fontSize: 22, color: "var(--ink)", margin: "0 0 8px" }}>No dogs are listed right now.</div>
             <p style={{ color: "var(--ink-2)", fontSize: 14, margin: "0 0 16px" }}>Every survivor here has found a home. Check back soon, or reach out about fostering.</p>
-            <a className="btn btn-accent" href="Foster.html">Become a Foster</a>
+            <a className="btn btn-accent" href="/foster">Become a Foster</a>
           </DirectoryMessage>
         )}
 
@@ -441,6 +441,7 @@ function ProfileModal({ dog, fav, onFav, onClose }) {
 
           {step === "form" && (
             <form onSubmit={submit}>
+              <BotcheckS />
               <button type="button" onClick={() => setStep("profile")} style={{ fontSize: 13, color: "var(--purple-600)", marginBottom: 16, display: "flex", alignItems: "center", gap: 6 }}>← Back to {dog.name}'s profile</button>
               <h2 className="display" style={{ fontSize: 28, margin: "0 0 6px", color: "var(--ink)" }}>Apply to adopt {dog.name}</h2>
               <p style={{ margin: "0 0 20px", color: "var(--ink-2)", fontSize: 13 }}>We'll review your application within 48 hours. No obligation, this just starts the conversation.</p>
@@ -646,7 +647,7 @@ function AdoptFAQ() {
           <p style={{ fontSize: 14, color: "var(--ink-3)", margin: "0 0 14px" }}>
             Still wondering about something specific?
           </p>
-          <a href="Contact.html" className="btn btn-outline-soft">Ask us anything →</a>
+          <a href="/contact" className="btn btn-outline-soft">Ask us anything →</a>
         </div>
       </div>
     </section>
@@ -666,9 +667,9 @@ function AdoptCTA() {
           Foster, sponsor, donate. Each one keeps a survivor moving home.
         </p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-          <a href="Foster.html" className="btn btn-outline-soft">Become a Foster</a>
-          <a href="Sponsor.html" className="btn btn-outline-soft">Sponsor a Dog</a>
-          <a href="Donate.html" className="btn btn-outline-soft">Donate</a>
+          <a href="/foster" className="btn btn-outline-soft">Become a Foster</a>
+          <a href="/sponsor" className="btn btn-outline-soft">Sponsor a Dog</a>
+          <a href="/donate" className="btn btn-outline-soft">Donate</a>
         </div>
       </div>
     </section>

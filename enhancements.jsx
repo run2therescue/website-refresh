@@ -30,10 +30,14 @@ function ScrollProgress() {
 
 /* Count-up number when visible */
 function CountUp({ to, suffix = "", duration = 1600, prefix = "" }) {
-  const [n, setN] = React.useState(0);
+  /* In the CI prerender (headless Chrome), show the final value immediately so
+     the baked snapshot reads real numbers, never the pre-animation zeros. */
+  const prerendering = typeof navigator !== "undefined" && navigator.webdriver === true;
+  const [n, setN] = React.useState(prerendering ? to : 0);
   const ref = React.useRef(null);
   const started = React.useRef(false);
   React.useEffect(() => {
+    if (prerendering) return;
     if (!ref.current) return;
     const io = new IntersectionObserver(entries => {
       entries.forEach(e => {
@@ -86,7 +90,6 @@ function LiveTicker() {
     "From trauma to trust",
     "Every survivor deserves a second chance",
     "Adopt · Sponsor · Foster · Donate",
-    "Real stories and stats coming soon",
   ];
   return (
     <section style={{
@@ -139,7 +142,7 @@ function ImpactCalc({ onDonate }) {
   const dogsHelped = Math.max(1, Math.round(amount / 50));
 
   return (
-    <section className="section-light" style={{ padding: "72px 0", position: "relative", overflow: "hidden" }}>
+    <section className="section-light" style={{ padding: "56px 0", position: "relative", overflow: "hidden" }}>
       <Paw className="paw-light" style={{ top: 40, right: "6%", width: 44, height: 44 }} />
       <div className="wrap">
         <div style={{
@@ -162,7 +165,7 @@ function ImpactCalc({ onDonate }) {
                 Every dollar has a face.
               </h2>
               <p style={{ color: "var(--on-dark-2)", maxWidth: 420, margin: 0, fontSize: 16 }}>
-                Slide to see what your gift does. Every dollar funds rescue, care, and the flight home.
+                Drag the slider to see what your gift covers, from a week of food to the flight home.
               </p>
             </div>
             <div>

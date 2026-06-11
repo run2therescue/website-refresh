@@ -112,6 +112,19 @@ Script and CSS references in the HTML carry a `?v=N` query string
 `.css` file, bump its `?v=` in every HTML file that loads it.** `vercel.json`
 also sets `must-revalidate`, but bumping `?v=` guarantees no stale cache.
 
+**Assets are cached for a year.** `vercel.json` gives `/assets/*` a
+`max-age=31536000, immutable` header (images and videos are heavy; repeat
+visits should not re-download them). So **never replace an asset file in
+place** — if an image changes, either rename the file or bump a `?v=` query
+string everywhere it's referenced (e.g. `honey-before-rescue.jpg?v=2`).
+
+### Internal links use clean URLs
+
+Nav, footer, and in-page links point to the clean paths (`/adopt`, `/donate`,
+`/`), which `vercel.json` rewrites to the `.html` files. Caveat: under a plain
+`python3 -m http.server` those paths 404 — use `npx vercel dev` when you need
+to click through pages locally, or open the `.html` files directly.
+
 ---
 
 ## Local development
@@ -332,10 +345,23 @@ no rotation cost beyond pasting a new key.
   same pattern — never call `fetch("https://api.web3forms.com/...")` directly.
 - Bump `?v=N` cache strings when editing shared `.jsx`/`.css` (see above).
 - Syntax-check `.jsx` before deploying — a Babel error blanks the whole page.
-- `feedback.js` adds a floating "Send feedback" button on every page (copy-to-
-  clipboard, no backend) — a prototype review tool.
 - The homepage has a hidden "Tweaks" dev panel (`interactions.jsx`) toggled via
-  postMessage — internal, ignore.
+  postMessage — internal, ignore. It is skipped during the CI prerender
+  (`navigator.webdriver` check) so crawlers never see it.
+- React is loaded as the **production** UMD builds with SRI hashes. If you ever
+  bump the React version in the HTML files, regenerate both `integrity` hashes
+  (`openssl dgst -sha384 -binary file | openssl base64 -A`).
+- Count-up animations (`CountUp` / `CountUpS`) render their final value
+  immediately when `navigator.webdriver` is true, so the prerendered snapshot
+  shows real numbers instead of zeros. Keep that behavior for any new
+  animated-content component.
+- Every form renders a hidden `botcheck` honeypot (`Botcheck` on the homepage,
+  `BotcheckS` on subpages); `submitForm` silently drops submissions where it is
+  filled. Include it in any new form.
+- **At domain cutover:** the `og:image` / `twitter:image` URLs in every HTML
+  head currently point at `run2-rescuedemo.vercel.app` (the production domain
+  still serves the old WordPress site). Switch them to `run2therescue.org`
+  when the domain moves.
 
 ## Brand voice (quick reference)
 

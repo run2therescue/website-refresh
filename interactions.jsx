@@ -63,7 +63,7 @@ function DafInfo() {
       <div style={{ background: "var(--lav-50)", border: "1px solid var(--line-light)", borderRadius: 12, padding: "16px 18px", marginBottom: 14 }}>
         <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--ink-3)", marginBottom: 4 }}>Legal name</div>
         <div style={{ fontFamily: "var(--font-display)", fontSize: 18, fontWeight: 600, color: "var(--ink)" }}>Run to the Rescue</div>
-        <div style={{ fontSize: 11, color: "var(--ink-3)", marginTop: 4, fontStyle: "italic" }}>Note: the "2" is dropped in our IRS filing — use exactly the name above.</div>
+        <div style={{ fontSize: 11, color: "var(--ink-3)", marginTop: 4, fontStyle: "italic" }}>Note: the "2" is dropped in our IRS filing, so use exactly the name above.</div>
         <div style={{ height: 1, background: "var(--line-light)", margin: "14px 0" }} />
         <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--ink-3)", marginBottom: 4 }}>EIN</div>
         <div style={{ fontFamily: "var(--font-mono)", fontSize: 16, fontWeight: 600, color: "var(--ink)" }}>99-4240461</div>
@@ -159,6 +159,10 @@ function Tweaks({ state, onChange }) {
     onChange({ ...state, [k]: v });
     window.parent.postMessage({ type: "__edit_mode_set_keys", edits: { [k]: v } }, "*");
   };
+
+  /* Internal review tool: keep it out of the CI prerender snapshot so crawlers
+     and no-JS visitors never see it as page content. */
+  if (typeof navigator !== "undefined" && navigator.webdriver === true) return null;
 
   return (
     <div className={"tweaks" + (open ? " open" : "")}>

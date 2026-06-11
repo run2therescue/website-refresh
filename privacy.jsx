@@ -78,7 +78,7 @@ function PrivacyPage() {
             </h2>
             <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--ink-2)", margin: 0 }}>
               If you have any questions about this Privacy Policy, please reach out through our{" "}
-              <a href="Contact.html" style={{ color: "var(--purple-600)", fontWeight: 600 }}>contact page</a>.
+              <a href="/contact" style={{ color: "var(--purple-600)", fontWeight: 600 }}>contact page</a>.
             </p>
           </div>
         </div>

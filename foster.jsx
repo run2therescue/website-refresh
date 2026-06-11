@@ -235,12 +235,13 @@ function FosterForm() {
                 Thank you for opening your home, {form.firstName || "friend"}. Our foster coordinator will reach out within 48 hours with next steps.
               </p>
               <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
-                <a href="Adopt.html" className="btn btn-accent">See current survivors</a>
+                <a href="/adopt" className="btn btn-accent">See current survivors</a>
                 <button className="btn btn-outline-dark" onClick={() => { setSent(false); setForm({ firstName: "", lastName: "", email: "", phone: "", location: "", home: "house", experience: "", message: "" }); }}>Submit another</button>
               </div>
             </div>
           ) : (
             <form onSubmit={submit}>
+              <BotcheckS />
               <div className="form-row" style={{ marginBottom: 16 }}>
                 <div>
                   <label className="f-label">First name <span style={{ color: "var(--purple-600)" }}>*</span></label>
