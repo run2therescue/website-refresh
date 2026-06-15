@@ -443,7 +443,7 @@ function TeamCard({ p, featured }) {
       onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-5px)"; e.currentTarget.style.boxShadow = "0 24px 48px -22px oklch(0.1 0.04 310 / 0.7)"; }}
       onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}
     >
-      <div style={{ aspectRatio: featured ? "4/3" : "1/1", borderRadius: featured ? 16 : 13, overflow: "hidden", marginBottom: featured ? 16 : 13, background: "var(--plum-600)", position: "relative" }}>
+      <div style={{ aspectRatio: p.imgAspect || (featured ? "4/3" : "1/1"), borderRadius: featured ? 16 : 13, overflow: "hidden", marginBottom: featured ? 16 : 13, background: "var(--plum-600)", position: "relative" }}>
         {p.img ? (
           <Img src={p.img} alt={p.name} style={featured ? { objectPosition: p.imgPos || "center 28%" } : {}} />
         ) : (
@@ -479,7 +479,7 @@ function TeamCard({ p, featured }) {
 function Team() {
   // Founders render large; the growing team renders in a uniform, equal-height row below.
   const founders = [
-    { name: "Brandy Cherven", role: "Chief Executive Officer", tag: "Co-Founder", img: IMG.teamBrandy, imgPos: "center 38%", copy: "I never imagined that rescuing dogs would become my life's work. Everything changed when I adopted Sunny, a three-legged Jindo rescued from the dog meat trade in East Asia. What began as volunteering and advocacy ultimately led me to leave my traditional career path and, in 2024, co-found Run 2 The Rescue. Rescue is more than what I do... it's who I am. In memory of Sunny, the dog who changed everything." },
+    { name: "Brandy Cherven", role: "Chief Executive Officer", tag: "Co-Founder", img: IMG.teamBrandy, imgAspect: "1031 / 1255", copy: "I never imagined that rescuing dogs would become my life's work. Everything changed when I adopted Sunny, a three-legged Jindo rescued from the dog meat trade in East Asia. What began as volunteering and advocacy ultimately led me to leave my traditional career path and, in 2024, co-found Run 2 The Rescue. Rescue is more than what I do... it's who I am. In memory of Sunny, the dog who changed everything." },
     { name: "Bonnie Klapper", role: "Chief Operating Officer", tag: "Co-Founder", img: IMG.teamBonnie, copy: "I spent nearly two dozen years as a federal prosecutor in California and New York, dismantling drug cartels. Today, I put that same energy and skills into helping the animals. I am a vegan animal rights activist who provides pro bono support to dozens of animal-related nonprofits and activists on the ground. While I fight for all animals, dogs have always had my heart. I am honored to work with Brandy and Run 2 the Rescue to save these beautiful dog meat trade survivors." },
   ];
   const team = [
