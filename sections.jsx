@@ -168,7 +168,7 @@ function Survivors({ onSponsor }) {
               </p>
             </div>
           </div>
-          <div style={{ borderRadius: 22, overflow: "hidden", background: "var(--lav-200)", minHeight: 380 }}>
+          <div style={{ borderRadius: 22, overflow: "hidden", background: "var(--lav-200)", aspectRatio: "4 / 5", maxHeight: 560, alignSelf: "center" }}>
             <Img src="assets/sunny.jpg" alt="Sunny, the rescue that inspired Run 2 The Rescue" style={{ objectPosition: "center 30%" }} />
           </div>
         </div>

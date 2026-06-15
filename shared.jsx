@@ -454,14 +454,9 @@ function DifferentDogsS() {
                     : <div aria-hidden="true" style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(160deg, var(--lav-200), var(--lav-100))" }}>
                         <span className="display" style={{ fontSize: 40, color: "var(--purple-400)" }}>{c.name[0]}</span>
                       </div>}
-                  <span style={{
-                    position: "absolute", top: 0, left: 0,
-                    fontFamily: "var(--font-display)", fontStyle: "italic", fontWeight: 600, fontSize: 11,
-                    padding: "4px 11px 5px", borderRadius: "0 0 12px 0",
-                    background: looking ? "var(--purple-500)" : "rgba(26,16,37,0.78)", color: "#fff",
-                  }}>{looking ? "Looking" : "Forever home ♥"}</span>
                 </div>
                 <div style={{ padding: "10px 12px" }}>
+                  <span style={{ display: "inline-block", marginBottom: 7, fontFamily: "var(--font-mono)", fontSize: 8, letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 700, padding: "3px 8px", borderRadius: 999, background: looking ? "var(--purple-500)" : "rgba(26,16,37,0.78)", color: "#fff" }}>{looking ? "Looking" : "Forever home ♥"}</span>
                   <div className="display" style={{ fontSize: 16, color: "var(--ink)", lineHeight: 1.1 }}>{c.name}</div>
                   {meta && <div style={{ fontSize: 9, fontFamily: "var(--font-mono)", letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--purple-600)", marginTop: 4 }}>{meta}</div>}
                   {looking && c.live && <div style={{ fontSize: 11, fontWeight: 600, color: "var(--purple-600)", marginTop: 6 }}>Meet {c.name} →</div>}
