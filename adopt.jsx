@@ -48,7 +48,7 @@ function AdoptHero({ variant }) {
 
 function AdoptHeroFilter() {
   const { animals } = useAnimalsS();
-  const count = animals.filter((a) => a.available !== false).length;
+  const count = animals.filter((a) => a.available !== false && !isHiddenDog(a)).length;
   return (
     <header className="adopt-hero-filter">
       <PawS className="paw" style={{ top: 80, left: "6%", width: 60, height: 60, color: "#fff", opacity: 0.1 }} />
@@ -68,7 +68,7 @@ function AdoptHeroFilter() {
 
         <div style={{ display: "flex", justifyContent: "center", gap: 48, marginTop: 40, flexWrap: "wrap" }}>
           <HeroStat num={count || 0} label="Dogs waiting" />
-          <HeroStat num={800} suffix="+" label="Adopted since 2024" />
+          <HeroStat num={300} suffix="+" label="Adopted since 2024" />
           <HeroStat num={2} label="Years rescuing" />
         </div>
       </div>
@@ -193,6 +193,7 @@ function AdoptDirectory() {
 
   const filtered = uM(() => {
     let r = dogs.filter((d) => {
+      if (isHiddenDog(d)) return false;
       if (filters.age !== "Any" && d.age !== filters.age) return false;
       if (filters.size !== "Any" && d.size !== filters.size) return false;
       if (filters.good !== "Any" && !d.good.includes(filters.good.toLowerCase())) return false;
@@ -300,7 +301,6 @@ function DogCard({ dog, fav, onFav, onOpen }) {
     <button className="dog-card reveal" onClick={onOpen}>
       <div className="img-wrap" style={{ aspectRatio: "4 / 5" }}>
         <ImgS src={dog.img} alt={dog.name} />
-        {dog.isNew && <span className="new-pill">Just arrived</span>}
         <span className={`fav-btn ${fav ? "on" : ""}`} onClick={(e) => { e.stopPropagation(); onFav(); }} role="button" aria-label="Favorite">
           {fav ? "♥" : "♡"}
         </span>
@@ -313,6 +313,7 @@ function DogCard({ dog, fav, onFav, onOpen }) {
         <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--purple-600)", fontWeight: 600, marginBottom: 10 }}>
           {dog.breed}
         </div>
+        {dog.isNew && <span style={{ display: "inline-block", marginBottom: 10, fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--purple-700)", background: "var(--purple-soft)", padding: "3px 9px", borderRadius: 999 }}>Just arrived</span>}
         <p style={{ margin: "0 0 14px", fontSize: 13, color: "var(--ink-2)", lineHeight: 1.55 }}>
           {dog.bio.length > 116 ? dog.bio.slice(0, 116).trim() + "…" : dog.bio}
         </p>
@@ -365,9 +366,6 @@ function ProfileModal({ dog, fav, onFav, onClose }) {
       <div className="profile-modal" onClick={(e) => e.stopPropagation()}>
         <div className="gallery">
           <ImgS src={gallery[photoIdx] || dog.img} alt={dog.name} />
-          {dog.isNew && (
-            <span className="new-pill" style={{ top: 16, left: 16 }}>Just arrived</span>
-          )}
           <button onClick={onClose} style={{ position: "absolute", top: 16, right: 16, width: 36, height: 36, borderRadius: "50%", background: "rgba(255,255,255,0.95)", color: "var(--ink)", display: "grid", placeItems: "center", fontSize: 16 }} aria-label="Close">✕</button>
           {gallery.length > 1 && (
             <div className="thumb-row">

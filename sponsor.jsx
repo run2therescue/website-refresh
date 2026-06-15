@@ -259,7 +259,7 @@ function SponsorPicker({ animals, status, selectedDog, setSelectedDog, onSponsor
 
 function SponsorPage() {
   const { status, animals } = useAnimalsS();
-  const available = animals.filter((a) => a.available !== false);
+  const available = animals.filter((a) => a.available !== false && !isHiddenDog(a));
   // selectedDog: null | { id, name, slug, photo } — carried through to every
   // CTA so the donor's chosen survivor is reflected.
   const [selectedDog, setSelectedDog] = spS(null);

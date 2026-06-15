@@ -26,16 +26,6 @@ function FosterHeroNarrative() {
           <MagneticS><a href="#apply" className="btn btn-accent">Apply to foster <span className="arrow">→</span></a></MagneticS>
           <a href="#why" className="btn btn-outline-light">Why foster?</a>
         </div>
-
-        <div className="foster-hero-stats" style={{
-          display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24,
-          maxWidth: 720, margin: "0 auto", paddingTop: 32,
-          borderTop: "1px solid var(--line-dark)",
-        }}>
-          <HeroStatF num={8} label="Fosters needed now" highlight />
-          <HeroStatF num={420} suffix="+" label="Fosters since 2024" />
-          <HeroStatF num={2} label="Flight hubs · JFK · LAX" />
-        </div>
       </div>
     </header>
   );
@@ -98,7 +88,7 @@ function FosterHeroSplit() {
 function WhyFoster() {
   const items = [
     { icon: "🏠", title: "You're the first home they know", copy: "Many of our dogs have never slept on a bed, been called by a name, or felt safe. You're the one who teaches them that home is real." },
-    { icon: "💜", title: "Every foster creates space for the next rescue", copy: "Every dog you foster opens a spot for the next survivor waiting in Yulin. You save two lives for every one in your home." },
+    { icon: "💜", title: "Every foster creates space for the next rescue", copy: "Every dog you foster opens a spot for the next survivor waiting in East Asia." },
   ];
   return (
     <section id="why" className="why-foster">
@@ -145,7 +135,7 @@ function FosterJourney() {
             Four stops, one journey home.
           </h2>
           <p style={{ color: "var(--on-dark-2)", fontSize: 15, margin: 0 }}>
-            A typical foster lasts 2 to 8 weeks. We're with you the whole way.
+            Every foster is its own journey, and we're with you the whole way.
           </p>
         </div>
         <div className="journey-flow">

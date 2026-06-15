@@ -140,7 +140,7 @@ function DonateHero() {
             Donate to Rescue and Rehabilitate <em>Dogs from the Dog Meat Trade.</em>
           </h1>
           <p style={{ fontSize: 16, color: "var(--on-dark-2)", margin: "0 0 22px", maxWidth: 480, lineHeight: 1.6 }}>
-            We rescue dogs from holding pens in China, heal what's broken, and put them on planes home. That's what your gift pays for: vet care, recovery, the flight home, and the foster who keeps them safe until the right family says yes.
+            We rescue dogs from slaughterhouses, dog transports, and laboratories, heal what's broken, and put them on planes home. That's the work your donations pay for.
           </p>
           <div className="donate-trust">
             <span>501(c)(3) nonprofit</span>

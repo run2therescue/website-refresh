@@ -137,6 +137,7 @@ function ImpactCalc({ onDonate }) {
     { at: 250, text: "sponsors a full medical recovery" },
     { at: 500, text: "pays for one rescue flight home" },
     { at: 1000, text: "saves two dogs from a meat farm" },
+    { at: 2500, text: "covers airfare and CDC fees for one dog" },
   ];
   const outcome = outcomes.slice().reverse().find(o => amount >= o.at) || outcomes[0];
   const dogsHelped = Math.max(1, Math.round(amount / 50));
@@ -176,11 +177,11 @@ function ImpactCalc({ onDonate }) {
                 <span style={{ fontSize: 14, color: "var(--on-dark-3)", fontFamily: "var(--font-mono)" }}>one-time</span>
               </div>
               <input
-                type="range" min={10} max={1000} step={10} value={amount}
+                type="range" min={10} max={2500} step={10} value={amount}
                 onChange={e => setAmount(Number(e.target.value))}
                 style={{
                   width: "100%", height: 4, borderRadius: 999,
-                  background: `linear-gradient(to right, var(--purple-400) ${(amount - 10) / 9.9}%, var(--plum-700) ${(amount - 10) / 9.9}%)`,
+                  background: `linear-gradient(to right, var(--purple-400) ${(amount - 10) / 24.9}%, var(--plum-700) ${(amount - 10) / 24.9}%)`,
                   appearance: "none", WebkitAppearance: "none", outline: "none", cursor: "pointer",
                   marginBottom: 28,
                 }}
@@ -195,7 +196,7 @@ function ImpactCalc({ onDonate }) {
                   ♡ Your ${amount} today
                 </div>
                 <div style={{ fontSize: 18, color: "#fff", lineHeight: 1.4 }}>
-                  {outcome.text} · helps <b style={{ color: "var(--purple-400)" }}>{dogsHelped} {dogsHelped === 1 ? "dog" : "dogs"}</b>
+                  {outcome.text}
                 </div>
               </div>
               <Magnetic>

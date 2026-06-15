@@ -86,6 +86,11 @@ function PawGlyph({ style = {} }) {
   );
 }
 
+/* Dogs featured in the "Different Dogs" strip (or temporarily pulled) — hidden
+   from the homepage survivor previews + counts. Mirrors shared.jsx. By name. */
+const HIDDEN_FROM_GRID = ["twitch", "sweet pea", "checkers"];
+const isHiddenDog = (a) => HIDDEN_FROM_GRID.includes(String((a && a.name) || "").trim().toLowerCase());
+
 /* Paw print SVG */
 function Paw({ style = {}, className = "" }) {
   return (
@@ -326,8 +331,8 @@ function HeroCentered({ onDonate }) {
           maxWidth: 820, margin: "0", paddingTop: 32,
           borderTop: "1px solid var(--line-dark)",
         }}>
-          <Stat num="1,200+" label="Dogs rescued" />
-          <Stat num="800+" label="Forever homes" />
+          <Stat num="600+" label="Dogs rescued" />
+          <Stat num="300+" label="Forever homes" />
           <Stat num="2" label="Years on the ground" />
         </div>
       </div>

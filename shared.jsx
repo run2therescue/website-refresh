@@ -38,6 +38,11 @@ function PawGlyphS({ style = {} }) {
   );
 }
 
+/* Dogs featured in the "Different Dogs" strip (or temporarily pulled) — hidden
+   from the browsable grids + counts, but still openable from the strip. By name. */
+const HIDDEN_FROM_GRID = ["twitch", "sweet pea", "checkers"];
+const isHiddenDog = (a) => HIDDEN_FROM_GRID.includes(String((a && a.name) || "").trim().toLowerCase());
+
 function PawS({ style = {}, className = "" }) {
   return (
     <svg className={`paw ${className}`} style={style} viewBox="0 0 64 64" fill="currentColor" aria-hidden="true">

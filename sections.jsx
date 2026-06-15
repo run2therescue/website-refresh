@@ -142,7 +142,7 @@ function Mission() {
 function Survivors({ onSponsor }) {
   // Live from Shelterluv — a four-dog preview of the full Adopt page.
   const { status, animals } = useAnimals();
-  const available = animals.filter((a) => a.available !== false);
+  const available = animals.filter((a) => a.available !== false && !isHiddenDog(a));
   const dogs = available.slice(0, 4);
   return (
     <section id="survivors" className="section-light" style={{ padding: "56px 0 16px", position: "relative", overflow: "hidden" }}>
@@ -246,7 +246,7 @@ function Survivors({ onSponsor }) {
 function Journey() {
   // Real R2R survivors. beforeFocal / afterFocal control CSS object-position.
   const items = [
-    { name: "Kronk",  before: IMG.kronkBefore,  after: IMG.kronkAfter,  story: "Rescued from a holding pen in Yulin. Featured in People Magazine." },
+    { name: "Kronk",  before: IMG.kronkBefore,  after: IMG.kronkAfter,  story: "Rescued from a slaughter site in Mudanjiang. Featured in People Magazine." },
     { name: "Alfie",  before: IMG.alfieBefore,  after: IMG.alfieAfter,  story: "Rescued from the dog meat trade and finding his way home." },
     { name: "Gertie", before: IMG.gertieBefore, after: IMG.gertieAfter, story: "Rescued from the trade and finding her people." },
     { name: "Honey",  before: IMG.honeyBefore,  after: IMG.honeyAfter,  story: "From forgotten to a forever home of her own.", beforeFocal: "20% center" },
@@ -356,7 +356,7 @@ function Feature() {
               Meet Kronk
             </h2>
             <p style={{ fontSize: 15, color: "var(--ink-2)", marginBottom: 22, maxWidth: 480, lineHeight: 1.65 }}>
-              Rescued from a holding pen in Yulin, Kronk now leaps through fresh snow a world away. His journey from the dog meat trade to a life of pure joy is proof of what a second chance makes possible, and it caught the eye of <b style={{ color: "var(--ink)" }}>People Magazine</b>.
+              Kronk was rescued from a slaughter site in Mudanjiang. Now he leaps through fresh snow a world away. His journey from the dog meat trade to a life of pure joy is proof of what a second chance makes possible, and it caught the eye of <b style={{ color: "var(--ink)" }}>People Magazine</b>.
             </p>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
               <a href="/news" className="btn btn-accent">Read Kronk's Story <span className="arrow">→</span></a>
@@ -445,7 +445,7 @@ function TeamCard({ p, featured }) {
     >
       <div style={{ aspectRatio: featured ? "4/3" : "1/1", borderRadius: featured ? 16 : 13, overflow: "hidden", marginBottom: featured ? 16 : 13, background: "var(--plum-600)", position: "relative" }}>
         {p.img ? (
-          <Img src={p.img} alt={p.name} style={featured ? { objectPosition: "center 28%" } : {}} />
+          <Img src={p.img} alt={p.name} style={featured ? { objectPosition: p.imgPos || "center 28%" } : {}} />
         ) : (
           <div aria-hidden="true" style={{
             width: "100%", height: "100%", display: "flex", flexDirection: "column",
@@ -479,7 +479,7 @@ function TeamCard({ p, featured }) {
 function Team() {
   // Founders render large; the growing team renders in a uniform, equal-height row below.
   const founders = [
-    { name: "Brandy Cherven", role: "Chief Executive Officer", tag: "Co-Founder", img: IMG.teamBrandy, copy: "I never imagined that rescuing dogs would become my life's work. Everything changed when I adopted Sunny, a three-legged Jindo rescued from the dog meat trade in East Asia. What began as volunteering and advocacy ultimately led me to leave my traditional career path and, in 2024, co-found Run 2 The Rescue. Rescue is more than what I do... it's who I am. In memory of Sunny, the dog who changed everything." },
+    { name: "Brandy Cherven", role: "Chief Executive Officer", tag: "Co-Founder", img: IMG.teamBrandy, imgPos: "center 38%", copy: "I never imagined that rescuing dogs would become my life's work. Everything changed when I adopted Sunny, a three-legged Jindo rescued from the dog meat trade in East Asia. What began as volunteering and advocacy ultimately led me to leave my traditional career path and, in 2024, co-found Run 2 The Rescue. Rescue is more than what I do... it's who I am. In memory of Sunny, the dog who changed everything." },
     { name: "Bonnie Klapper", role: "Chief Operating Officer", tag: "Co-Founder", img: IMG.teamBonnie, copy: "I spent nearly two dozen years as a federal prosecutor in California and New York, dismantling drug cartels. Today, I put that same energy and skills into helping the animals. I am a vegan animal rights activist who provides pro bono support to dozens of animal-related nonprofits and activists on the ground. While I fight for all animals, dogs have always had my heart. I am honored to work with Brandy and Run 2 the Rescue to save these beautiful dog meat trade survivors." },
   ];
   const team = [
