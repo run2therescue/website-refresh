@@ -314,8 +314,7 @@ function Journey() {
                     }}>After</span>
                   </div>
                 </div>
-                <div style={{ padding: "22px 24px", display: "flex", alignItems: "baseline", gap: 14 }}>
-                  <span className="display" style={{ fontSize: 28, fontWeight: 700, fontStyle: "italic", color: "var(--purple-400)", opacity: 0.55, flexShrink: 0, lineHeight: 1 }}>{i + 1}</span>
+                <div style={{ padding: "22px 24px" }}>
                   <div>
                     <div className="display" style={{ fontSize: 26, marginBottom: 4, color: "var(--ink)" }}>{it.name}</div>
                     <p style={{ margin: 0, color: "var(--ink-2)", fontSize: 14, lineHeight: 1.55 }}>
