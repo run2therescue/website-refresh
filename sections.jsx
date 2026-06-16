@@ -836,12 +836,12 @@ function ShareStoryModal({ open, onClose }) {
 /* Testimonial avatar: an adopter's pet photo when provided, otherwise the
    initials chip. Falls back to initials if the photo file is missing, so a
    not-yet-added image never shows as a broken image. */
-function TestimonialAvatar({ img, initials, alt }) {
+function TestimonialAvatar({ img, initials, alt, imgPos }) {
   const [failed, setFailed] = useState(false);
   if (img && !failed) {
     return (
       <img src={img} alt={alt || ""} onError={() => setFailed(true)}
-        style={{ width: 42, height: 42, borderRadius: 12, objectFit: "cover", objectPosition: "center 65%", flexShrink: 0, background: "var(--lav-300)" }} />
+        style={{ width: 42, height: 42, borderRadius: 12, objectFit: "cover", objectPosition: imgPos || "center 50%", flexShrink: 0, background: "var(--lav-300)" }} />
     );
   }
   return (
@@ -885,8 +885,9 @@ function Testimonials() {
       name: "Katherine",
       detail: "Adopted Audrey “Dog Hepburn”",
       initials: "K",
-      img: "assets/audrey-testimonial.jpg",
-      alt: "Audrey, a poodle adopted from Run 2 The Rescue",
+      img: "assets/Audrey1.JPG",
+      imgPos: "58% 26%",
+      alt: "Audrey, a doodle adopted from Run 2 The Rescue",
       rotate: 1.6,
     },
     // Future verbatims drop in here.
@@ -927,7 +928,7 @@ function Testimonials() {
                 margin: "20px 0 18px", flex: 1,
               }}>{q.quote}</blockquote>
               <figcaption style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <TestimonialAvatar img={q.img} initials={q.initials} alt={q.alt} />
+                <TestimonialAvatar img={q.img} initials={q.initials} alt={q.alt} imgPos={q.imgPos} />
                 <span style={{ display: "flex", flexDirection: "column", gap: 1, textAlign: "left" }}>
                   <span style={{ fontWeight: 600, fontSize: 13, color: "var(--ink)" }}>{q.name}</span>
                   <span style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 10.5, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--purple-600)" }}>{q.detail}</span>
