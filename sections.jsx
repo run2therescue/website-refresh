@@ -840,7 +840,7 @@ function TestimonialAvatar({ img, initials, alt, imgPos }) {
   const [failed, setFailed] = useState(false);
   if (img && !failed) {
     return (
-      <img src={img} alt={alt || ""} onError={() => setFailed(true)}
+      <img src={img} alt={alt || ""} onError={() => setFailed(true)} loading="lazy" decoding="async"
         style={{ width: 42, height: 42, borderRadius: 12, objectFit: "cover", objectPosition: imgPos || "center 50%", flexShrink: 0, background: "var(--lav-300)" }} />
     );
   }
@@ -860,17 +860,20 @@ function Testimonials() {
   const [storyOpen, setStoryOpen] = useState(false);
   const quotes = [
     {
-      quote: "Fig and Coal have brought so much love and joy into our home since adopting them from R2TR… we absolutely adore them.",
+      quote: "Fig and Coal have brought so much love and joy into our home since adopting them from R2TR. They are sweet, fun little poodles who bonded beautifully with our family and our other dogs. We absolutely adore them.",
       name: "Megan Elizabeth",
       detail: "Adopted Fig & Coal",
       initials: "M",
       rotate: -1.8,
     },
     {
-      quote: "Brandy and Bonnie helped us find the perfect dog for our family. We'll be adopting our next one from them too.",
+      quote: "We had a wonderful, stress-free experience adopting our amazing dog, Dash, from Run 2 The Rescue. Brandy and Bonnie know every dog in their care so well, and they helped us choose the perfect one for our family. The work they do to give these resilient dogs a second chance after a life of abuse is incredible. We'll be adopting our next family member from them!",
       name: "Laurie Eisenberg",
       detail: "Adopted Dash",
       initials: "L",
+      img: "assets/Dash.jpg",
+      imgPos: "center 33%",
+      alt: "Dash, a yellow Labrador adopted from Run 2 The Rescue",
       rotate: 1.4,
     },
     {
