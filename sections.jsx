@@ -874,10 +874,13 @@ function Testimonials() {
       rotate: 1.4,
     },
     {
-      quote: "We've adopted three R2R dogs: Romeo, Olive, and Junebug. Brandy and Bonnie find the right home for every dog.",
+      quote: "Choosing to adopt from Run 2 The Rescue was one of the best decisions we've ever made. Brandy, Bonnie, and their team champion the dogs who need it most, from dog meat trade survivors to those with special needs. For them it's never just about finding a home, it's about finding the right one. We're forever grateful they brought Romeo, Olive, and Junebug into our lives.",
       name: "Greg Carrico",
       detail: "Adopted Romeo, Olive & Junebug",
       initials: "G",
+      img: "assets/Romeo_Olive.jpeg",
+      imgPos: "center 45%",
+      alt: "Romeo and Olive, adopted from Run 2 The Rescue",
       rotate: -1.2,
     },
     {
