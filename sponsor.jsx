@@ -163,9 +163,9 @@ function SponsorHero() {
   );
 }
 
-/* How it works + a call to action. When a dog is selected, the CTA reads
-   "Sponsor <Name> monthly" and opens the confirm modal (consistent with the
-   picker). With no dog, it's a direct generic Zeffy link. */
+/* How it works — the same content as before, rebalanced into two columns so the
+   section reads horizontally instead of as a tall centered stack: the pitch + CTA
+   on the left, the founder's line as the counterweight on the right. */
 function SponsorStart({ selectedDog, onSponsor }) {
   const ctaHref = buildSponsorUrl(selectedDog, null);
   const ctaLabel = selectedDog
@@ -176,16 +176,13 @@ function SponsorStart({ selectedDog, onSponsor }) {
       <PawS className="paw paw-light" style={{ bottom: 24, right: "4%", width: 56, height: 56 }} />
       <div className="wrap">
         <div className="sp-start-grid">
-          {/* Left — the pitch */}
           <div className="sp-start-copy">
-            <div>
-              <div className="eyebrow-dark" style={{ marginBottom: 14 }}>How it works</div>
-              <h2 className="display" style={{ fontSize: "clamp(30px, 3.8vw, 46px)", margin: 0, color: "var(--ink)", lineHeight: 1.08 }}>
-                Become a Sponsor Angel
-              </h2>
-            </div>
+            <div className="eyebrow-dark" style={{ marginBottom: 14 }}>How it works</div>
+            <h2 className="display" style={{ fontSize: "clamp(30px, 3.8vw, 46px)", margin: 0, color: "var(--ink)", lineHeight: 1.08 }}>
+              Become a Sponsor Angel
+            </h2>
             <p className="sp-body">
-              Pick a survivor, choose any monthly amount, and it goes straight to their food, vet care, and foster costs. You'll get updates as their story unfolds. Cancel anytime.
+              Pick a survivor, choose any monthly amount, and it goes straight to their food, vet care, and foster costs. You'll get updates as their story unfolds.
             </p>
             <div>
               <MagneticS>
@@ -203,29 +200,11 @@ function SponsorStart({ selectedDog, onSponsor }) {
                 Secure checkout through Zeffy. Tax deductible. Cancel anytime.
               </p>
             </div>
+          </div>
+          <div className="sp-start-aside">
             <blockquote className="sp-quote">
               "We cannot do this without you. Together, we can make change happen."
             </blockquote>
-          </div>
-
-          {/* Right — what your gift covers (surfaces the tier amounts) */}
-          <div className="sp-impact-card">
-            <div className="sp-impact-head"><PawGlyphS />What your gift covers</div>
-            <ul className="sp-impact-list">
-              {SPONSOR_AMOUNTS.map((a) => (
-                <li key={a.value} className={`sp-impact-row ${a.featured ? "featured" : ""}`}>
-                  {a.featured && <span className="sp-impact-badge">Most loved</span>}
-                  <span className="sp-impact-amt">${a.value.toLocaleString()}</span>
-                  <span className="sp-impact-text">
-                    <span className="sp-impact-note">{a.note.charAt(0).toUpperCase() + a.note.slice(1)}</span>
-                    <span className="sp-impact-cadence">{cadenceWord(a.cadence)}</span>
-                  </span>
-                </li>
-              ))}
-            </ul>
-            <p className="sp-impact-foot">
-              Choose any amount on the next step. These are just a few of the ways your gift adds up.
-            </p>
           </div>
         </div>
       </div>
