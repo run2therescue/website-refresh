@@ -483,7 +483,7 @@ function Team() {
   ];
   const team = [
     { name: "Gregory Carrico", role: "Foster Dad & Volunteer", tag: "Volunteer", img: IMG.teamGreg, copy: "Lifelong animal lover and ringleader of a twelve-poodle pack (plus fosters) based in Upstate New York. The daily agenda: rehabilitation, well-being, fashion, and a lot of pup-cups. Greg champions senior and special-needs rescues and the joy of bringing them home. \"Are all these dogs yours?\" ~ everyone Gregory meets while walking his dogs." },
-    { name: "Kirk", role: "Tech Wizard", tag: "Team", img: null, copy: "Bio coming soon." },
+    { name: "Kirk", role: "Tech Wizard", tag: "Team", img: IMG.teamKirk, copy: "Ok, who's this cat dude!? As a young lad in rural Wisconsin, I grew up literally running with a pack of (domesticated) dogs. My rescue work began in earnest in the concrete jungle of Harlem, NY, where there's a cat crisis on every corner. My first rescue, Zora, was a foster fail. Here she is, perched on my shoulder, telling me not to adopt another cat. Along with a small but dedicated group of rescuers, I helped found Be the Change Animal Rescue. Professionally, I help small businesses and nonprofits strategize and overcome technical hurdles. I'm also a songwriter and musician, and when I'm not advocating for animals, you can usually find me in the woods!" },
     { name: "Aman Garg", role: "Tech and AI Lead", tag: "Team", img: IMG.teamAman, copy: "10+ years in marketing analytics and consumer insights have left Aman a card-carrying data geek. Lately he's all-in on AI, cooking up products that solve real-world problems. The rest of his time belongs to Coco, his favorite drooler, who gets long walks on the St. Pete beach and a suspiciously generous ration of peanut-butter-and-banana ice cream." },
   ];
   return (
@@ -833,6 +833,27 @@ function ShareStoryModal({ open, onClose }) {
   );
 }
 
+/* Testimonial avatar: an adopter's pet photo when provided, otherwise the
+   initials chip. Falls back to initials if the photo file is missing, so a
+   not-yet-added image never shows as a broken image. */
+function TestimonialAvatar({ img, initials, alt }) {
+  const [failed, setFailed] = useState(false);
+  if (img && !failed) {
+    return (
+      <img src={img} alt={alt || ""} onError={() => setFailed(true)}
+        style={{ width: 42, height: 42, borderRadius: 12, objectFit: "cover", objectPosition: "center 65%", flexShrink: 0, background: "var(--lav-300)" }} />
+    );
+  }
+  return (
+    <span style={{
+      width: 36, height: 36, borderRadius: "50%", flexShrink: 0,
+      background: "var(--purple-500)", color: "#fff",
+      display: "flex", alignItems: "center", justifyContent: "center",
+      fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 15,
+    }}>{initials}</span>
+  );
+}
+
 /* Adopter testimonials, real verbatim quotes, shown as speech bubbles.
    Add more by appending to `quotes`; each becomes another bubble. */
 function Testimonials() {
@@ -858,6 +879,15 @@ function Testimonials() {
       detail: "Adopted Romeo, Olive & Junebug",
       initials: "G",
       rotate: -1.2,
+    },
+    {
+      quote: "Adopting Audrey was the best thing our family has done in a very long time. She fills our days with laughter, love, and joy, and somehow arrived with no bad habits whatsoever. The team made the whole experience honest, kind, and wonderful. We absolutely hit the canine jackpot!",
+      name: "Katherine",
+      detail: "Adopted Audrey “Dog Hepburn”",
+      initials: "K",
+      img: "assets/audrey-testimonial.jpg",
+      alt: "Audrey, a poodle adopted from Run 2 The Rescue",
+      rotate: 1.6,
     },
     // Future verbatims drop in here.
   ];
@@ -897,12 +927,7 @@ function Testimonials() {
                 margin: "20px 0 18px", flex: 1,
               }}>{q.quote}</blockquote>
               <figcaption style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <span style={{
-                  width: 36, height: 36, borderRadius: "50%", flexShrink: 0,
-                  background: "var(--purple-500)", color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 15,
-                }}>{q.initials}</span>
+                <TestimonialAvatar img={q.img} initials={q.initials} alt={q.alt} />
                 <span style={{ display: "flex", flexDirection: "column", gap: 1, textAlign: "left" }}>
                   <span style={{ fontWeight: 600, fontSize: 13, color: "var(--ink)" }}>{q.name}</span>
                   <span style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 10.5, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--purple-600)" }}>{q.detail}</span>
