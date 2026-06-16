@@ -48,12 +48,17 @@ function buildSponsorUrl(dog, amount) {
   return u.toString();
 }
 
-/* Amount options offered inside the confirm modal (mirror the tier prices). */
+/* Gift tiers — surfaced visibly in the "Become a Sponsor Angel" section AND
+   offered inside the confirm modal. Cadence is honest: the small tiers are
+   monthly sponsorships; flying a dog home is a one-time cost (~airfare + CDC
+   fees), so it is NOT framed as "/mo". */
 const SPONSOR_AMOUNTS = [
-  { value: 15, label: "Paw", note: "feeds a dog for a week" },
-  { value: 35, label: "Heart", note: "vaccines & meds", featured: true },
-  { value: 2500, label: "Lifeline", note: "flies a dog home" },
+  { value: 15, label: "Paw", note: "feeds a dog for a week", cadence: "mo" },
+  { value: 35, label: "Heart", note: "vaccines & meds", featured: true, cadence: "mo" },
+  { value: 2500, label: "Lifeline", note: "flies a dog home", cadence: "once" },
 ];
+const perLabel = (cadence) => (cadence === "once" ? "one-time" : "/mo");
+const cadenceWord = (cadence) => (cadence === "once" ? "One-time" : "Monthly");
 
 /* Sponsor confirmation modal — pops the INSTANT a dog is selected (issue #1:
    nothing is buried below the grid). The donor confirms the amount right here,
@@ -70,6 +75,7 @@ function SponsorConfirmModal({ open, dog, amount, onClose }) {
   }, [open]);
   if (!open || !dog) return null;
   const url = buildSponsorUrl(dog, amt);
+  const amtCadence = (SPONSOR_AMOUNTS.find((a) => a.value === amt) || {}).cadence || "mo";
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal sp-confirm" onClick={(e) => e.stopPropagation()}
@@ -84,13 +90,13 @@ function SponsorConfirmModal({ open, dog, amount, onClose }) {
           <div className="sp-confirm-eyebrow">You're sponsoring</div>
           <h3 className="display sp-confirm-title">{dog.name}</h3>
 
-          <div className="sp-confirm-amounts" role="group" aria-label="Choose a monthly amount">
+          <div className="sp-confirm-amounts" role="group" aria-label="Choose an amount">
             {SPONSOR_AMOUNTS.map((a) => (
               <button key={a.value} type="button"
                 onClick={() => setAmt(a.value)}
                 className={`sp-confirm-chip ${amt === a.value ? "sel" : ""}`}
                 aria-pressed={amt === a.value}>
-                <span className="sp-confirm-chip-amt">${a.value}<span className="per">/mo</span></span>
+                <span className="sp-confirm-chip-amt">${a.value.toLocaleString()}<span className="per">{perLabel(a.cadence)}</span></span>
                 <span className="sp-confirm-chip-note">{a.note}</span>
               </button>
             ))}
@@ -103,15 +109,20 @@ function SponsorConfirmModal({ open, dog, amount, onClose }) {
             </div>
             <div className="sp-confirm-divider" />
             <div className="sp-confirm-row">
-              <span className="sp-confirm-label">Monthly gift</span>
-              <span className="sp-confirm-val sp-confirm-amt">${amt}<span className="per">/mo</span></span>
+              <span className="sp-confirm-label">{cadenceWord(amtCadence)} gift</span>
+              <span className="sp-confirm-val sp-confirm-amt">${amt.toLocaleString()}<span className="per">{perLabel(amtCadence)}</span></span>
             </div>
           </div>
 
           <p className="sp-confirm-handoff">
-            Next, our secure checkout (powered by <strong>Zeffy</strong>, 100% fee-free) opens
-            with your <strong>${amt}</strong> already filled in. Just tap <strong>“Monthly”</strong> there
-            to start your recurring gift for {dog.name}.
+            {amtCadence === "once" ? (
+              <>Next, our secure checkout (powered by <strong>Zeffy</strong>, 100% fee-free) opens
+              with your <strong>${amt.toLocaleString()}</strong> gift already filled in to help fly {dog.name} home.</>
+            ) : (
+              <>Next, our secure checkout (powered by <strong>Zeffy</strong>, 100% fee-free) opens
+              with your <strong>${amt}</strong> already filled in. Just tap <strong>“Monthly”</strong> there
+              to start your recurring gift for {dog.name}.</>
+            )}
           </p>
 
           <a href={url} target="_blank" rel="noopener noreferrer"
@@ -163,31 +174,60 @@ function SponsorStart({ selectedDog, onSponsor }) {
   return (
     <section id="start" className="sponsor-start">
       <PawS className="paw paw-light" style={{ bottom: 24, right: "4%", width: 56, height: 56 }} />
-      <div className="wrap" style={{ maxWidth: 680, textAlign: "center" }}>
-        <div className="eyebrow-dark" style={{ marginBottom: 14, justifyContent: "center" }}>How it works</div>
-        <h2 className="display" style={{ fontSize: "clamp(28px, 3.6vw, 44px)", margin: "0 0 14px", color: "var(--ink)" }}>
-          Become a Sponsor Angel
-        </h2>
-        <p style={{ fontSize: 15, color: "var(--ink-2)", lineHeight: 1.65, margin: "0 auto 26px", maxWidth: 540 }}>
-          Pick a survivor below, choose any monthly amount, and it goes straight to their food, vet care, and foster costs. You'll get updates as their story unfolds. Cancel anytime.
-        </p>
-        <MagneticS>
-          {selectedDog ? (
-            <button type="button" onClick={() => onSponsor(selectedDog, 35)} className="btn btn-accent" style={{ fontSize: 15 }}>
-              {ctaLabel}
-            </button>
-          ) : (
-            <a href={ctaHref} target="_blank" rel="noopener noreferrer" className="btn btn-accent" style={{ fontSize: 15 }}>
-              {ctaLabel}
-            </a>
-          )}
-        </MagneticS>
-        <p style={{ fontSize: 12, color: "var(--ink-3)", marginTop: 14 }}>
-          Secure checkout through Zeffy. Tax deductible. Cancel anytime.
-        </p>
-        <blockquote className="sp-quote" style={{ marginTop: 32 }}>
-          "We cannot do this without you. Together, we can make change happen."
-        </blockquote>
+      <div className="wrap">
+        <div className="sp-start-grid">
+          {/* Left — the pitch */}
+          <div className="sp-start-copy">
+            <div>
+              <div className="eyebrow-dark" style={{ marginBottom: 14 }}>How it works</div>
+              <h2 className="display" style={{ fontSize: "clamp(30px, 3.8vw, 46px)", margin: 0, color: "var(--ink)", lineHeight: 1.08 }}>
+                Become a Sponsor Angel
+              </h2>
+            </div>
+            <p className="sp-body">
+              Pick a survivor, choose any monthly amount, and it goes straight to their food, vet care, and foster costs. You'll get updates as their story unfolds. Cancel anytime.
+            </p>
+            <div>
+              <MagneticS>
+                {selectedDog ? (
+                  <button type="button" onClick={() => onSponsor(selectedDog, 35)} className="btn btn-accent" style={{ fontSize: 15 }}>
+                    {ctaLabel}
+                  </button>
+                ) : (
+                  <a href={ctaHref} target="_blank" rel="noopener noreferrer" className="btn btn-accent" style={{ fontSize: 15 }}>
+                    {ctaLabel}
+                  </a>
+                )}
+              </MagneticS>
+              <p style={{ fontSize: 12, color: "var(--ink-3)", margin: "12px 0 0" }}>
+                Secure checkout through Zeffy. Tax deductible. Cancel anytime.
+              </p>
+            </div>
+            <blockquote className="sp-quote">
+              "We cannot do this without you. Together, we can make change happen."
+            </blockquote>
+          </div>
+
+          {/* Right — what your gift covers (surfaces the tier amounts) */}
+          <div className="sp-impact-card">
+            <div className="sp-impact-head"><PawGlyphS />What your gift covers</div>
+            <ul className="sp-impact-list">
+              {SPONSOR_AMOUNTS.map((a) => (
+                <li key={a.value} className={`sp-impact-row ${a.featured ? "featured" : ""}`}>
+                  {a.featured && <span className="sp-impact-badge">Most loved</span>}
+                  <span className="sp-impact-amt">${a.value.toLocaleString()}</span>
+                  <span className="sp-impact-text">
+                    <span className="sp-impact-note">{a.note.charAt(0).toUpperCase() + a.note.slice(1)}</span>
+                    <span className="sp-impact-cadence">{cadenceWord(a.cadence)}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <p className="sp-impact-foot">
+              Choose any amount on the next step. These are just a few of the ways your gift adds up.
+            </p>
+          </div>
+        </div>
       </div>
     </section>
   );
