@@ -56,9 +56,20 @@ function PawS({ style = {}, className = "" }) {
   );
 }
 
-function ImgS({ src, alt, style = {}, ...rest }) {
+/* Route Shelterluv photos through Vercel's image optimizer (on-the-fly resize +
+   WebP). The full-res Shelterluv PNGs are the heaviest payload on Adopt/Sponsor;
+   serving a width-appropriate WebP cuts most of it, especially on mobile. Local
+   /assets and any non-Shelterluv URL are returned untouched. Width must be one
+   of the `sizes` configured in vercel.json; quality must match `qualities`. */
+function vimgS(url, w = 750) {
+  if (!url || typeof url !== "string") return url;
+  if (!/^https?:\/\/[^/]*\.shelterluv\.com\//i.test(url)) return url;
+  return `/_vercel/image?url=${encodeURIComponent(url)}&w=${w}&q=75`;
+}
+
+function ImgS({ src, alt, style = {}, imgWidth, ...rest }) {
   return (
-    <img src={src} alt={alt} loading="lazy"
+    <img src={vimgS(src, imgWidth)} alt={alt} loading="lazy"
       style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", ...style }}
       {...rest}
     />
@@ -432,7 +443,7 @@ function DifferentDogsS() {
           <h2 className="display" style={{ fontSize: "clamp(22px, 3vw, 34px)", margin: 0, color: "var(--ink)" }}>
             Different isn't bad. It's just different.
           </h2>
-          <span style={{ fontSize: 13, color: "var(--ink-2)" }}>Seniors and special-needs survivors worth showing up for.</span>
+          <span style={{ fontSize: 13, color: "var(--ink-2)", maxWidth: 460 }}>We at Run 2 The Rescue know different doesn't mean bad. We celebrate the dogs with differences. Our seniors and special-needs survivors all deserve a loving home.</span>
         </div>
         <div className="ways-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14 }}>
           {cards.map(c => {
@@ -471,6 +482,6 @@ function DifferentDogsS() {
 }
 
 Object.assign(window, {
-  IMG_BANK, PawS, ImgS, NavS, FooterS, MagneticS, CountUpS, ScrollProgressS, useRevealS, useAnimalsS,
+  IMG_BANK, PawS, ImgS, vimgS, NavS, FooterS, MagneticS, CountUpS, ScrollProgressS, useRevealS, useAnimalsS,
   DifferentDogsS, submitForm, WEB3FORMS_KEY, BotcheckS, autoplayFixS, PawGlyphS,
 });

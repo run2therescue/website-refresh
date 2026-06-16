@@ -52,7 +52,7 @@ function buildSponsorUrl(dog, amount) {
 const SPONSOR_AMOUNTS = [
   { value: 15, label: "Paw", note: "feeds a dog for a week" },
   { value: 35, label: "Heart", note: "vaccines & meds", featured: true },
-  { value: 150, label: "Lifeline", note: "flies a dog home" },
+  { value: 2500, label: "Lifeline", note: "flies a dog home" },
 ];
 
 /* Sponsor confirmation modal — pops the INSTANT a dog is selected (issue #1:
@@ -77,7 +77,7 @@ function SponsorConfirmModal({ open, dog, amount, onClose }) {
         <button onClick={onClose} aria-label="Close" className="sp-confirm-close">×</button>
         <div className="sp-confirm-photo">
           {dog.photo
-            ? <img src={dog.photo} alt={dog.name} />
+            ? <img src={vimgS(dog.photo, 480)} alt={dog.name} loading="lazy" />
             : <div className="sp-confirm-photo-fallback" aria-hidden="true">🐾</div>}
         </div>
         <div className="sp-confirm-body">
@@ -279,7 +279,6 @@ function SponsorPage() {
   return (
     <>
       <SponsorHero />
-      <DifferentDogsS />
       <SponsorStart selectedDog={selectedDog} onSponsor={onSponsor} />
       <SponsorPicker animals={available} status={status}
         selectedDog={selectedDog} setSelectedDog={setSelectedDog}

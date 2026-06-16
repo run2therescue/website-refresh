@@ -110,7 +110,7 @@ function AdoptHeroEditorial() {
             </div>
           </div>
           <div style={{ position: "relative", aspectRatio: "4/5", borderRadius: 24, overflow: "hidden", maxHeight: 520, background: "var(--lav-200)" }}>
-            {feat && <ImgS src={feat.img} alt={feat.name} />}
+            {feat && <ImgS src={feat.img} alt={feat.name} imgWidth={828} />}
           </div>
         </div>
       </div>
@@ -190,6 +190,52 @@ function AdoptDirectory() {
     window.addEventListener("r2r-open-dog", open);
     return () => window.removeEventListener("r2r-open-dog", open);
   }, []);
+
+  // Per-dog structured data (schema.org ItemList of Products). Injected once the
+  // live Shelterluv list loads, so search engines that render JS can read each
+  // adoptable dog as a discrete entity (name, photo, breed/age, "free" offer).
+  // Lists the same dogs as the grid (available, not hidden) regardless of UI filters.
+  uE(() => {
+    const id = "r2r-dogs-jsonld";
+    const remove = () => { const e = document.getElementById(id); if (e) e.remove(); };
+    if (status !== "ready" || dogs.length === 0) { remove(); return; }
+    const listed = dogs.filter((d) => !isHiddenDog(d));
+    const data = {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": "Adoptable rescue dogs — Run 2 The Rescue",
+      "numberOfItems": listed.length,
+      "itemListElement": listed.map((d, i) => ({
+        "@type": "ListItem",
+        "position": i + 1,
+        "item": {
+          "@type": "Product",
+          "name": d.name,
+          "description": d.bio || `${d.name}, a rescue dog from the dog meat trade looking for a forever home.`,
+          "image": d.gallery[0] || d.img || undefined,
+          "category": "Adoptable dog",
+          "brand": { "@type": "Organization", "name": "Run 2 The Rescue" },
+          "additionalProperty": [
+            d.breed && { "@type": "PropertyValue", "name": "Breed", "value": d.breed },
+            d.age && { "@type": "PropertyValue", "name": "Age group", "value": d.age },
+            d.sex && { "@type": "PropertyValue", "name": "Sex", "value": d.sex },
+            d.size && { "@type": "PropertyValue", "name": "Size", "value": d.size },
+          ].filter(Boolean),
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock",
+            "url": "https://run2therescue.org/adopt",
+          },
+        },
+      })),
+    };
+    let el = document.getElementById(id);
+    if (!el) { el = document.createElement("script"); el.type = "application/ld+json"; el.id = id; document.head.appendChild(el); }
+    el.textContent = JSON.stringify(data);
+    return remove;
+  }, [status, dogs]);
 
   const filtered = uM(() => {
     let r = dogs.filter((d) => {
@@ -365,13 +411,13 @@ function ProfileModal({ dog, fav, onFav, onClose }) {
     <div className="modal-backdrop" onClick={onClose}>
       <div className="profile-modal" onClick={(e) => e.stopPropagation()}>
         <div className="gallery">
-          <ImgS src={gallery[photoIdx] || dog.img} alt={dog.name} />
+          <ImgS src={gallery[photoIdx] || dog.img} alt={dog.name} imgWidth={1080} />
           <button onClick={onClose} style={{ position: "absolute", top: 16, right: 16, width: 36, height: 36, borderRadius: "50%", background: "rgba(255,255,255,0.95)", color: "var(--ink)", display: "grid", placeItems: "center", fontSize: 16 }} aria-label="Close">✕</button>
           {gallery.length > 1 && (
             <div className="thumb-row">
               {gallery.map((g, i) => (
                 <div key={i} className={`thumb ${i === photoIdx ? "sel" : ""}`} onClick={() => setPhotoIdx(i)}>
-                  <ImgS src={g} alt="" />
+                  <ImgS src={g} alt="" imgWidth={320} />
                 </div>
               ))}
             </div>

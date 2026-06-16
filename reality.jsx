@@ -173,7 +173,7 @@ function RealityGallery({ revealed }) {
       img: "assets/reality-beagle.webp",
       alt: "A beagle looking out from a wire crate",
       heading: "Every breed, every kind",
-      body: "Beagles, retrievers, huskies, poodles, Pomeranians, the dog meat trade takes breeds of every kind, and many still wear the tag of a home they were taken from.",
+      body: "Beagles, Goldens, Huskies, Poodles, Pomeranians and Mixed Breeds, the dog meat trade takes breeds of every kind, and many still wear the tag of a home they were taken from.",
     },
     {
       img: "assets/reality-puppies.webp",
@@ -231,7 +231,7 @@ function RealityClips({ revealed }) {
           Footage from the trade
         </h2>
         <p style={{ fontSize: 15, lineHeight: 1.6, color: "var(--on-dark-2)", margin: "0 0 28px", maxWidth: 520 }}>
-          Short clips from the holding sites and markets our rescuers rescue dogs from.
+          Short clips from the slaughter sites and dog meat markets our rescuers rescue dogs from.
         </p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 280px))", gap: 18, justifyContent: "center" }}>
           {clips.map((src, i) => (

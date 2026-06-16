@@ -67,7 +67,7 @@ function PressMark({ name, slug, href, h }) {
           fontSize: "clamp(15px, 1.7vw, 20px)", color: "var(--ink-2)", whiteSpace: "nowrap",
         }}>{name}</span>
       ) : (
-        <img src={`assets/press/${slug}.png?v=1`} alt={name}
+        <img src={`assets/press/${slug}.png?v=1`} alt={name} loading="lazy" decoding="async"
           style={{ height: h || 30, width: "auto", display: "block" }}
           onError={() => setFailed(true)} />
       )}

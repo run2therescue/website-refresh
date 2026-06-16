@@ -105,9 +105,19 @@ function Paw({ style = {}, className = "" }) {
   );
 }
 
-function Img({ src, alt, style = {}, ...rest }) {
+/* Route Shelterluv photos through Vercel's image optimizer (resize + WebP).
+   Local /assets and non-Shelterluv URLs are returned untouched. Mirrors vimgS in
+   shared.jsx (the homepage doesn't load shared.jsx). Width must be one of the
+   `sizes` in vercel.json; quality must match `qualities`. */
+function vimg(url, w = 750) {
+  if (!url || typeof url !== "string") return url;
+  if (!/^https?:\/\/[^/]*\.shelterluv\.com\//i.test(url)) return url;
+  return `/_vercel/image?url=${encodeURIComponent(url)}&w=${w}&q=75`;
+}
+
+function Img({ src, alt, style = {}, imgWidth, ...rest }) {
   return (
-    <img src={src} alt={alt} loading="lazy"
+    <img src={vimg(src, imgWidth)} alt={alt} loading="lazy"
       style={{
         width: "100%", height: "100%", objectFit: "cover",
         display: "block", borderRadius: "inherit",
@@ -479,4 +489,4 @@ function useAnimals() {
   return state;
 }
 
-Object.assign(window, { Paw, PawGlyph, Img, IMG, Nav, Hero, Stat, HeroVideoBG, useAnimals, Botcheck });
+Object.assign(window, { Paw, PawGlyph, Img, vimg, IMG, Nav, Hero, Stat, HeroVideoBG, useAnimals, Botcheck });

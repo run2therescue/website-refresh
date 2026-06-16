@@ -15,7 +15,7 @@ function HelpIllustration({ kind }) {
   if (!src) return null;
   return (
     <div className="help-illust-bg">
-      <img className="help-illust-img" src={src} alt="" aria-hidden="true" />
+      <img className="help-illust-img" src={src} alt="" aria-hidden="true" loading="lazy" decoding="async" />
     </div>
   );
 }
