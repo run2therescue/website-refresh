@@ -140,40 +140,24 @@ function Mission() {
 }
 
 function Survivors({ onSponsor }) {
-  // Live from Shelterluv — a horizontal carousel of every available survivor,
-  // four per view on desktop. Prev/next arrows plus a gentle auto-advance that
-  // pauses on hover/focus and respects prefers-reduced-motion.
+  // Live from Shelterluv — the original four-up preview, now paged: the arrows
+  // swap in the next four survivors (Rocky, Polar, Opus, …). A gentle
+  // auto-advance pages every 6s, pauses on hover, and respects reduced-motion.
   const { status, animals } = useAnimals();
   const available = animals.filter((a) => a.available !== false && !isHiddenDog(a));
-  const trackRef = useRef(null);
-  const scrollByPage = (dir) => {
-    const el = trackRef.current;
-    if (el) el.scrollBy({ left: dir * el.clientWidth * 0.85, behavior: "smooth" });
-  };
+  const PER = 4;
+  const [page, setPage] = useState(0);
+  const pausedRef = useRef(false);
+  const pageCount = Math.max(1, Math.ceil(available.length / PER));
+  const p = available.length ? (((page % pageCount) + pageCount) % pageCount) : 0;
+  const shown = available.slice(p * PER, p * PER + PER);
+  const go = (dir) => setPage((prev) => prev + dir);
   useEffect(() => {
-    const el = trackRef.current;
-    if (!el || status !== "ready" || available.length <= 4) return;
+    if (status !== "ready" || pageCount <= 1) return;
     if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    let paused = false;
-    const enter = () => { paused = true; };
-    const leave = () => { paused = false; };
-    el.addEventListener("pointerenter", enter);
-    el.addEventListener("pointerleave", leave);
-    el.addEventListener("focusin", enter);
-    const id = setInterval(() => {
-      if (paused) return;
-      const node = trackRef.current;
-      if (!node) return;
-      const atEnd = node.scrollLeft + node.clientWidth >= node.scrollWidth - 8;
-      node.scrollTo({ left: atEnd ? 0 : node.scrollLeft + node.clientWidth * 0.85, behavior: "smooth" });
-    }, 6000);
-    return () => {
-      clearInterval(id);
-      el.removeEventListener("pointerenter", enter);
-      el.removeEventListener("pointerleave", leave);
-      el.removeEventListener("focusin", enter);
-    };
-  }, [status, available.length]);
+    const id = setInterval(() => { if (!pausedRef.current) setPage((prev) => prev + 1); }, 6000);
+    return () => clearInterval(id);
+  }, [status, pageCount]);
   return (
     <section id="survivors" className="section-light" style={{ padding: "56px 0 16px", position: "relative", overflow: "hidden" }}>
       <Paw className="paw-light" style={{ top: 40, left: "5%", width: 40, height: 40 }} />
@@ -213,8 +197,8 @@ function Survivors({ onSponsor }) {
           <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
             {status === "ready" && available.length > 4 && (
               <div style={{ display: "flex", gap: 8 }}>
-                <button type="button" className="survivor-arrow" aria-label="Previous survivors" onClick={() => scrollByPage(-1)}>‹</button>
-                <button type="button" className="survivor-arrow" aria-label="Next survivors" onClick={() => scrollByPage(1)}>›</button>
+                <button type="button" className="survivor-arrow" aria-label="Previous survivors" onClick={() => go(-1)}>‹</button>
+                <button type="button" className="survivor-arrow" aria-label="Next survivors" onClick={() => go(1)}>›</button>
               </div>
             )}
             <a href="/adopt" style={{
@@ -229,9 +213,13 @@ function Survivors({ onSponsor }) {
           </div>
         </div>
 
-        <div className="survivor-track" ref={trackRef}>
-          {status === "loading" && [0, 1, 2, 3, 4].map(i => (
-            <div key={i} className="survivor-card survivor-skeleton" aria-hidden="true">
+        <div className="ways-grid"
+          style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 20 }}
+          onMouseEnter={() => { pausedRef.current = true; }}
+          onMouseLeave={() => { pausedRef.current = false; }}
+        >
+          {status === "loading" && [0, 1, 2, 3].map(i => (
+            <div key={i} style={{ background: "#fff", borderRadius: 20, overflow: "hidden" }}>
               <div style={{ aspectRatio: "4/5", background: "var(--lav-200)" }} />
               <div style={{ padding: 20 }}>
                 <div style={{ height: 16, width: "55%", background: "var(--lav-200)", borderRadius: 6, marginBottom: 12 }} />
@@ -241,12 +229,19 @@ function Survivors({ onSponsor }) {
             </div>
           ))}
           {status === "error" && (
-            <p style={{ flex: "1 1 100%", textAlign: "center", color: "var(--ink-3)", fontSize: 14, padding: "24px 0" }}>
+            <p style={{ gridColumn: "1 / -1", textAlign: "center", color: "var(--ink-3)", fontSize: 14, padding: "24px 0" }}>
               Our survivors are loading from our shelter system. Refresh in a moment to meet them.
             </p>
           )}
-          {status === "ready" && available.map(d => (
-            <article key={d.id} className="survivor-card" onClick={() => onSponsor(d.name)}>
+          {status === "ready" && shown.map(d => (
+            <article key={d.id} onClick={() => onSponsor(d.name)} style={{
+              background: "#fff", borderRadius: 20, overflow: "hidden",
+              cursor: "pointer", transition: "transform .25s ease, box-shadow .25s ease",
+              display: "flex", flexDirection: "column",
+            }}
+              onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "var(--shadow)"; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}
+            >
               <div style={{ aspectRatio: "4/5", overflow: "hidden", background: "var(--lav-200)" }}>
                 <Img src={d.cover} alt={d.name} />
               </div>
@@ -893,6 +888,9 @@ function Testimonials() {
       name: "Megan Elizabeth",
       detail: "Adopted Fig & Coal",
       initials: "M",
+      img: "assets/fig_coal.jpeg",
+      imgPos: "center 42%",
+      alt: "Fig and Coal, poodles adopted from Run 2 The Rescue",
       rotate: -1.8,
     },
     {
