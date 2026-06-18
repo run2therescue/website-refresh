@@ -309,22 +309,25 @@ function LoveReveal() {
         .love-reveal .love-text {
           display: inline-block; opacity: 0; transform: scale(.35);
           transform-origin: center 58%;
-          animation: loveTextIn .6s cubic-bezier(.2,.85,.25,1.25) .65s forwards;
+          animation: loveTextIn .55s cubic-bezier(.2,.85,.25,1.25) .55s forwards;
         }
         .love-reveal .love-heart {
           position: absolute; left: 50%; top: 50%; width: .8em; height: .8em;
           transform: translate(-50%,-50%); color: var(--purple-400);
           display: inline-flex; pointer-events: none;
-          /* One continuous bloom-and-fade — no middle "settle" frame that
-             reads as a second appearance. Heart grows in, peaks, then keeps
-             expanding outward while fading, all in a single keyframe set. */
-          animation: loveBloom 1s cubic-bezier(.2,.7,.3,1) forwards;
+          /* One heart, one entrance, one exit. Pop in, hold, fade out
+             without expanding — the previous expand-on-exit was reading
+             as a second heart growing into the frame. Now it just dims
+             away while "Love." crossfades into the same spot. */
+          animation: lovePop .95s cubic-bezier(.2,.7,.3,1.05) forwards;
         }
         .love-reveal .love-heart svg { width: 100%; height: 100%; display: block; }
-        @keyframes loveBloom {
+        @keyframes lovePop {
           0%   { transform: translate(-50%,-50%) scale(.3);  opacity: 0; }
-          22%  { transform: translate(-50%,-50%) scale(1.15); opacity: 1; }
-          100% { transform: translate(-50%,-50%) scale(2.4); opacity: 0; }
+          28%  { transform: translate(-50%,-50%) scale(1.15); opacity: 1; }
+          42%  { transform: translate(-50%,-50%) scale(1);    opacity: 1; }
+          65%  { transform: translate(-50%,-50%) scale(1);    opacity: 1; }
+          100% { transform: translate(-50%,-50%) scale(1);    opacity: 0; }
         }
         @keyframes loveTextIn {
           0% { opacity: 0; transform: scale(.35); }
