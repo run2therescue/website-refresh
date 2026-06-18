@@ -352,22 +352,21 @@ function DogCard({ dog, fav, onFav, onOpen }) {
         </span>
       </div>
       <div style={{ padding: 18 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8, marginBottom: 4 }}>
-          <div className="display" style={{ fontSize: 22, color: "var(--ink)" }}>{dog.name}</div>
-          {dog.age && <span style={{ fontSize: 11, fontFamily: "var(--font-ui)", letterSpacing: "0.08em", color: "var(--ink-3)", textTransform: "uppercase" }}>{dog.age}</span>}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8, marginBottom: 4 }}>
+          <div className="display" style={{ fontSize: 22, color: "var(--ink)", lineHeight: 1.15 }}>{dog.name}</div>
+          {dog.isNew && <span className="tag tag-new" style={{ flexShrink: 0, marginTop: 3 }}>Just arrived</span>}
         </div>
-        <div style={{ fontFamily: "var(--font-ui)", fontSize: 11, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--purple-600)", fontWeight: 600, marginBottom: 10 }}>
+        <div style={{ fontFamily: "var(--font-ui)", fontSize: 11, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--purple-600)", fontWeight: 600, marginBottom: 12 }}>
           {dog.breed}
         </div>
-        {dog.isNew && <span style={{ display: "inline-block", marginBottom: 10, fontFamily: "var(--font-ui)", fontSize: 10, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--purple-700)", background: "var(--purple-soft)", padding: "3px 9px", borderRadius: 999 }}>Just arrived</span>}
         <p style={{ margin: "0 0 14px", fontSize: 13, color: "var(--ink-2)", lineHeight: 1.55 }}>
           {dog.bio.length > 116 ? dog.bio.slice(0, 116).trim() + "…" : dog.bio}
         </p>
-        {dog.good.length > 0 && (
-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-            {dog.good.map((g) => <span key={g} className="trait">Good with {g}</span>)}
-          </div>
-        )}
+        <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+          {dog.age && <span className="tag tag-age">{dog.age}</span>}
+          {dog.size && <span className="tag tag-size">{dog.size}</span>}
+          {dog.good.map((g) => <span key={g} className="trait">Good with {g}</span>)}
+        </div>
       </div>
     </button>
   );
