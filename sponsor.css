@@ -146,8 +146,8 @@
   color: var(--ink); margin: 0 0 2px;
 }
 .pick-card .meta {
-  font-family: var(--font-mono); font-size: 10px;
-  letter-spacing: 0.14em; text-transform: uppercase;
+  font-family: var(--font-ui); font-size: 11px;
+  letter-spacing: 0.05em; text-transform: uppercase;
   color: var(--purple-600); font-weight: 600;
 }
 

@@ -208,7 +208,7 @@ function Survivors({ onSponsor }) {
                       <div className="display" style={{ fontSize: 24, color: "var(--ink)" }}>{d.name}</div>
                       {d.ageGroup && (
                         <span style={{
-                          fontSize: 10, fontFamily: "var(--font-mono)", letterSpacing: "0.1em", textTransform: "uppercase",
+                          fontSize: 10, fontFamily: "var(--font-ui)", letterSpacing: "0.06em", textTransform: "uppercase",
                           color: "var(--purple-600)",
                         }}>{d.ageGroup}</span>
                       )}

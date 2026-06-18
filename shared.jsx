@@ -469,7 +469,7 @@ function DifferentDogsS() {
                 <div style={{ padding: "10px 12px" }}>
                   <span style={{ display: "inline-block", marginBottom: 7, fontFamily: "var(--font-mono)", fontSize: 8, letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 700, padding: "3px 8px", borderRadius: 999, background: looking ? "var(--purple-500)" : "rgba(26,16,37,0.78)", color: "#fff" }}>{looking ? "Looking" : "Forever home ♥"}</span>
                   <div className="display" style={{ fontSize: 16, color: "var(--ink)", lineHeight: 1.1 }}>{c.name}</div>
-                  {meta && <div style={{ fontSize: 9, fontFamily: "var(--font-mono)", letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--purple-600)", marginTop: 4 }}>{meta}</div>}
+                  {meta && <div style={{ fontSize: 10, fontFamily: "var(--font-ui)", letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--purple-600)", marginTop: 4 }}>{meta}</div>}
                   {looking && c.live && <div style={{ fontSize: 11, fontWeight: 600, color: "var(--purple-600)", marginTop: 6 }}>Meet {c.name} →</div>}
                 </div>
               </div>

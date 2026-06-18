@@ -354,12 +354,12 @@ function DogCard({ dog, fav, onFav, onOpen }) {
       <div style={{ padding: 18 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8, marginBottom: 4 }}>
           <div className="display" style={{ fontSize: 22, color: "var(--ink)" }}>{dog.name}</div>
-          {dog.age && <span style={{ fontSize: 11, fontFamily: "var(--font-mono)", letterSpacing: "0.12em", color: "var(--ink-3)", textTransform: "uppercase" }}>{dog.age}</span>}
+          {dog.age && <span style={{ fontSize: 11, fontFamily: "var(--font-ui)", letterSpacing: "0.08em", color: "var(--ink-3)", textTransform: "uppercase" }}>{dog.age}</span>}
         </div>
-        <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--purple-600)", fontWeight: 600, marginBottom: 10 }}>
+        <div style={{ fontFamily: "var(--font-ui)", fontSize: 11, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--purple-600)", fontWeight: 600, marginBottom: 10 }}>
           {dog.breed}
         </div>
-        {dog.isNew && <span style={{ display: "inline-block", marginBottom: 10, fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--purple-700)", background: "var(--purple-soft)", padding: "3px 9px", borderRadius: 999 }}>Just arrived</span>}
+        {dog.isNew && <span style={{ display: "inline-block", marginBottom: 10, fontFamily: "var(--font-ui)", fontSize: 10, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--purple-700)", background: "var(--purple-soft)", padding: "3px 9px", borderRadius: 999 }}>Just arrived</span>}
         <p style={{ margin: "0 0 14px", fontSize: 13, color: "var(--ink-2)", lineHeight: 1.55 }}>
           {dog.bio.length > 116 ? dog.bio.slice(0, 116).trim() + "…" : dog.bio}
         </p>
@@ -430,7 +430,7 @@ function ProfileModal({ dog, fav, onFav, onClose }) {
                 <h2 className="display" style={{ fontSize: 36, margin: 0, color: "var(--ink)" }}>{dog.name}</h2>
                 <button onClick={onFav} style={{ fontSize: 22, color: fav ? "oklch(0.55 0.2 25)" : "var(--ink-3)", lineHeight: 1 }} aria-label="Favorite">{fav ? "♥" : "♡"}</button>
               </div>
-              <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--purple-600)", fontWeight: 600, marginBottom: 20 }}>
+              <div style={{ fontFamily: "var(--font-ui)", fontSize: 12, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--purple-600)", fontWeight: 600, marginBottom: 20 }}>
                 {dog.breed}{(dog.ageText || dog.age) ? ` · ${dog.ageText || dog.age}` : ""}
               </div>
 
