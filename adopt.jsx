@@ -470,7 +470,7 @@ function MatchFeature({ result, onOpenDog, onRetake, onClear }) {
           <div className="match-alts-row">
             {alts.map((r) => (
               <button key={r.d.id} type="button" className="match-alt" onClick={() => onOpenDog(r.d.id)}>
-                <div className="match-alt-photo"><ImgS src={r.d.img} alt={r.d.name} imgWidth={160} /></div>
+                <div className="match-alt-photo"><ImgS src={r.d.img} alt={r.d.name} imgWidth={320} /></div>
                 <div>
                   <div className="match-alt-name">{r.d.name}</div>
                   <div className="match-alt-meta">{[r.d.size, r.d.age].filter(Boolean).join(" · ")}</div>
