@@ -79,12 +79,19 @@ function Magnetic({ children, strength = 0.25, ...rest }) {
   );
 }
 
-/* Live activity ticker strip */
+/* Live activity ticker strip
+   Two UX tweaks layered on top of the original CSS marquee:
+   1) Shuffle the line order once per browsing session so a returning visitor
+      doesn't see the same first three headlines every time.
+   2) Persist elapsed marquee seconds in sessionStorage so navigating away
+      and back resumes the strip mid-cycle instead of restarting at 0%.
+   Together these guarantee every headline gets seen across a session, even
+   if the visitor only spends ~10 seconds on the homepage per visit. */
 function LiveTicker() {
   // PLACEHOLDER ticker content — on-brand lines, no fabricated events.
   // Swap these for real stats/updates when available (e.g. dogs rescued this month,
   // upcoming transport, latest adoption, sponsorship milestones).
-  const items = [
+  const ITEMS = [
     "Recent Rescue Mission: Dog Meat Truck Interception. 47 dogs saved from transport to the Yulin Dog Meat Festival",
     "12 dogs have arrived from our sanctuary in China, four now with our wonderful rescue partner Animal Haven in NYC",
     "Little tripod Trip has been adopted by a wonderful family in Atlanta, living his best life with dog and human siblings",
@@ -94,6 +101,50 @@ function LiveTicker() {
     "Every survivor deserves a second chance",
     "Adopt · Sponsor · Foster · Donate",
   ];
+  const CYCLE_SEC = 55;
+  const STATE_KEY = "r2tr_ticker_v1";
+
+  const state = React.useMemo(() => {
+    // Try to resume the per-tab session
+    try {
+      const stored = JSON.parse(sessionStorage.getItem(STATE_KEY) || "null");
+      if (stored && Array.isArray(stored.order) && stored.order.length === ITEMS.length) {
+        const elapsed = (Date.now() - (stored.savedAt || Date.now())) / 1000;
+        const offset = ((stored.offset || 0) + Math.max(0, elapsed)) % CYCLE_SEC;
+        return { order: stored.order, offset };
+      }
+    } catch (e) { /* sessionStorage blocked → fall through to fresh shuffle */ }
+    // First visit this session: shuffle the line order (Fisher–Yates)
+    const order = ITEMS.map((_, i) => i);
+    for (let i = order.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const tmp = order[i]; order[i] = order[j]; order[j] = tmp;
+    }
+    return { order, offset: 0 };
+  }, []);
+
+  React.useEffect(() => {
+    // Save the current offset whenever the user leaves the page (navigates
+    // away, switches tab, closes), so the next mount can resume mid-cycle.
+    const save = () => {
+      try {
+        sessionStorage.setItem(STATE_KEY, JSON.stringify({
+          order: state.order,
+          offset: state.offset,
+          savedAt: Date.now(),
+        }));
+      } catch (e) { /* storage blocked, nothing to do */ }
+    };
+    window.addEventListener("pagehide", save);
+    document.addEventListener("visibilitychange", save);
+    return () => {
+      save();
+      window.removeEventListener("pagehide", save);
+      document.removeEventListener("visibilitychange", save);
+    };
+  }, [state]);
+
+  const items = state.order.map((i) => ITEMS[i]);
   return (
     <section style={{
       background: "var(--plum-900)", color: "var(--on-dark-2)",
@@ -102,7 +153,8 @@ function LiveTicker() {
     }}>
       <div style={{
         display: "flex", gap: 64, whiteSpace: "nowrap",
-        animation: "marquee 55s linear infinite",
+        animation: `marquee ${CYCLE_SEC}s linear infinite`,
+        animationDelay: `-${state.offset}s`,
         fontFamily: "var(--font-mono)", fontSize: 13,
       }}>
         {[...items, ...items].map((t, i) => (
