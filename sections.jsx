@@ -147,7 +147,7 @@ function Survivors({ onSponsor }) {
   const { status, animals } = useAnimals();
   const available = animals.filter((a) => a.available !== false && !isHiddenDog(a));
   const loop = available.length ? [...available, ...available] : [];
-  const dur = Math.max(40, available.length * 5); // ~5s per card
+  const dur = Math.max(80, available.length * 10); // ~10s per card
   return (
     <section id="survivors" className="section-light" style={{ padding: "56px 0 16px", position: "relative", overflow: "hidden" }}>
       <Paw className="paw-light" style={{ top: 40, left: "5%", width: 40, height: 40 }} />
