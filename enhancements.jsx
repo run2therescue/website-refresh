@@ -95,13 +95,11 @@ function LiveTicker() {
     "Recent Rescue Mission: Dog Meat Truck Interception. 47 dogs saved from transport to the Yulin Dog Meat Festival",
     "12 dogs have arrived from our sanctuary in China, four now with our wonderful rescue partner Animal Haven in NYC",
     "Little tripod Trip has been adopted by a wonderful family in Atlanta, living his best life with dog and human siblings",
-    "Run · Rescue · Repeat",
-    "Rescuing dogs from the dog meat trade",
-    "From trauma to trust",
-    "Every survivor deserves a second chance",
-    "Adopt · Sponsor · Foster · Donate",
   ];
-  const CYCLE_SEC = 55;
+  // Cycle scaled to ~7s per headline at original tempo — fewer items in the
+  // strip means we proportionally shorten the marquee duration so it doesn't
+  // crawl unnaturally slowly. Adjust upward if more headlines are added.
+  const CYCLE_SEC = 24;
   const STATE_KEY = "r2tr_ticker_v1";
 
   const state = React.useMemo(() => {
