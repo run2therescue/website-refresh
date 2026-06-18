@@ -148,9 +148,10 @@ function Survivors({ onSponsor }) {
   const PER = 4;
   const [page, setPage] = useState(0);
   const pausedRef = useRef(false);
-  const pageCount = Math.max(1, Math.ceil(available.length / PER));
-  const p = available.length ? (((page % pageCount) + pageCount) % pageCount) : 0;
-  const shown = available.slice(p * PER, p * PER + PER);
+  const pages = [];
+  for (let i = 0; i < available.length; i += PER) pages.push(available.slice(i, i + PER));
+  const pageCount = Math.max(1, pages.length);
+  const p = pages.length ? (((page % pageCount) + pageCount) % pageCount) : 0;
   const go = (dir) => setPage((prev) => prev + dir);
   useEffect(() => {
     if (status !== "ready" || pageCount <= 1) return;
@@ -213,55 +214,65 @@ function Survivors({ onSponsor }) {
           </div>
         </div>
 
-        <div className="ways-grid"
-          style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 20 }}
-          onMouseEnter={() => { pausedRef.current = true; }}
-          onMouseLeave={() => { pausedRef.current = false; }}
-        >
-          {status === "loading" && [0, 1, 2, 3].map(i => (
-            <div key={i} style={{ background: "#fff", borderRadius: 20, overflow: "hidden" }}>
-              <div style={{ aspectRatio: "4/5", background: "var(--lav-200)" }} />
-              <div style={{ padding: 20 }}>
-                <div style={{ height: 16, width: "55%", background: "var(--lav-200)", borderRadius: 6, marginBottom: 12 }} />
-                <div style={{ height: 11, width: "100%", background: "var(--lav-100)", borderRadius: 6, marginBottom: 7 }} />
-                <div style={{ height: 11, width: "80%", background: "var(--lav-100)", borderRadius: 6 }} />
-              </div>
-            </div>
-          ))}
-          {status === "error" && (
-            <p style={{ gridColumn: "1 / -1", textAlign: "center", color: "var(--ink-3)", fontSize: 14, padding: "24px 0" }}>
-              Our survivors are loading from our shelter system. Refresh in a moment to meet them.
-            </p>
-          )}
-          {status === "ready" && shown.map(d => (
-            <article key={d.id} onClick={() => onSponsor(d.name)} style={{
-              background: "#fff", borderRadius: 20, overflow: "hidden",
-              cursor: "pointer", transition: "transform .25s ease, box-shadow .25s ease",
-              display: "flex", flexDirection: "column",
-            }}
-              onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "var(--shadow)"; }}
-              onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}
-            >
-              <div style={{ aspectRatio: "4/5", overflow: "hidden", background: "var(--lav-200)" }}>
-                <Img src={d.cover} alt={d.name} />
-              </div>
-              <div style={{ padding: 20 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8, gap: 8 }}>
-                  <div className="display" style={{ fontSize: 24, color: "var(--ink)" }}>{d.name}</div>
-                  {d.ageGroup && (
-                    <span style={{
-                      fontSize: 10, fontFamily: "var(--font-mono)", letterSpacing: "0.1em", textTransform: "uppercase",
-                      color: "var(--purple-600)",
-                    }}>{d.ageGroup}</span>
-                  )}
+        {status === "ready" ? (
+          <div className="surv-viewport"
+            onMouseEnter={() => { pausedRef.current = true; }}
+            onMouseLeave={() => { pausedRef.current = false; }}
+          >
+            <div className="surv-rail" style={{ transform: `translateX(-${p * 100}%)` }}>
+              {pages.map((pg, idx) => (
+                <div className="surv-page" key={idx} aria-hidden={idx !== p}>
+                  {pg.map(d => (
+                    <article key={d.id} onClick={() => onSponsor(d.name)} style={{
+                      background: "#fff", borderRadius: 20, overflow: "hidden",
+                      cursor: "pointer", transition: "transform .25s ease, box-shadow .25s ease",
+                      display: "flex", flexDirection: "column",
+                    }}
+                      onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "var(--shadow)"; }}
+                      onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}
+                    >
+                      <div style={{ aspectRatio: "4/5", overflow: "hidden", background: "var(--lav-200)" }}>
+                        <Img src={d.cover} alt={d.name} />
+                      </div>
+                      <div style={{ padding: 20 }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8, gap: 8 }}>
+                          <div className="display" style={{ fontSize: 24, color: "var(--ink)" }}>{d.name}</div>
+                          {d.ageGroup && (
+                            <span style={{
+                              fontSize: 10, fontFamily: "var(--font-mono)", letterSpacing: "0.1em", textTransform: "uppercase",
+                              color: "var(--purple-600)",
+                            }}>{d.ageGroup}</span>
+                          )}
+                        </div>
+                        <p style={{ margin: 0, fontSize: 13, color: "var(--ink-2)", lineHeight: 1.5 }}>
+                          {d.blurb && d.blurb.length > 104 ? d.blurb.slice(0, 104).trim() + "…" : d.blurb}
+                        </p>
+                      </div>
+                    </article>
+                  ))}
                 </div>
-                <p style={{ margin: 0, fontSize: 13, color: "var(--ink-2)", lineHeight: 1.5 }}>
-                  {d.blurb && d.blurb.length > 104 ? d.blurb.slice(0, 104).trim() + "…" : d.blurb}
-                </p>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="ways-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 20 }}>
+            {status === "loading" && [0, 1, 2, 3].map(i => (
+              <div key={i} style={{ background: "#fff", borderRadius: 20, overflow: "hidden" }}>
+                <div style={{ aspectRatio: "4/5", background: "var(--lav-200)" }} />
+                <div style={{ padding: 20 }}>
+                  <div style={{ height: 16, width: "55%", background: "var(--lav-200)", borderRadius: 6, marginBottom: 12 }} />
+                  <div style={{ height: 11, width: "100%", background: "var(--lav-100)", borderRadius: 6, marginBottom: 7 }} />
+                  <div style={{ height: 11, width: "80%", background: "var(--lav-100)", borderRadius: 6 }} />
+                </div>
               </div>
-            </article>
-          ))}
-        </div>
+            ))}
+            {status === "error" && (
+              <p style={{ gridColumn: "1 / -1", textAlign: "center", color: "var(--ink-3)", fontSize: 14, padding: "24px 0" }}>
+                Our survivors are loading from our shelter system. Refresh in a moment to meet them.
+              </p>
+            )}
+          </div>
+        )}
       </div>
     </section>
   );
