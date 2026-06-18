@@ -387,16 +387,37 @@ function BotcheckS() {
 /* Ref callback for autoplay background videos. React sets `muted` as a DOM
    property only, so the attribute never reaches the markup — and mobile
    browsers refuse to autoplay a video they can't see is muted. Set the
-   attribute by hand, nudge play(), and retry once on first touch (covers
-   iOS Low Power Mode, where autoplay is deferred until a gesture). */
+   attribute by hand, nudge play(), then retry on every plausible signal
+   (data ready, viewport entry, first gesture, tab visibility) so the video
+   eventually starts even under iOS Low Power Mode or a slow first paint.
+   Note: use preload="auto" on the <video> for fastest mobile start. */
 function autoplayFixS(v) {
   if (!v) return;
   v.muted = true;
   v.defaultMuted = true;
   v.setAttribute("muted", "");
-  const tryPlay = () => { const p = v.play(); if (p && p.catch) p.catch(() => {}); };
+  let played = false;
+  const tryPlay = () => {
+    if (played || !v.paused) { played = true; return; }
+    const p = v.play();
+    if (p && p.then) p.then(() => { played = true; }).catch(() => {});
+  };
   tryPlay();
-  window.addEventListener("touchstart", tryPlay, { passive: true, once: true });
+  v.addEventListener("loadeddata", tryPlay);
+  v.addEventListener("canplay", tryPlay);
+  const opts = { passive: true };
+  window.addEventListener("touchstart", tryPlay, opts);
+  window.addEventListener("scroll", tryPlay, opts);
+  window.addEventListener("pointerdown", tryPlay, opts);
+  window.addEventListener("keydown", tryPlay);
+  const onVis = () => { if (!document.hidden) tryPlay(); };
+  document.addEventListener("visibilitychange", onVis);
+  if (typeof IntersectionObserver !== "undefined") {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) tryPlay(); });
+    });
+    io.observe(v);
+  }
 }
 
 async function submitForm(fields, formName) {

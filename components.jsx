@@ -212,10 +212,18 @@ function HeroVideoBG() {
   // Cinematic hero: real footage of rescued dogs running free, darkened so the
   // headline stays legible. Poster frame shows instantly before the video loads.
   //
-  // Mobile autoplay gotcha: React sets `muted` as a DOM *property*, so the
-  // attribute never appears in the markup — and iOS/Android only autoplay
-  // videos they can see are muted. Set the attribute by hand and nudge play();
-  // if Low Power Mode still blocks it, retry on the first touch.
+  // Mobile autoplay gotcha (battle-tested across iOS Safari, Android Chrome,
+  // Firefox iOS, and iOS Low Power Mode):
+  //  1) React sets `muted` as a DOM *property*, so the attribute never reaches
+  //     the markup — and iOS/Android only autoplay videos they can see are
+  //     muted. Set the attribute by hand.
+  //  2) `preload="auto"` on the element below forces the video to load on
+  //     page entry instead of waiting for the first scroll.
+  //  3) Initial play() can be silently rejected (Low Power Mode, slow first
+  //     paint). Retry on every plausible signal: data ready, viewport entry,
+  //     first user gesture (touch/scroll/pointer/key), and tab visibility.
+  //  4) A "played" flag stops the scroll/pointer listeners after the first
+  //     successful play so they don't fight loop playback.
   const vidRef = useRef(null);
   useEffect(() => {
     const v = vidRef.current;
@@ -223,11 +231,39 @@ function HeroVideoBG() {
     v.muted = true;
     v.defaultMuted = true;
     v.setAttribute("muted", "");
-    const tryPlay = () => { const p = v.play(); if (p && p.catch) p.catch(() => {}); };
+    let played = false;
+    const tryPlay = () => {
+      if (played || !v.paused) { played = true; return; }
+      const p = v.play();
+      if (p && p.then) p.then(() => { played = true; }).catch(() => {});
+    };
     tryPlay();
-    const onTouch = () => tryPlay();
-    window.addEventListener("touchstart", onTouch, { passive: true, once: true });
-    return () => window.removeEventListener("touchstart", onTouch);
+    v.addEventListener("loadeddata", tryPlay);
+    v.addEventListener("canplay", tryPlay);
+    const opts = { passive: true };
+    window.addEventListener("touchstart", tryPlay, opts);
+    window.addEventListener("scroll", tryPlay, opts);
+    window.addEventListener("pointerdown", tryPlay, opts);
+    window.addEventListener("keydown", tryPlay);
+    const onVis = () => { if (!document.hidden) tryPlay(); };
+    document.addEventListener("visibilitychange", onVis);
+    let io;
+    if (typeof IntersectionObserver !== "undefined") {
+      io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => { if (e.isIntersecting) tryPlay(); });
+      });
+      io.observe(v);
+    }
+    return () => {
+      v.removeEventListener("loadeddata", tryPlay);
+      v.removeEventListener("canplay", tryPlay);
+      window.removeEventListener("touchstart", tryPlay);
+      window.removeEventListener("scroll", tryPlay);
+      window.removeEventListener("pointerdown", tryPlay);
+      window.removeEventListener("keydown", tryPlay);
+      document.removeEventListener("visibilitychange", onVis);
+      if (io) io.disconnect();
+    };
   }, []);
   return (
     <div aria-hidden="true" style={{
@@ -235,7 +271,7 @@ function HeroVideoBG() {
     }}>
       <video
         ref={vidRef}
-        autoPlay muted loop playsInline
+        autoPlay muted loop playsInline preload="auto"
         poster="assets/hero-meadow-poster.jpg"
         style={{
           position: "absolute", inset: 0, width: "100%", height: "100%",

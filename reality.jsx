@@ -240,7 +240,7 @@ function RealityClips({ revealed }) {
               background: "oklch(0.16 0.03 310)", border: "1px solid var(--line-dark)",
             }}>
               <SensitiveMedia revealed={revealed}>
-                <video ref={autoplayFixS} autoPlay muted loop playsInline preload="metadata" style={{
+                <video ref={autoplayFixS} autoPlay muted loop playsInline preload="auto" style={{
                   width: "100%", height: "100%", objectFit: "cover", display: "block",
                   filter: "saturate(0.5) brightness(0.8)",
                 }}>
