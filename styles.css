@@ -597,32 +597,44 @@ html { scroll-behavior: smooth; }
 
 Add r2r-run-italicize animation styles
 
-/* Survivors preview (homepage "A few of our survivors") — the original four-up
-   grid, now on a rail that slides smoothly between pages (next four survivors). */
-.surv-viewport { overflow: hidden; padding: 8px 0 26px; }
-.surv-rail {
+/* Survivors preview (homepage "A few of our survivors") — a seamless continuous
+   marquee. The card list is rendered twice in sections.jsx and the track is
+   translated by exactly one set (-50%), so the loop never jumps. Linear timing
+   means constant speed and no jerk. Edges fade via a mask; pauses on hover. */
+.surv-marquee {
+  overflow: hidden;
+  padding: 8px 0 26px;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 3.5%, #000 96.5%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 3.5%, #000 96.5%, transparent 100%);
+}
+.surv-track {
   display: flex;
-  transition: transform .55s cubic-bezier(.16, 1, .3, 1);
+  width: max-content;
+  animation-name: survMarquee;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
   will-change: transform;
 }
-.surv-page {
-  flex: 0 0 100%;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  align-content: start;
+.surv-marquee:hover .surv-track,
+.surv-marquee:focus-within .surv-track { animation-play-state: paused; }
+@keyframes survMarquee {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
 }
-@media (prefers-reduced-motion: reduce) { .surv-rail { transition: none; } }
-.survivor-arrow {
-  width: 38px; height: 38px;
-  border-radius: 50%;
-  border: 1.5px solid var(--line-light);
+.surv-card-m {
+  flex: 0 0 300px;
+  margin-right: 20px;
   background: #fff;
-  color: var(--purple-600);
-  font-size: 22px; line-height: 1;
+  border-radius: 20px;
+  overflow: hidden;
   cursor: pointer;
-  display: inline-flex; align-items: center; justify-content: center;
-  transition: background .2s ease, border-color .2s ease, color .2s ease, transform .15s ease;
+  display: flex;
+  flex-direction: column;
+  transition: transform .25s ease, box-shadow .25s ease;
 }
-.survivor-arrow:hover { background: var(--purple-500); border-color: var(--purple-500); color: #fff; }
-.survivor-arrow:active { transform: scale(0.94); }
+.surv-card-m:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+@media (max-width: 560px) { .surv-card-m { flex-basis: 250px; } }
+@media (prefers-reduced-motion: reduce) {
+  .surv-marquee { overflow-x: auto; }
+  .surv-track { animation: none; }
+}

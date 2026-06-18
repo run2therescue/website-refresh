@@ -18,7 +18,7 @@
 const { useState: spS, useEffect: spE } = React;
 
 /* Zeffy hosted sponsorship form (recurring donation). */
-const SPONSOR_URL = "https://www.zeffy.com/en-US/donation-form/help-the-abandoned-dogs-come-home";
+const SPONSOR_URL = "https://www.zeffy.com/en-US/donation-form/sponsor-a-dog-5";
 
 /* OPTION-1 UPGRADE HOOK — leave null until R2R adds a required text question to
    the Zeffy form (e.g. "Which survivor are you sponsoring?"). Once added, Zeffy

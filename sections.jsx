@@ -140,25 +140,14 @@ function Mission() {
 }
 
 function Survivors({ onSponsor }) {
-  // Live from Shelterluv — the original four-up preview, now paged: the arrows
-  // swap in the next four survivors (Rocky, Polar, Opus, …). A gentle
-  // auto-advance pages every 6s, pauses on hover, and respects reduced-motion.
+  // Live from Shelterluv — a continuous marquee that scrolls survivors past at a
+  // steady, gentle pace and loops seamlessly (the list is rendered twice and the
+  // track translates exactly one set). Constant linear speed = no jerk. Pauses on
+  // hover; reduced-motion turns it into a normal horizontal scroll.
   const { status, animals } = useAnimals();
   const available = animals.filter((a) => a.available !== false && !isHiddenDog(a));
-  const PER = 4;
-  const [page, setPage] = useState(0);
-  const pausedRef = useRef(false);
-  const pages = [];
-  for (let i = 0; i < available.length; i += PER) pages.push(available.slice(i, i + PER));
-  const pageCount = Math.max(1, pages.length);
-  const p = pages.length ? (((page % pageCount) + pageCount) % pageCount) : 0;
-  const go = (dir) => setPage((prev) => prev + dir);
-  useEffect(() => {
-    if (status !== "ready" || pageCount <= 1) return;
-    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const id = setInterval(() => { if (!pausedRef.current) setPage((prev) => prev + 1); }, 6000);
-    return () => clearInterval(id);
-  }, [status, pageCount]);
+  const loop = available.length ? [...available, ...available] : [];
+  const dur = Math.max(40, available.length * 5); // ~5s per card
   return (
     <section id="survivors" className="section-light" style={{ padding: "56px 0 16px", position: "relative", overflow: "hidden" }}>
       <Paw className="paw-light" style={{ top: 40, left: "5%", width: 40, height: 40 }} />
@@ -189,68 +178,46 @@ function Survivors({ onSponsor }) {
         </div>
 
         <div style={{
-          display: "flex", justifyContent: "space-between", alignItems: "center",
+          display: "flex", justifyContent: "space-between", alignItems: "baseline",
           flexWrap: "wrap", gap: "8px 16px", margin: "0 0 20px",
         }}>
           <h3 className="display" style={{ fontSize: "clamp(21px, 2.5vw, 30px)", margin: 0, color: "var(--ink)" }}>
             A few of our survivors
           </h3>
-          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-            {status === "ready" && available.length > 4 && (
-              <div style={{ display: "flex", gap: 8 }}>
-                <button type="button" className="survivor-arrow" aria-label="Previous survivors" onClick={() => go(-1)}>‹</button>
-                <button type="button" className="survivor-arrow" aria-label="Next survivors" onClick={() => go(1)}>›</button>
-              </div>
-            )}
-            <a href="/adopt" style={{
-              display: "inline-flex", alignItems: "center", gap: 6,
-              fontWeight: 600, fontSize: 14, color: "var(--purple-600)", transition: "color .2s", whiteSpace: "nowrap",
-            }}
-              onMouseEnter={e => { e.currentTarget.style.color = "var(--purple-700)"; }}
-              onMouseLeave={e => { e.currentTarget.style.color = "var(--purple-600)"; }}
-            >
-              Meet all{available.length ? ` ${available.length}` : ""} survivors <span className="arrow">→</span>
-            </a>
-          </div>
+          <a href="/adopt" style={{
+            display: "inline-flex", alignItems: "center", gap: 6,
+            fontWeight: 600, fontSize: 14, color: "var(--purple-600)", transition: "color .2s", whiteSpace: "nowrap",
+          }}
+            onMouseEnter={e => { e.currentTarget.style.color = "var(--purple-700)"; }}
+            onMouseLeave={e => { e.currentTarget.style.color = "var(--purple-600)"; }}
+          >
+            Meet all{available.length ? ` ${available.length}` : ""} survivors <span className="arrow">→</span>
+          </a>
         </div>
 
         {status === "ready" ? (
-          <div className="surv-viewport"
-            onMouseEnter={() => { pausedRef.current = true; }}
-            onMouseLeave={() => { pausedRef.current = false; }}
-          >
-            <div className="surv-rail" style={{ transform: `translateX(-${p * 100}%)` }}>
-              {pages.map((pg, idx) => (
-                <div className="surv-page" key={idx} aria-hidden={idx !== p}>
-                  {pg.map(d => (
-                    <article key={d.id} onClick={() => onSponsor(d.name)} style={{
-                      background: "#fff", borderRadius: 20, overflow: "hidden",
-                      cursor: "pointer", transition: "transform .25s ease, box-shadow .25s ease",
-                      display: "flex", flexDirection: "column",
-                    }}
-                      onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "var(--shadow)"; }}
-                      onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}
-                    >
-                      <div style={{ aspectRatio: "4/5", overflow: "hidden", background: "var(--lav-200)" }}>
-                        <Img src={d.cover} alt={d.name} />
-                      </div>
-                      <div style={{ padding: 20 }}>
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8, gap: 8 }}>
-                          <div className="display" style={{ fontSize: 24, color: "var(--ink)" }}>{d.name}</div>
-                          {d.ageGroup && (
-                            <span style={{
-                              fontSize: 10, fontFamily: "var(--font-mono)", letterSpacing: "0.1em", textTransform: "uppercase",
-                              color: "var(--purple-600)",
-                            }}>{d.ageGroup}</span>
-                          )}
-                        </div>
-                        <p style={{ margin: 0, fontSize: 13, color: "var(--ink-2)", lineHeight: 1.5 }}>
-                          {d.blurb && d.blurb.length > 104 ? d.blurb.slice(0, 104).trim() + "…" : d.blurb}
-                        </p>
-                      </div>
-                    </article>
-                  ))}
-                </div>
+          <div className="surv-marquee">
+            <div className="surv-track" style={{ animationDuration: `${dur}s` }}>
+              {loop.map((d, i) => (
+                <article key={`${d.id}-${i}`} className="surv-card-m" aria-hidden={i >= available.length ? true : undefined} onClick={() => onSponsor(d.name)}>
+                  <div style={{ aspectRatio: "4/5", overflow: "hidden", background: "var(--lav-200)" }}>
+                    <Img src={d.cover} alt={d.name} />
+                  </div>
+                  <div style={{ padding: 20 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8, gap: 8 }}>
+                      <div className="display" style={{ fontSize: 24, color: "var(--ink)" }}>{d.name}</div>
+                      {d.ageGroup && (
+                        <span style={{
+                          fontSize: 10, fontFamily: "var(--font-mono)", letterSpacing: "0.1em", textTransform: "uppercase",
+                          color: "var(--purple-600)",
+                        }}>{d.ageGroup}</span>
+                      )}
+                    </div>
+                    <p style={{ margin: 0, fontSize: 13, color: "var(--ink-2)", lineHeight: 1.5 }}>
+                      {d.blurb && d.blurb.length > 104 ? d.blurb.slice(0, 104).trim() + "…" : d.blurb}
+                    </p>
+                  </div>
+                </article>
               ))}
             </div>
           </div>
