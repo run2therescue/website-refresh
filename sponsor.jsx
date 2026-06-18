@@ -48,14 +48,17 @@ function buildSponsorUrl(dog, amount) {
   return u.toString();
 }
 
-/* Gift tiers — surfaced visibly in the "Become a Sponsor Angel" section AND
-   offered inside the confirm modal. Cadence is honest: the small tiers are
-   monthly sponsorships; flying a dog home is a one-time cost (~airfare + CDC
-   fees), so it is NOT framed as "/mo". */
+/* Ways to give, offered inside the confirm modal. Cadence is honest: the two
+   Sponsor Angel options are monthly (food, medical, shelter for one dog); the
+   flights and CDC fees are one-time costs, so they are NOT framed as "/mo".
+   Flight cost scales with the dog's size (airline crate + cargo). */
 const SPONSOR_AMOUNTS = [
-  { value: 15, label: "Paw", note: "feeds a dog for a week", cadence: "mo" },
-  { value: 35, label: "Heart", note: "vaccines & meds", featured: true, cadence: "mo" },
-  { value: 2500, label: "Lifeline", note: "flies a dog home", cadence: "once" },
+  { value: 65, note: "a small dog's care", cadence: "mo", featured: true },
+  { value: 85, note: "a large dog's care", cadence: "mo" },
+  { value: 900, note: "CDC fees, one dog", cadence: "once" },
+  { value: 1500, note: "a small dog's flight", cadence: "once" },
+  { value: 2000, note: "a med/large dog's flight", cadence: "once" },
+  { value: 3000, note: "an XL dog's flight", cadence: "once" },
 ];
 const perLabel = (cadence) => (cadence === "once" ? "one-time" : "/mo");
 const cadenceWord = (cadence) => (cadence === "once" ? "One-time" : "Monthly");
@@ -64,8 +67,8 @@ const cadenceWord = (cadence) => (cadence === "once" ? "One-time" : "Monthly");
    nothing is buried below the grid). The donor confirms the amount right here,
    sees exactly what happens next on Zeffy, then hands off in one tap. */
 function SponsorConfirmModal({ open, dog, amount, onClose }) {
-  const [amt, setAmt] = spS(amount || 35);
-  spE(() => { if (open) setAmt(amount || 35); }, [open, amount]);
+  const [amt, setAmt] = spS(amount || 65);
+  spE(() => { if (open) setAmt(amount || 65); }, [open, amount]);
   spE(() => {
     if (!open) return;
     const onKey = (e) => { if (e.key === "Escape") onClose(); };
@@ -117,7 +120,7 @@ function SponsorConfirmModal({ open, dog, amount, onClose }) {
           <p className="sp-confirm-handoff">
             {amtCadence === "once" ? (
               <>Next, our secure checkout (powered by <strong>Zeffy</strong>, 100% fee-free) opens
-              with your <strong>${amt.toLocaleString()}</strong> gift already filled in to help fly {dog.name} home.</>
+              with your <strong>${amt.toLocaleString()}</strong> gift already filled in to help bring {dog.name} home.</>
             ) : (
               <>Next, our secure checkout (powered by <strong>Zeffy</strong>, 100% fee-free) opens
               with your <strong>${amt}</strong> already filled in. Just tap <strong>“Monthly”</strong> there
@@ -187,7 +190,7 @@ function SponsorStart({ selectedDog, onSponsor }) {
             <div>
               <MagneticS>
                 {selectedDog ? (
-                  <button type="button" onClick={() => onSponsor(selectedDog, 35)} className="btn btn-accent" style={{ fontSize: 15 }}>
+                  <button type="button" onClick={() => onSponsor(selectedDog, 65)} className="btn btn-accent" style={{ fontSize: 15 }}>
                     {ctaLabel}
                   </button>
                 ) : (
@@ -227,7 +230,7 @@ function SponsorPicker({ animals, status, selectedDog, setSelectedDog, onSponsor
   const choose = (d) => {
     const dog = { id: d.id, name: d.name, slug: d.slug, photo: d.img };
     setSelectedDog(dog);
-    onSponsor(dog, 35); // pop the modal right away
+    onSponsor(dog, 65); // pop the modal right away
   };
   return (
     <section id="pick" className="sponsor-picker">
@@ -290,7 +293,7 @@ function SponsorPage() {
 
   // The "Different Dogs" strip above dispatches this to open the sponsor flow here.
   spE(() => {
-    const open = (e) => { if (e.detail) { setSelectedDog(e.detail); setConfirm({ dog: e.detail, amount: 35 }); } };
+    const open = (e) => { if (e.detail) { setSelectedDog(e.detail); setConfirm({ dog: e.detail, amount: 65 }); } };
     window.addEventListener("r2r-open-dog", open);
     return () => window.removeEventListener("r2r-open-dog", open);
   }, []);

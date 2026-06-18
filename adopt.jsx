@@ -68,7 +68,7 @@ function AdoptHeroFilter() {
 
         <div style={{ display: "flex", justifyContent: "center", gap: 48, marginTop: 40, flexWrap: "wrap" }}>
           <HeroStat num={count || 0} label="Dogs waiting" />
-          <HeroStat num={300} suffix="+" label="Adopted since 2024" />
+          <HeroStat num={220} suffix="+" label="Adopted since 2024" />
           <HeroStat num={2} label="Years rescuing" />
         </div>
       </div>

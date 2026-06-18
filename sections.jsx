@@ -140,10 +140,40 @@ function Mission() {
 }
 
 function Survivors({ onSponsor }) {
-  // Live from Shelterluv — a four-dog preview of the full Adopt page.
+  // Live from Shelterluv — a horizontal carousel of every available survivor,
+  // four per view on desktop. Prev/next arrows plus a gentle auto-advance that
+  // pauses on hover/focus and respects prefers-reduced-motion.
   const { status, animals } = useAnimals();
   const available = animals.filter((a) => a.available !== false && !isHiddenDog(a));
-  const dogs = available.slice(0, 4);
+  const trackRef = useRef(null);
+  const scrollByPage = (dir) => {
+    const el = trackRef.current;
+    if (el) el.scrollBy({ left: dir * el.clientWidth * 0.85, behavior: "smooth" });
+  };
+  useEffect(() => {
+    const el = trackRef.current;
+    if (!el || status !== "ready" || available.length <= 4) return;
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let paused = false;
+    const enter = () => { paused = true; };
+    const leave = () => { paused = false; };
+    el.addEventListener("pointerenter", enter);
+    el.addEventListener("pointerleave", leave);
+    el.addEventListener("focusin", enter);
+    const id = setInterval(() => {
+      if (paused) return;
+      const node = trackRef.current;
+      if (!node) return;
+      const atEnd = node.scrollLeft + node.clientWidth >= node.scrollWidth - 8;
+      node.scrollTo({ left: atEnd ? 0 : node.scrollLeft + node.clientWidth * 0.85, behavior: "smooth" });
+    }, 6000);
+    return () => {
+      clearInterval(id);
+      el.removeEventListener("pointerenter", enter);
+      el.removeEventListener("pointerleave", leave);
+      el.removeEventListener("focusin", enter);
+    };
+  }, [status, available.length]);
   return (
     <section id="survivors" className="section-light" style={{ padding: "56px 0 16px", position: "relative", overflow: "hidden" }}>
       <Paw className="paw-light" style={{ top: 40, left: "5%", width: 40, height: 40 }} />
@@ -174,28 +204,34 @@ function Survivors({ onSponsor }) {
         </div>
 
         <div style={{
-          display: "flex", justifyContent: "space-between", alignItems: "baseline",
+          display: "flex", justifyContent: "space-between", alignItems: "center",
           flexWrap: "wrap", gap: "8px 16px", margin: "0 0 20px",
         }}>
           <h3 className="display" style={{ fontSize: "clamp(21px, 2.5vw, 30px)", margin: 0, color: "var(--ink)" }}>
             A few of our survivors
           </h3>
-          <a href="/adopt" style={{
-            display: "inline-flex", alignItems: "center", gap: 6,
-            fontWeight: 600, fontSize: 14, color: "var(--purple-600)", transition: "color .2s",
-          }}
-            onMouseEnter={e => { e.currentTarget.style.color = "var(--purple-700)"; }}
-            onMouseLeave={e => { e.currentTarget.style.color = "var(--purple-600)"; }}
-          >
-            Meet all{available.length ? ` ${available.length}` : ""} survivors <span className="arrow">→</span>
-          </a>
+          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            {status === "ready" && available.length > 4 && (
+              <div style={{ display: "flex", gap: 8 }}>
+                <button type="button" className="survivor-arrow" aria-label="Previous survivors" onClick={() => scrollByPage(-1)}>‹</button>
+                <button type="button" className="survivor-arrow" aria-label="Next survivors" onClick={() => scrollByPage(1)}>›</button>
+              </div>
+            )}
+            <a href="/adopt" style={{
+              display: "inline-flex", alignItems: "center", gap: 6,
+              fontWeight: 600, fontSize: 14, color: "var(--purple-600)", transition: "color .2s", whiteSpace: "nowrap",
+            }}
+              onMouseEnter={e => { e.currentTarget.style.color = "var(--purple-700)"; }}
+              onMouseLeave={e => { e.currentTarget.style.color = "var(--purple-600)"; }}
+            >
+              Meet all{available.length ? ` ${available.length}` : ""} survivors <span className="arrow">→</span>
+            </a>
+          </div>
         </div>
 
-        <div className="ways-grid" style={{
-          display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 20,
-        }}>
-          {status === "loading" && [0, 1, 2, 3].map(i => (
-            <div key={i} style={{ background: "#fff", borderRadius: 20, overflow: "hidden" }}>
+        <div className="survivor-track" ref={trackRef}>
+          {status === "loading" && [0, 1, 2, 3, 4].map(i => (
+            <div key={i} className="survivor-card survivor-skeleton" aria-hidden="true">
               <div style={{ aspectRatio: "4/5", background: "var(--lav-200)" }} />
               <div style={{ padding: 20 }}>
                 <div style={{ height: 16, width: "55%", background: "var(--lav-200)", borderRadius: 6, marginBottom: 12 }} />
@@ -205,19 +241,12 @@ function Survivors({ onSponsor }) {
             </div>
           ))}
           {status === "error" && (
-            <p style={{ gridColumn: "1 / -1", textAlign: "center", color: "var(--ink-3)", fontSize: 14, padding: "24px 0" }}>
+            <p style={{ flex: "1 1 100%", textAlign: "center", color: "var(--ink-3)", fontSize: 14, padding: "24px 0" }}>
               Our survivors are loading from our shelter system. Refresh in a moment to meet them.
             </p>
           )}
-          {status === "ready" && dogs.map(d => (
-            <article key={d.id} className="reveal" onClick={() => onSponsor(d.name)} style={{
-              background: "#fff", borderRadius: 20, overflow: "hidden",
-              cursor: "pointer", transition: "transform .25s ease, box-shadow .25s ease",
-              display: "flex", flexDirection: "column",
-            }}
-              onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "var(--shadow)"; }}
-              onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}
-            >
+          {status === "ready" && available.map(d => (
+            <article key={d.id} className="survivor-card" onClick={() => onSponsor(d.name)}>
               <div style={{ aspectRatio: "4/5", overflow: "hidden", background: "var(--lav-200)" }}>
                 <Img src={d.cover} alt={d.name} />
               </div>

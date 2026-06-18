@@ -596,3 +596,47 @@ html { scroll-behavior: smooth; }
    }
 
 Add r2r-run-italicize animation styles
+
+/* Survivors carousel (homepage "A few of our survivors") --------------------
+   Horizontal scroll-snap track, four cards per view on desktop, with arrow
+   controls and a gentle auto-advance handled in sections.jsx. */
+.survivor-track {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 4px 2px 10px;
+  margin: 0 -2px;
+}
+.survivor-track::-webkit-scrollbar { display: none; }
+.survivor-card {
+  flex: 0 0 calc((100% - 60px) / 4);
+  scroll-snap-align: start;
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.survivor-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+.survivor-skeleton { cursor: default; }
+@media (max-width: 900px) { .survivor-card { flex-basis: calc((100% - 20px) / 2); } }
+@media (max-width: 560px) { .survivor-card { flex-basis: 82%; } }
+.survivor-arrow {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  border: 1.5px solid var(--line-light);
+  background: #fff;
+  color: var(--purple-600);
+  font-size: 22px; line-height: 1;
+  cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background .2s ease, border-color .2s ease, color .2s ease, transform .15s ease;
+}
+.survivor-arrow:hover { background: var(--purple-500); border-color: var(--purple-500); color: #fff; }
+.survivor-arrow:active { transform: scale(0.94); }

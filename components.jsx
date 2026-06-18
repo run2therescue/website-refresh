@@ -342,8 +342,8 @@ function HeroCentered({ onDonate }) {
           maxWidth: 820, margin: "0", paddingTop: 32,
           borderTop: "1px solid var(--line-dark)",
         }}>
-          <Stat num="600+" label="Dogs rescued" />
-          <Stat num="300+" label="Forever homes" />
+          <Stat num="650+" label="Dogs rescued" />
+          <Stat num="220+" label="Forever homes" />
           <Stat num="2" label="Years on the ground" />
         </div>
       </div>
