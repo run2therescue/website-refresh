@@ -150,11 +150,9 @@ function LiveTicker() {
       borderTop: "1px solid var(--line-dark)", borderBottom: "1px solid var(--line-dark)",
       padding: "16px 0", overflow: "hidden", position: "relative",
     }}>
-      <div style={{
-        display: "flex", gap: 64, whiteSpace: "nowrap",
-        animation: `marquee ${CYCLE_SEC}s linear infinite`,
+      <div className="r2tr-ticker-track" style={{
+        animationDuration: `${CYCLE_SEC}s`,
         animationDelay: `-${state.offset}s`,
-        fontFamily: "var(--font-mono)", fontSize: 13,
       }}>
         {[...items, ...items].map((t, i) => (
           <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: 12 }}>
@@ -169,6 +167,22 @@ function LiveTicker() {
         ))}
       </div>
       <style>{`
+        .r2tr-ticker-track {
+          display: flex; gap: 64px; white-space: nowrap;
+          animation-name: marquee; animation-timing-function: linear; animation-iteration-count: infinite;
+          font-family: var(--font-mono); font-size: 13px;
+          will-change: transform;
+        }
+        @media (max-width: 640px) {
+          .r2tr-ticker-track {
+            gap: 28px;
+            font-size: 11px;
+            /* On mobile the track length is much shorter, so the same 28s
+               desktop cycle drags. Halve the cycle so headlines move at a
+               readable but lively pace. */
+            animation-duration: calc(var(--ticker-cycle, 28s) * 0.5) !important;
+          }
+        }
         @keyframes marquee { from { transform: translateX(0) } to { transform: translateX(-50%) } }
         @keyframes pulse {
           0% { box-shadow: 0 0 0 0 oklch(0.72 0.14 305 / 0.6); }
@@ -180,21 +194,25 @@ function LiveTicker() {
   );
 }
 
-/* Interactive impact calculator */
+/* Interactive impact calculator
+   Discrete six-tier ladder backed by actual line items in our rescue budget,
+   so a donor can see exactly which line their gift would cover. The slider's
+   underlying input is min=0, max=5, step=1 — visual feedback is smooth but
+   only six positions are reachable. Tiers are ordered low → high; default
+   is the middle "food and shelter for one month" tier so the panel opens at
+   a meaningful number, not the minimum. */
 function ImpactCalc({ onDonate }) {
-  const [amount, setAmount] = React.useState(50);
-  const outcomes = [
-    { at: 10, text: "covers a week of food for a survivor" },
-    { at: 25, text: "funds a full vet check-up" },
-    { at: 50, text: "provides a month of care + food" },
-    { at: 120, text: "covers heartworm treatment" },
-    { at: 250, text: "sponsors a full medical recovery" },
-    { at: 500, text: "pays for one rescue flight home" },
-    { at: 1000, text: "saves two dogs from a meat farm" },
-    { at: 2500, text: "covers airfare and CDC fees for one dog" },
+  const TIERS = [
+    { value: 15,   text: "buys a bag of treats for the dogs" },
+    { value: 30,   text: "covers flea and tick for one month" },
+    { value: 75,   text: "provides food and shelter for one month" },
+    { value: 150,  text: "covers vaccinations, sterilization, and microchip" },
+    { value: 900,  text: "pays for the CDC fees on a rescue" },
+    { value: 2500, text: "funds one freedom flight home" },
   ];
-  const outcome = outcomes.slice().reverse().find(o => amount >= o.at) || outcomes[0];
-  const dogsHelped = Math.max(1, Math.round(amount / 50));
+  const [idx, setIdx] = React.useState(2);
+  const amount = TIERS[idx].value;
+  const outcome = TIERS[idx];
 
   return (
     <section className="section-light" style={{ padding: "56px 0", position: "relative", overflow: "hidden" }}>
@@ -231,15 +249,37 @@ function ImpactCalc({ onDonate }) {
                 <span style={{ fontSize: 14, color: "var(--on-dark-3)", fontFamily: "var(--font-mono)" }}>one-time</span>
               </div>
               <input
-                type="range" min={10} max={2500} step={10} value={amount}
-                onChange={e => setAmount(Number(e.target.value))}
+                type="range" min={0} max={TIERS.length - 1} step={1} value={idx}
+                onChange={e => setIdx(Number(e.target.value))}
+                aria-valuetext={`$${amount.toLocaleString()} — ${outcome.text}`}
                 style={{
                   width: "100%", height: 4, borderRadius: 999,
-                  background: `linear-gradient(to right, var(--purple-400) ${(amount - 10) / 24.9}%, var(--plum-700) ${(amount - 10) / 24.9}%)`,
+                  background: `linear-gradient(to right, var(--purple-400) ${(idx / (TIERS.length - 1)) * 100}%, var(--plum-700) ${(idx / (TIERS.length - 1)) * 100}%)`,
                   appearance: "none", WebkitAppearance: "none", outline: "none", cursor: "pointer",
-                  marginBottom: 28,
+                  marginBottom: 14,
                 }}
               />
+              <div style={{
+                display: "flex", justifyContent: "space-between", marginBottom: 22,
+                fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--on-dark-3)",
+              }} aria-hidden="true">
+                {TIERS.map((t, i) => (
+                  <button
+                    key={t.value}
+                    type="button"
+                    onClick={() => setIdx(i)}
+                    style={{
+                      background: "transparent", border: 0, padding: "4px 6px",
+                      color: i === idx ? "var(--purple-400)" : "var(--on-dark-3)",
+                      fontWeight: i === idx ? 700 : 500,
+                      fontFamily: "var(--font-mono)", fontSize: 11, cursor: "pointer",
+                      transition: "color .15s ease",
+                    }}
+                  >
+                    ${t.value < 1000 ? t.value : (t.value / 1000) + "K"}
+                  </button>
+                ))}
+              </div>
               <div style={{
                 padding: "18px 22px", borderRadius: 16,
                 background: "oklch(0.72 0.14 305 / 0.15)",
