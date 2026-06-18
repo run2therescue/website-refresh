@@ -181,6 +181,9 @@ function AdoptDirectory() {
     try { return JSON.parse(localStorage.getItem("r2r:favs") || "[]"); } catch { return []; }
   });
   const [selectedId, setSelectedId] = uS(null);
+  const [matcherOpen, setMatcherOpen] = uS(false);
+  const [matchResult, setMatchResult] = uS(null);
+  const matchPool = uM(() => dogs.filter((d) => !isHiddenDog(d)), [dogs]);
 
   uE(() => { localStorage.setItem("r2r:favs", JSON.stringify(favs)); }, [favs]);
 
@@ -271,6 +274,12 @@ function AdoptDirectory() {
           {status === "ready" && dogs.length > 0 && <SortMenu sort={sort} setSort={setSort} />}
         </div>
 
+        {status === "ready" && matchPool.length > 0 && (
+          matchResult
+            ? <MatchFeature result={matchResult} onOpenDog={setSelectedId} onRetake={() => setMatcherOpen(true)} onClear={() => setMatchResult(null)} />
+            : <MatchCTA onStart={() => setMatcherOpen(true)} />
+        )}
+
         {status === "ready" && dogs.length > 0 && (
           <FilterBarInner filters={filters} setFilters={setFilters} count={filtered.length} />
         )}
@@ -311,8 +320,167 @@ function AdoptDirectory() {
         )}
       </div>
 
+      {matcherOpen && <DogMatcher dogs={matchPool} onClose={() => setMatcherOpen(false)} onComplete={(r) => { setMatchResult(r); setMatcherOpen(false); }} />}
       {selected && <ProfileModal dog={selected} fav={favs.includes(selected.id)} onFav={() => toggleFav(selected.id)} onClose={() => setSelectedId(null)} />}
     </section>
+  );
+}
+
+/* ---- Find-your-match quiz ----------------------------------------------
+   Three single-tap questions, then the best-scoring live dog is featured at the
+   top of the page. Every question has an "Any/Skip" escape so it never becomes a
+   friction point; nothing is required and results are instant. */
+const MATCH_STEPS = [
+  { key: "home", q: "Who's at home?", sub: "We'll favor dogs who do well with them.", opts: [
+    { v: "kids", label: "Kids" }, { v: "dogs", label: "Another dog" },
+    { v: "cats", label: "A cat" }, { v: "any", label: "Just us" },
+  ]},
+  { key: "size", q: "What size feels right?", sub: "Pick the build that fits your space.", opts: [
+    { v: "Small", label: "Small" }, { v: "Medium", label: "Medium" },
+    { v: "Large", label: "Large" }, { v: "any", label: "Any size" },
+  ]},
+  { key: "vibe", q: "What's your speed?", sub: "From bouncy pup to couch companion.", opts: [
+    { v: "puppy", label: "Playful pup" }, { v: "adult", label: "Easygoing" },
+    { v: "senior", label: "Calm & cuddly" }, { v: "any", label: "Any age" },
+  ]},
+];
+
+function scoreDog(d, ans) {
+  let score = 0, max = 0;
+  const reasons = [];
+  if (ans.home && ans.home !== "any") {
+    max++;
+    if ((d.good || []).includes(ans.home)) { score++; reasons.push(`Good with ${ans.home}`); }
+  }
+  if (ans.size && ans.size !== "any") {
+    max++;
+    if (d.size === ans.size) { score++; reasons.push(`${ans.size} size`); }
+  }
+  if (ans.vibe && ans.vibe !== "any") {
+    max++;
+    const ok = ans.vibe === "puppy" ? ["Puppy", "Young"].includes(d.age)
+      : ans.vibe === "adult" ? ["Young", "Adult"].includes(d.age)
+      : ["Adult", "Senior"].includes(d.age);
+    if (ok) { score++; reasons.push(d.age || "Good fit"); }
+  }
+  return { score, max, reasons };
+}
+function rankMatches(dogs, ans) {
+  return dogs
+    .map((d) => ({ d, ...scoreDog(d, ans) }))
+    .sort((a, b) => (b.score - a.score) || ((b.d.daysInCare || 0) - (a.d.daysInCare || 0)))
+    .slice(0, 6);
+}
+function matchLabel(score, max) {
+  if (max === 0) return "Worth meeting";
+  if (score === max) return "Perfect match";
+  if (score / max >= 0.5) return "Great match";
+  return "Good match";
+}
+
+function DogMatcher({ dogs, onClose, onComplete }) {
+  const [step, setStep] = uS(0);
+  const [ans, setAns] = uS({ home: null, size: null, vibe: null });
+  uE(() => {
+    const onKey = (e) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => { document.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
+  }, []);
+  const s = MATCH_STEPS[step];
+  const pick = (v) => {
+    const next = { ...ans, [s.key]: v };
+    setAns(next);
+    if (step < MATCH_STEPS.length - 1) setStep(step + 1);
+    else onComplete({ answers: next, ranked: rankMatches(dogs, next) });
+  };
+  return (
+    <div className="modal-backdrop" onClick={onClose}>
+      <div className="match-modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label="Find your match">
+        <button onClick={onClose} aria-label="Close" className="match-close">×</button>
+        <div className="match-eyebrow"><PawGlyphS />Find your match</div>
+        <div className="match-dots">
+          {MATCH_STEPS.map((_, i) => <span key={i} className={`match-dot ${i <= step ? "on" : ""}`} />)}
+        </div>
+        <h3 className="display match-q">{s.q}</h3>
+        <p className="match-sub">{s.sub}</p>
+        <div className="match-opts">
+          {s.opts.map((o) => (
+            <button key={o.v} type="button" className="match-opt" onClick={() => pick(o.v)}>{o.label}</button>
+          ))}
+        </div>
+        <div className="match-foot">
+          {step > 0
+            ? <button type="button" className="match-back" onClick={() => setStep(step - 1)}>← Back</button>
+            : <span />}
+          <button type="button" className="match-skip" onClick={() => pick("any")}>Skip</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MatchCTA({ onStart }) {
+  return (
+    <div className="match-cta">
+      <div>
+        <div className="match-cta-title">Not sure where to start?</div>
+        <div className="match-cta-sub">Answer three quick questions and we'll surface your best match.</div>
+      </div>
+      <button type="button" className="btn btn-accent" onClick={onStart}>
+        <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}><PawGlyphS />Find your match</span>
+      </button>
+    </div>
+  );
+}
+
+function MatchFeature({ result, onOpenDog, onRetake, onClear }) {
+  const ranked = (result && result.ranked) || [];
+  if (!ranked.length) return null;
+  const top = ranked[0];
+  const d = top.d;
+  const alts = ranked.slice(1, 4);
+  return (
+    <div className="match-feature">
+      <button className="match-feature-clear" onClick={onClear} aria-label="Clear match">×</button>
+      <div className="match-feature-main">
+        <div className="match-feature-photo" onClick={() => onOpenDog(d.id)} role="button" aria-label={`Open ${d.name}`}>
+          <ImgS src={d.img} alt={d.name} imgWidth={640} />
+          <span className="tag tag-new match-feature-badge">{matchLabel(top.score, top.max)}</span>
+        </div>
+        <div className="match-feature-body">
+          <div className="match-eyebrow"><PawGlyphS />Your match</div>
+          <h3 className="display match-feature-name">{d.name}</h3>
+          <div className="match-feature-meta">{[d.breed, d.size, d.age].filter(Boolean).join(" · ")}</div>
+          <p className="match-feature-bio">{d.bio && d.bio.length > 150 ? d.bio.slice(0, 150).trim() + "…" : d.bio}</p>
+          {top.reasons.length > 0 && (
+            <div className="match-feature-why">
+              {top.reasons.map((r, i) => <span key={i} className="tag tag-good" style={{ textTransform: "capitalize" }}>{r}</span>)}
+            </div>
+          )}
+          <div className="match-feature-actions">
+            <button className="btn btn-accent" onClick={() => onOpenDog(d.id)}>Meet {d.name} <span className="arrow">→</span></button>
+            <button type="button" className="match-retake" onClick={onRetake}>Retake quiz</button>
+          </div>
+        </div>
+      </div>
+      {alts.length > 0 && (
+        <div className="match-alts">
+          <div className="match-alts-label">Other dogs worth meeting</div>
+          <div className="match-alts-row">
+            {alts.map((r) => (
+              <button key={r.d.id} type="button" className="match-alt" onClick={() => onOpenDog(r.d.id)}>
+                <div className="match-alt-photo"><ImgS src={r.d.img} alt={r.d.name} imgWidth={160} /></div>
+                <div>
+                  <div className="match-alt-name">{r.d.name}</div>
+                  <div className="match-alt-meta">{[r.d.size, r.d.age].filter(Boolean).join(" · ")}</div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 

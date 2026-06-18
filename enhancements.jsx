@@ -85,6 +85,9 @@ function LiveTicker() {
   // Swap these for real stats/updates when available (e.g. dogs rescued this month,
   // upcoming transport, latest adoption, sponsorship milestones).
   const items = [
+    "Recent Rescue Mission: Dog Meat Truck Interception. 47 dogs saved from transport to the Yulin Dog Meat Festival",
+    "12 dogs have arrived from our sanctuary in China, four now with our wonderful rescue partner Animal Haven in NYC",
+    "Little tripod Trip has been adopted by a wonderful family in Atlanta, living his best life with dog and human siblings",
     "Run · Rescue · Repeat",
     "Rescuing dogs from the dog meat trade",
     "From trauma to trust",
