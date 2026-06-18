@@ -36,7 +36,7 @@ medical care, and rehoming survivors.
 **Donations**
 - Zeffy general: https://www.zeffy.com/en-US/donation-form/provide-food-and-medical
 - Zeffy transport: https://www.zeffy.com/en-US/donation-form/help-bring-them-home
-- Zeffy sponsorship: https://www.zeffy.com/en-US/donation-form/help-the-abandoned-dogs-come-home
+- Zeffy sponsorship: https://www.zeffy.com/en-US/donation-form/sponsor-a-dog-5
 - PayPal: https://www.paypal.com/donate/?hosted_button_id=5YFAYGX4FKHW6
 - Venmo: https://venmo.com/u/Run2TheRescue
 
@@ -104,6 +104,25 @@ their own `*.jsx` and `*.css`:
 
 `styles.css` is the global stylesheet loaded by **every** page. Per-page CSS
 files layer on top.
+
+### Notable interactive components
+
+- **Find your match (Adopt)** — `MatchModal` / `MatchFeature` in `adopt.jsx`.
+  A short quiz pops the user a featured match with two alternates, all backed
+  by the same live Shelterluv data the directory uses.
+- **Adopt FAQ** — `AdoptFAQ` in `adopt.jsx`. Accordion answering the
+  China / meat-trade / trauma hesitations adopters voice; edit the
+  `ADOPT_FAQ` array at the top of the component to add or reword.
+- **Survivors marquee (homepage)** — `sections.jsx`. Continuous, seamless,
+  edge-faded, hover-pauses, runs at half speed. Replaces the older paged grid.
+- **Headline ticker (homepage)** — `enhancements.jsx`. Three rotating recent
+  rescue / adoption headlines below the hero. Edit the string array directly.
+- **Share Your Story modal (homepage testimonials)** — `sections.jsx`. Routed
+  through the shared `submitForm` helper; gracefully handles photo uploads
+  by recording the filename and asking the team to follow up by email.
+- **Sponsor confirmation modal** — `sponsor.jsx`. Pops the instant a dog is
+  selected; size-aware fee tiers (see Donations & sponsorship below); hands
+  off to Zeffy with the amount and dog name pre-filled.
 
 ### Cache-busting convention
 
@@ -217,6 +236,22 @@ All adoptable-dog data is **live from Shelterluv** — never hardcode dog arrays
 - Adopted dogs are filtered out via the normalized `available` flag.
 - New dogs, profile edits, and adoptions all flow through automatically.
 
+### Vercel image optimizer (Shelterluv photos)
+
+Shelterluv ships full-res PNGs as the largest payload on Adopt / Sponsor /
+homepage Survivors. We route every Shelterluv URL through Vercel's image
+optimizer for on-the-fly WebP + resize:
+
+- Helper: `vimgS(url, w)` and component `<ImgS imgWidth={...} />` (both in `shared.jsx`)
+- Non-Shelterluv URLs (local `/assets`, Unsplash, etc.) pass through untouched.
+- **Allowed widths come from `vercel.json → images.sizes`**:
+  `[320, 384, 480, 640, 750, 828, 1080, 1200, 1920]`. Quality is fixed at 75.
+- **Using any other width returns a 400 and the image renders broken** —
+  this bit us with `w=160` on the match-quiz alt thumbnails (fixed in
+  `1539604` by switching to `w=320`).
+- When adding a new image size, either pick from the existing list or extend
+  `images.sizes` in `vercel.json` first, then use the new value.
+
 ### Donations & sponsorship — Zeffy + PayPal + Venmo
 
 A **hybrid, link-out** model. No payment form is ever embedded; every "give"
@@ -224,10 +259,17 @@ action opens the provider in a new tab.
 
 - **Zeffy** (fee-free, recommended) — hosted forms at
   `zeffy.com/en-US/donation-form/{slug}`. Slugs: `provide-food-and-medical`
-  (general), `help-bring-them-home` (transport), `help-the-abandoned-dogs-come-home`
+  (general), `help-bring-them-home` (transport), `sponsor-a-dog-5`
   (sponsorship).
 - **PayPal** — `paypal.com/donate/?hosted_button_id=5YFAYGX4FKHW6`
 - **Venmo** — `venmo.com/u/Run2TheRescue`
+
+On the Sponsor page, the confirmation modal that pops when a dog is
+selected (`sponsor.jsx → relevantAmounts`) tailors its fee menu to the dog's
+**Shelterluv `size` field**: small dogs see the $65/mo care + $900 CDC + $1,500
+small flight; medium / large see $85/mo care + $900 CDC + $2,000 flight; XL
+swaps in the $3,000 flight. So a donor for a medium dog never sees the small
+or XL flight tiers. Falls back to med/large when size is missing.
 
 The "Donate" buttons open a method-chooser modal (`DonateModal` in
 `interactions.jsx`); the Donate page has the same chooser as a section
