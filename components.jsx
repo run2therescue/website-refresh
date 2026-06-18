@@ -315,16 +315,17 @@ function LoveReveal() {
           position: absolute; left: 50%; top: 50%; width: .8em; height: .8em;
           transform: translate(-50%,-50%); color: var(--purple-400);
           display: inline-flex; pointer-events: none;
-          animation: loveBeat .55s cubic-bezier(.2,.7,.3,1.1) both, loveBurst .45s ease .55s forwards;
+          /* One continuous bloom-and-fade — no middle "settle" frame that
+             reads as a second appearance. Heart grows in, peaks, then keeps
+             expanding outward while fading, all in a single keyframe set. */
+          animation: loveBloom 1s cubic-bezier(.2,.7,.3,1) forwards;
         }
         .love-reveal .love-heart svg { width: 100%; height: 100%; display: block; }
-        @keyframes loveBeat {
-          0%   { transform: translate(-50%,-50%) scale(.35); opacity: 0; }
-          25%  { opacity: 1; }
-          55%  { transform: translate(-50%,-50%) scale(1.2); }
-          100% { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+        @keyframes loveBloom {
+          0%   { transform: translate(-50%,-50%) scale(.3);  opacity: 0; }
+          22%  { transform: translate(-50%,-50%) scale(1.15); opacity: 1; }
+          100% { transform: translate(-50%,-50%) scale(2.4); opacity: 0; }
         }
-        @keyframes loveBurst { to { opacity: 0; transform: translate(-50%,-50%) scale(2.6); } }
         @keyframes loveTextIn {
           0% { opacity: 0; transform: scale(.35); }
           65% { opacity: 1; transform: scale(1.06); }
