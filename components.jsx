@@ -293,9 +293,10 @@ function HeroVideoBG() {
   );
 }
 
-/* On load, a purple heart pops, beats, then bursts as the word "Love." scales in.
-   Inherits the hero's accent styling (italic, purple) via the <em>. The visible
-   "Love." text stays in the DOM for SEO/crawlers; reduced-motion shows it plainly. */
+/* On load, a purple heart pops once (single grow-and-settle) and bursts as the
+   word "Love." scales in. Inherits the hero's accent styling (italic, purple)
+   via the <em>. The visible "Love." text stays in the DOM for SEO/crawlers;
+   reduced-motion shows it plainly. */
 function LoveReveal() {
   return (
     <em className="love-reveal" aria-label="Love.">
@@ -308,22 +309,20 @@ function LoveReveal() {
         .love-reveal .love-text {
           display: inline-block; opacity: 0; transform: scale(.35);
           transform-origin: center 58%;
-          animation: loveTextIn .6s cubic-bezier(.2,.85,.25,1.25) .8s forwards;
+          animation: loveTextIn .6s cubic-bezier(.2,.85,.25,1.25) .65s forwards;
         }
         .love-reveal .love-heart {
           position: absolute; left: 50%; top: 50%; width: .8em; height: .8em;
           transform: translate(-50%,-50%); color: var(--purple-400);
           display: inline-flex; pointer-events: none;
-          animation: loveBeat .8s ease-in-out both, loveBurst .45s ease .7s forwards;
+          animation: loveBeat .55s cubic-bezier(.2,.7,.3,1.1) both, loveBurst .45s ease .55s forwards;
         }
         .love-reveal .love-heart svg { width: 100%; height: 100%; display: block; }
         @keyframes loveBeat {
-          0% { transform: translate(-50%,-50%) scale(.4); opacity: 0; }
-          18% { opacity: 1; }
-          38% { transform: translate(-50%,-50%) scale(1.2); }
-          58% { transform: translate(-50%,-50%) scale(.92); }
-          78% { transform: translate(-50%,-50%) scale(1.08); }
-          100% { transform: translate(-50%,-50%) scale(1); }
+          0%   { transform: translate(-50%,-50%) scale(.35); opacity: 0; }
+          25%  { opacity: 1; }
+          55%  { transform: translate(-50%,-50%) scale(1.2); }
+          100% { transform: translate(-50%,-50%) scale(1); opacity: 1; }
         }
         @keyframes loveBurst { to { opacity: 0; transform: translate(-50%,-50%) scale(2.6); } }
         @keyframes loveTextIn {
