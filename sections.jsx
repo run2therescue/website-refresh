@@ -924,7 +924,18 @@ function Testimonials() {
               background: "var(--lav-200)", borderRadius: 20, padding: "28px 22px 22px",
               transform: `rotate(${q.rotate * 0.45}deg)`,
               boxShadow: "0 2px 6px oklch(0.4 0.06 310 / 0.07), 0 12px 28px oklch(0.4 0.06 310 / 0.10)",
-            }}>
+              transition: "opacity .6s cubic-bezier(0.16, 1, 0.3, 1), transform .28s cubic-bezier(.2, .7, .2, 1), box-shadow .28s ease",
+              willChange: "transform",
+            }}
+              onMouseEnter={e => {
+                e.currentTarget.style.transform = `translateY(-8px) rotate(${q.rotate * 0.45}deg)`;
+                e.currentTarget.style.boxShadow = "0 6px 14px oklch(0.4 0.06 310 / 0.12), 0 24px 50px oklch(0.4 0.06 310 / 0.18)";
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.transform = `rotate(${q.rotate * 0.45}deg)`;
+                e.currentTarget.style.boxShadow = "0 2px 6px oklch(0.4 0.06 310 / 0.07), 0 12px 28px oklch(0.4 0.06 310 / 0.10)";
+              }}
+            >
               <span aria-hidden="true" className="display" style={{
                 position: "absolute", top: 6, left: 18, fontSize: 64, lineHeight: 1,
                 fontWeight: 800, color: "var(--purple-400)", opacity: 0.3,
