@@ -345,6 +345,31 @@ const MATCH_STEPS = [
   ]},
 ];
 
+/* "vibe" → canonical age group. Exact hit = full credit; an adjacent group is a
+   near-fit worth partial credit, so a precise match always outranks a loose
+   overlap. (The old logic treated "Young" as an equal match for BOTH "puppy" and
+   "adult", which is a big reason adjacent answers produced identical results.) */
+const VIBE_TARGET = { puppy: "Puppy", adult: "Adult", senior: "Senior" };
+const VIBE_NEAR = {
+  puppy:  { Young: true },
+  adult:  { Young: true, Senior: true },
+  senior: { Adult: true },
+};
+const SIZE_ORDER = { Small: 0, Medium: 1, Large: 2 };
+
+/* Deterministic 0..1 hash (FNV-1a). Seeding the tiebreaker with the dog id PLUS
+   the actual answers is what makes different quiz selections surface different
+   dogs: change the answers and the seed changes, so tied / near-tied dogs
+   reshuffle per selection — yet it stays stable across re-renders for the same
+   answers (no flicker, and "retake → same answers" is reproducible). */
+function seededUnit(str) {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193); }
+  return ((h >>> 0) % 100000) / 100000;
+}
+
+/* Headline fit (integer): full criteria met out of criteria answered. Drives the
+   "Perfect / Great / Good match" badge and the reason chips only — NOT ordering. */
 function scoreDog(d, ans) {
   let score = 0, max = 0;
   const reasons = [];
@@ -358,17 +383,40 @@ function scoreDog(d, ans) {
   }
   if (ans.vibe && ans.vibe !== "any") {
     max++;
-    const ok = ans.vibe === "puppy" ? ["Puppy", "Young"].includes(d.age)
-      : ans.vibe === "adult" ? ["Young", "Adult"].includes(d.age)
-      : ["Adult", "Senior"].includes(d.age);
-    if (ok) { score++; reasons.push(d.age || "Good fit"); }
+    if (d.age === VIBE_TARGET[ans.vibe]) { score++; reasons.push(d.age); }
   }
   return { score, max, reasons };
 }
+
+/* Fine-grained ranking value: graded fit (exact > near > none) + a gentle
+   long-stay nudge + an answer-seeded jitter. Continuous values spread dogs out
+   instead of bunching them at integer scores (0/1/2/3), and the seeded jitter
+   rotates genuine ties by selection. A full-criterion gap (1.0) can't be
+   overcome by the nudge (≤0.05) or jitter (≤0.22), so a clearly better-fitting
+   dog still wins — only ties and near-ties rotate. */
+function rankValue(d, ans, answersKey) {
+  let v = 0;
+  if (ans.home && ans.home !== "any") {
+    if ((d.good || []).includes(ans.home)) v += 1;
+  }
+  if (ans.size && ans.size !== "any" && SIZE_ORDER[d.size] != null) {
+    const gap = Math.abs(SIZE_ORDER[d.size] - SIZE_ORDER[ans.size]);
+    v += gap === 0 ? 1 : gap === 1 ? 0.4 : 0;
+  }
+  if (ans.vibe && ans.vibe !== "any" && d.age) {
+    if (d.age === VIBE_TARGET[ans.vibe]) v += 1;
+    else if (VIBE_NEAR[ans.vibe] && VIBE_NEAR[ans.vibe][d.age]) v += 0.5;
+  }
+  if (d.daysInCare != null) v += Math.min(d.daysInCare / 365, 1) * 0.05;
+  v += seededUnit((d.id || "") + "|" + answersKey) * 0.22;
+  return v;
+}
+
 function rankMatches(dogs, ans) {
+  const answersKey = [ans.home, ans.size, ans.vibe].join("|");
   return dogs
-    .map((d) => ({ d, ...scoreDog(d, ans) }))
-    .sort((a, b) => (b.score - a.score) || ((b.d.daysInCare || 0) - (a.d.daysInCare || 0)))
+    .map((d) => ({ d, ...scoreDog(d, ans), rank: rankValue(d, ans, answersKey) }))
+    .sort((a, b) => b.rank - a.rank)
     .slice(0, 6);
 }
 function matchLabel(score, max) {
