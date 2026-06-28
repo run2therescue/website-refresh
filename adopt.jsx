@@ -194,6 +194,14 @@ function AdoptDirectory() {
     return () => window.removeEventListener("r2r-open-dog", open);
   }, []);
 
+  // Behavior signal: someone opened a dog's profile — the top-of-funnel
+  // adoption-intent event. Fires for every open path (card, match, deep link).
+  uE(() => {
+    if (selectedId == null || !window.track) return;
+    const d = dogs.find((x) => x.id === selectedId);
+    if (d) window.track("view_dog", { dog: d.name, dog_id: d.id, breed: d.breed || undefined, size: d.size || undefined });
+  }, [selectedId]);
+
   // Per-dog structured data (schema.org ItemList of Products). Injected once the
   // live Shelterluv list loads, so search engines that render JS can read each
   // adoptable dog as a discrete entity (name, photo, breed/age, "free" offer).
@@ -693,7 +701,7 @@ function ProfileModal({ dog, fav, onFav, onClose }) {
               )}
 
               <div style={{ marginTop: "auto", display: "flex", gap: 10, flexWrap: "wrap" }}>
-                <button className="btn btn-accent" style={{ flex: 1, justifyContent: "center" }} onClick={() => setStep("form")}>
+                <button className="btn btn-accent" style={{ flex: 1, justifyContent: "center" }} onClick={() => { if (window.track) window.track("adopt_application_start", { dog: dog.name }); setStep("form"); }}>
                   Apply to adopt {dog.name}
                 </button>
                 <button className="btn btn-outline-dark" style={{ borderColor: "var(--line-light)", color: "var(--ink-2)" }} onClick={onClose}>Close</button>
