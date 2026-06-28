@@ -440,7 +440,10 @@ function DogMatcher({ dogs, onClose, onComplete }) {
     const next = { ...ans, [s.key]: v };
     setAns(next);
     if (step < MATCH_STEPS.length - 1) setStep(step + 1);
-    else onComplete({ answers: next, ranked: rankMatches(dogs, next) });
+    else {
+      if (window.track) window.track("find_match", next);
+      onComplete({ answers: next, ranked: rankMatches(dogs, next) });
+    }
   };
   return (
     <div className="modal-backdrop" onClick={onClose}>

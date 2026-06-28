@@ -422,6 +422,7 @@ function autoplayFixS(v) {
 
 async function submitForm(fields, formName) {
   if (botcheckTrippedS()) return { ok: true };
+  if (window.track) window.track("form_submit", { form: formName });
   if (!WEB3FORMS_KEY || WEB3FORMS_KEY === "PASTE_KEY_HERE") {
     console.log("[submitForm] Demo mode (no Web3Forms key set). Form:", formName, fields);
     return { ok: false, demo: true };
