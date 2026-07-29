@@ -101,7 +101,7 @@ function DonateModal({ open, onClose }) {
         <div style={{ padding: "24px 26px 6px", display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
           <div style={{ minWidth: 0 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-              <img src="assets/r2r-logo.png?v=2" alt="" style={{ width: 30, height: 30 }} />
+              <img src="assets/r2r-logo.png?v=3" alt="" style={{ width: 30, height: 30 }} />
               <span style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 12, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--ink-3)" }}>
                 {isDaf ? "Donor Advised Fund" : "Make a donation"}
               </span>

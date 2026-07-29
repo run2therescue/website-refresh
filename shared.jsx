@@ -110,7 +110,7 @@ function NavS({ active = "home", onDonate }) {
     }}>
       <div className="wrap" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: 116, gap: 16 }}>
         <a href="/" aria-label="Run 2 The Rescue" style={{ display: "flex", alignItems: "center", gap: 12, flexShrink: 0 }}>
-          <img src="assets/r2r-logo.png?v=2" alt="" style={{ width: 96, height: 96 }} />
+          <img src="assets/r2r-logo.png?v=3" alt="" style={{ width: 96, height: 96 }} />
           <div style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 15, lineHeight: 1.05, color: "#fff", whiteSpace: "nowrap" }}>
             Run 2 The<br />Rescue
           </div>
@@ -180,7 +180,7 @@ function FooterS() {
         }}>
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 18 }}>
-              <img src="assets/r2r-logo.png?v=2" alt="" style={{ width: 48, height: 48 }} />
+              <img src="assets/r2r-logo.png?v=3" alt="" style={{ width: 48, height: 48 }} />
               <div style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 16, color: "#fff", lineHeight: 1.05 }}>Run 2 The<br />Rescue</div>
             </div>
             <p style={{ color: "var(--on-dark-2)", fontSize: 14, maxWidth: 340, margin: "0 0 18px" }}>

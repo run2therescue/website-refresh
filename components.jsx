@@ -158,7 +158,7 @@ function Nav({ onDonate }) {
     }}>
       <div className="wrap" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: 120, gap: 16 }}>
         <a href="/" aria-label="Run 2 The Rescue" style={{ display: "flex", alignItems: "center", gap: 12, flexShrink: 0 }}>
-          <img src="assets/r2r-logo.png?v=2" alt="" style={{ width: 104, height: 104 }} />
+          <img src="assets/r2r-logo.png?v=3" alt="" style={{ width: 104, height: 104 }} />
           <div style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 15, lineHeight: 1.05, color: "#fff" }}>
             Run 2 The<br />Rescue
           </div>
@@ -439,7 +439,7 @@ function HeroSplit({ onDonate }) {
             display: "flex", alignItems: "center", gap: 12,
             boxShadow: "var(--shadow)",
           }}>
-            <img src="assets/r2r-logo.png?v=2" alt="" style={{ width: 36, height: 36 }} />
+            <img src="assets/r2r-logo.png?v=3" alt="" style={{ width: 36, height: 36 }} />
             <div>
               <div style={{ fontSize: 12, color: "var(--ink-3)" }}>Today's featured</div>
               <div style={{ fontWeight: 600, fontSize: 14 }}>Kronk, in People</div>
