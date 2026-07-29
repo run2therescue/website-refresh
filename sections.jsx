@@ -595,7 +595,7 @@ function Footer() {
         }}>
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
-              <img src="assets/r2r-logo.png" alt="" style={{ width: 52, height: 52 }} />
+              <img src="assets/r2r-logo.png?v=2" alt="" style={{ width: 52, height: 52 }} />
               <div style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 16, color: "#fff", lineHeight: 1.05 }}>Run 2 The<br />Rescue</div>
             </div>
             <p style={{ color: "var(--on-dark-2)", fontSize: 14, maxWidth: 340, margin: "0 0 20px" }}>

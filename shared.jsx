@@ -38,8 +38,9 @@ function PawGlyphS({ style = {} }) {
   );
 }
 
-/* Dogs featured in the "Different Dogs" strip (or temporarily pulled) — hidden
-   from the browsable grids + counts, but still openable from the strip. By name. */
+/* Dogs kept out of the browsable grids + counts, by name. Covers dogs featured
+   in the "Different Dogs" strip, dogs temporarily pulled, and adopted dogs that
+   may still linger in the Shelterluv feed. */
 const HIDDEN_FROM_GRID = ["twitch", "sweet pea", "checkers"];
 const isHiddenDog = (a) => HIDDEN_FROM_GRID.includes(String((a && a.name) || "").trim().toLowerCase());
 
@@ -109,7 +110,7 @@ function NavS({ active = "home", onDonate }) {
     }}>
       <div className="wrap" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: 116, gap: 16 }}>
         <a href="/" aria-label="Run 2 The Rescue" style={{ display: "flex", alignItems: "center", gap: 12, flexShrink: 0 }}>
-          <img src="assets/r2r-logo.png" alt="" style={{ width: 96, height: 96 }} />
+          <img src="assets/r2r-logo.png?v=2" alt="" style={{ width: 96, height: 96 }} />
           <div style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 15, lineHeight: 1.05, color: "#fff", whiteSpace: "nowrap" }}>
             Run 2 The<br />Rescue
           </div>
@@ -179,7 +180,7 @@ function FooterS() {
         }}>
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 18 }}>
-              <img src="assets/r2r-logo.png" alt="" style={{ width: 48, height: 48 }} />
+              <img src="assets/r2r-logo.png?v=2" alt="" style={{ width: 48, height: 48 }} />
               <div style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 16, color: "#fff", lineHeight: 1.05 }}>Run 2 The<br />Rescue</div>
             </div>
             <p style={{ color: "var(--on-dark-2)", fontSize: 14, maxWidth: 340, margin: "0 0 18px" }}>
@@ -447,14 +448,14 @@ async function submitForm(fields, formName) {
 }
 
 /* Compact "Different Dogs" strip for the top of Adopt / Sponsor pages.
-   Kronk + Honey are alumni (static photos); Twitch + Sweet Pea pull live from
-   Shelterluv by name so their photo, breed, age, and availability stay current. */
+   Kronk + Honey are alumni (static photos). Twitch + Sweet Pea were removed
+   after they were adopted. To feature a dog who is still looking, add
+   { name: "Name", status: "looking", live: find("Name") } — that pulls their
+   photo, breed, age, and availability live from Shelterluv by name. */
 function DifferentDogsS() {
   const { animals } = useAnimalsS();
   const find = (n) => animals.find(a => (a.name || "").trim().toLowerCase() === n.toLowerCase());
   const cards = [
-    { name: "Twitch", status: "looking", live: find("Twitch"), zoom: 1.12 },
-    { name: "Sweet Pea", status: "looking", live: find("Sweet Pea") },
     { name: "Kronk", img: "assets/kronk-after-snow.jpg", status: "home" },
     { name: "Honey", img: "assets/honey-after-portrait.webp", status: "home" },
   ];
@@ -467,7 +468,9 @@ function DifferentDogsS() {
           </h2>
           <span style={{ fontSize: 13, color: "var(--ink-2)", maxWidth: 460 }}>We at Run 2 The Rescue know different doesn't mean bad. We celebrate the dogs with differences. Our seniors and special-needs survivors all deserve a loving home.</span>
         </div>
-        <div className="ways-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14 }}>
+        {/* Cap the track count at 4 so a short list keeps card-sized cards
+            instead of stretching each one across the full row. */}
+        <div className="ways-grid" style={{ display: "grid", gridTemplateColumns: `repeat(${Math.min(cards.length, 4)}, 1fr)`, gap: 14, maxWidth: cards.length < 4 ? 560 : "none" }}>
           {cards.map(c => {
             const looking = c.status === "looking";
             const img = c.img || (c.live && c.live.cover) || null;
