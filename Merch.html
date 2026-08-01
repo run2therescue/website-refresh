@@ -27,14 +27,6 @@
 <style>
 /* ---- Merch page styles (page-scoped; global tokens come from styles.css) ---- */
 
-/* Tagline ticker between hero and grid, echoes the homepage marquee */
-.m-ticker { overflow: clip; background: oklch(0.15 0.03 310); border-block: 1px solid rgba(255,255,255,0.07); }
-.m-ticker-track { display: inline-flex; gap: 56px; white-space: nowrap; padding: 13px 28px;
-  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
-  color: var(--purple-400); animation: mTicker 36s linear infinite; }
-.m-ticker:hover .m-ticker-track { animation-play-state: paused; }
-@keyframes mTicker { to { transform: translateX(-50%); } }
-
 /* Trust chips under the hero subline */
 .m-chip { display: inline-flex; align-items: center; gap: 7px; padding: 7px 14px; border-radius: 999px;
   border: 1px solid rgba(255,255,255,0.16); color: var(--on-dark-2);
@@ -51,7 +43,8 @@
 @keyframes mShimmer { to { background-position: -200% 0; } }
 
 /* Product cards */
-.m-card { display: block; background: #fff; border-radius: 18px; overflow: hidden; border: 1px solid var(--lav-200);
+.m-card { display: block; width: 100%; text-align: left; cursor: pointer; background: #fff; border-radius: 18px;
+  overflow: hidden; border: 1px solid var(--lav-200); padding: 0; font: inherit;
   animation: mPop .5s cubic-bezier(.16,1,.3,1) both;
   transition: transform .25s cubic-bezier(.16,1,.3,1), box-shadow .25s ease, border-color .25s ease; }
 .m-card:hover { transform: translateY(-5px); border-color: var(--lav-300);
@@ -73,10 +66,74 @@
 .m-name { transition: color .2s ease; }
 .m-card:hover .m-name { color: var(--purple-600); }
 
+/* Color dots on cards */
+.m-dots { display: flex; gap: 5px; margin-top: 8px; align-items: center; }
+.m-dot { width: 13px; height: 13px; border-radius: 50%; border: 1px solid oklch(0.3 0.06 310 / 0.25);
+  box-shadow: inset 0 0 0 1.5px #fff; }
+.m-dot-more { font-size: 10px; color: var(--ink-3); font-family: var(--font-ui); }
+
+/* ---- Product detail modal ---- */
+.m-overlay { position: fixed; inset: 0; z-index: 90; background: oklch(0.15 0.03 310 / 0.6);
+  backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center;
+  padding: 20px; animation: fade .25s ease both; }
+.m-modal { background: #fff; border-radius: 22px; width: min(920px, 100%); max-height: min(88vh, 780px);
+  overflow: auto; position: relative; animation: pop .3s cubic-bezier(.16,1,.3,1) both;
+  box-shadow: 0 8px 20px oklch(0.15 0.03 310 / 0.2), 0 32px 80px oklch(0.15 0.03 310 / 0.35); }
+.m-modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+@media (max-width: 720px) { .m-modal-grid { grid-template-columns: 1fr; } .m-modal { max-height: 92vh; } }
+.m-close { position: absolute; top: 14px; right: 14px; z-index: 2; width: 38px; height: 38px; border-radius: 50%;
+  border: none; cursor: pointer; background: rgba(26,16,37,0.55); color: #fff;
+  display: flex; align-items: center; justify-content: center; transition: background .2s ease, transform .15s ease; }
+.m-close:hover { background: rgba(26,16,37,0.8); } .m-close:active { transform: scale(.92); }
+.m-close svg { width: 16px; height: 16px; }
+
+.m-gal { background: var(--lav-100); }
+.m-gal-main { aspect-ratio: 1/1; overflow: hidden; position: relative; }
+.m-gal-main img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.m-thumbs { display: flex; gap: 8px; padding: 12px; overflow-x: auto; }
+.m-thumb { width: 58px; height: 58px; flex-shrink: 0; border-radius: 10px; overflow: hidden; padding: 0;
+  border: 2px solid transparent; cursor: pointer; background: var(--lav-200); transition: border-color .15s ease; }
+.m-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.m-thumb.sel { border-color: var(--purple-500); }
+
+.m-detail { padding: 30px 28px 28px; display: flex; flex-direction: column; gap: 16px; }
+.m-opt-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ink-3); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: baseline; }
+.m-opt-label b { color: var(--ink-2); font-weight: 600; letter-spacing: 0.06em; }
+
+.m-swatchbtn { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; padding: 0;
+  border: 1px solid oklch(0.3 0.06 310 / 0.25); box-shadow: inset 0 0 0 2px #fff;
+  transition: transform .15s ease, box-shadow .15s ease; }
+.m-swatchbtn:hover { transform: scale(1.1); }
+.m-swatchbtn.sel { box-shadow: inset 0 0 0 2px #fff, 0 0 0 2px var(--purple-500); transform: scale(1.08); }
+
+.m-size { min-width: 46px; padding: 9px 12px; border-radius: 10px; cursor: pointer; font: inherit; font-size: 13px;
+  font-weight: 600; color: var(--ink); background: #fff; border: 1.5px solid var(--lav-300);
+  transition: border-color .15s ease, background .15s ease, color .15s ease, transform .1s ease; }
+.m-size:hover { border-color: var(--purple-400); }
+.m-size:active { transform: scale(.95); }
+.m-size.sel { background: var(--purple-500); border-color: var(--purple-500); color: #fff; }
+.m-size:disabled { opacity: .4; cursor: not-allowed; text-decoration: line-through; }
+
+.m-qty { display: inline-flex; align-items: center; border: 1.5px solid var(--lav-300); border-radius: 999px; }
+.m-qty button { width: 36px; height: 36px; border: none; background: none; cursor: pointer; font-size: 17px;
+  color: var(--ink-2); transition: color .15s ease; border-radius: 50%; }
+.m-qty button:hover { color: var(--purple-600); }
+.m-qty button:disabled { opacity: .35; cursor: not-allowed; }
+.m-qty span { min-width: 28px; text-align: center; font-weight: 600; font-size: 14px; }
+
+.m-acc { border-top: 1px solid var(--lav-200); }
+.m-acc summary { cursor: pointer; padding: 13px 2px; font-weight: 600; font-size: 14px; color: var(--ink);
+  list-style: none; display: flex; justify-content: space-between; align-items: center; }
+.m-acc summary::-webkit-details-marker { display: none; }
+.m-acc summary svg { width: 13px; height: 13px; color: var(--ink-3); transition: transform .2s ease; }
+.m-acc[open] summary svg { transform: rotate(45deg); }
+.m-acc-body { padding: 0 2px 14px; font-size: 13.5px; line-height: 1.65; color: var(--ink-2); white-space: pre-line; }
+
 @media (prefers-reduced-motion: reduce) {
-  .m-ticker-track, .m-shimmer { animation: none; }
-  .m-card { animation: none; }
-  .m-card, .m-card-img, .m-view { transition: none; }
+  .m-shimmer { animation: none; }
+  .m-card, .m-overlay, .m-modal { animation: none; }
+  .m-card, .m-card-img, .m-view, .m-swatchbtn, .m-size { transition: none; }
 }
 </style>
 <script type="application/ld+json">
@@ -117,39 +174,117 @@
 <script type="text/babel">
 /* Live storefront, powered by Fourthwall via the /api/products proxy
    (mirrors how Adopt/Sponsor pull live dogs from /api/animals).
-   While every product is still a draft the API returns an empty list and the
-   page shows the "coming soon" state; publishing products in Fourthwall makes
-   the grid appear automatically. Buying links out to Fourthwall in a new tab,
-   the same convention as donations (no embedded payment forms).
 
-   Team-only preview: /merch?preview=1 renders the grid with sample products
-   so layout and interactions can be reviewed before launch. */
+   The full shopping experience lives on THIS page: browse, open a product,
+   pick color/size/quantity. Only the final payment step hands off, via
+   Fourthwall's direct-checkout endpoint
+   (SHOP/cart/checkout?products=<variantId>:<qty>), so the buyer never sees
+   Fourthwall's separately-themed shop pages.
+
+   While every product is still a draft the API returns an empty list and the
+   page shows the "coming soon" state. Team preview: /merch?preview=1. */
 
 const IS_PREVIEW = new URLSearchParams(window.location.search).has("preview");
 const SHOP_HOME = "https://run2therescue-yeh-shop.fourthwall.com";
+const SIZE_ORDER = ["XXS", "XS", "S", "M", "L", "XL", "2XL", "XXL", "3XL", "4XL", "5XL"];
 
-function svgTile(label, tone) {
-  const tones = {
-    a: ["#e6e0f4", "#f3f0fb"], b: ["#ddd4f0", "#ece6f8"],
-  };
-  const [c1, c2] = tones[tone] || tones.a;
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient></defs><rect width="600" height="600" fill="url(#g)"/><text x="300" y="285" text-anchor="middle" font-family="Arial, sans-serif" font-size="44" font-weight="800" fill="#8b5cf6" letter-spacing="6">${label}</text><text x="300" y="340" text-anchor="middle" font-family="Arial, sans-serif" font-size="17" font-weight="600" fill="#6d5a8e" letter-spacing="3">SAMPLE PRODUCT</text></svg>`;
+function sortSizes(sizes) {
+  return sizes.slice().sort((a, b) => {
+    const ia = SIZE_ORDER.indexOf(a), ib = SIZE_ORDER.indexOf(b);
+    if (ia !== -1 && ib !== -1) return ia - ib;
+    if (ia !== -1) return -1;
+    if (ib !== -1) return 1;
+    return String(a).localeCompare(String(b));
+  });
+}
+
+/* ---------- Preview sample data (exercises every state of the real UI) ---- */
+function svgTile(label, hex) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600"><rect width="600" height="600" fill="${hex}"/><text x="300" y="285" text-anchor="middle" font-family="Arial, sans-serif" font-size="42" font-weight="800" fill="#ffffff" fill-opacity="0.85" letter-spacing="5">${label}</text><text x="300" y="338" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="600" fill="#ffffff" fill-opacity="0.6" letter-spacing="3">SAMPLE PRODUCT</text></svg>`;
   return "data:image/svg+xml," + encodeURIComponent(svg);
 }
+function pvVariants(base, colors, sizes, outOfStock) {
+  const out = [];
+  colors.forEach(function (c, ci) {
+    (sizes.length ? sizes : [null]).forEach(function (s, si) {
+      const key = c.name + "/" + (s || "");
+      out.push({
+        id: "pv-" + base + "-" + ci + "-" + si,
+        price: null, priceText: "",
+        color: { name: c.name, swatch: c.swatch },
+        size: s,
+        inStock: !(outOfStock || []).includes(key),
+        image: svgTile(base.toUpperCase() + " · " + c.name.toUpperCase(), c.swatch),
+      });
+    });
+  });
+  return out;
+}
+const PV_PLUM = { name: "Plum", swatch: "#4a3566" };
+const PV_LAV = { name: "Lavender", swatch: "#a78bda" };
+const PV_CREAM = { name: "Cream", swatch: "#cfc4a8" };
 const PREVIEW_PRODUCTS = [
-  { id: "pv1", name: "RUN. RESCUE. REPEAT. Tee", price: "$28+", image: svgTile("TEE", "a"), images: [svgTile("TEE", "a"), svgTile("TEE BACK", "b")], soldOut: false, sizes: ["S","M","L","XL","2XL"], url: SHOP_HOME },
-  { id: "pv2", name: "Second Chance Hoodie", price: "$52+", image: svgTile("HOODIE", "a"), images: [svgTile("HOODIE", "a"), svgTile("HOODIE BACK", "b")], soldOut: false, sizes: ["S","M","L","XL"], url: SHOP_HOME },
-  { id: "pv3", name: "Beacon of Hope Tote", price: "$22", image: svgTile("TOTE", "a"), images: [svgTile("TOTE", "a")], soldOut: false, sizes: [], url: SHOP_HOME },
-  { id: "pv4", name: "Survivor Paw Mug", price: "$18", image: svgTile("MUG", "a"), images: [svgTile("MUG", "a")], soldOut: true, sizes: [], url: SHOP_HOME },
-  { id: "pv5", name: "Freedom Flight Sticker Pack", price: "$8", image: svgTile("STICKERS", "a"), images: [svgTile("STICKERS", "a"), svgTile("STICKERS ALT", "b")], soldOut: false, sizes: [], url: SHOP_HOME },
-  { id: "pv6", name: "Rescue Runner Cap", price: "$26", image: svgTile("CAP", "a"), images: [svgTile("CAP", "a")], soldOut: false, sizes: [], url: SHOP_HOME },
+  {
+    id: "pv1", name: "RUN. RESCUE. REPEAT. Tee", price: "$28+", priceMin: 28,
+    image: svgTile("TEE · PLUM", PV_PLUM.swatch),
+    images: [svgTile("TEE · PLUM", PV_PLUM.swatch), svgTile("TEE BACK", "#3a2a52"), svgTile("TEE DETAIL", "#5b4380")],
+    soldOut: false, colors: [PV_PLUM, PV_LAV, PV_CREAM], sizes: ["S", "M", "L", "XL", "2XL"],
+    variants: pvVariants("tee", [PV_PLUM, PV_LAV, PV_CREAM], ["S", "M", "L", "XL", "2XL"], ["Cream/2XL", "Lavender/S"]).map(function (v) { v.price = v.size === "2XL" ? 30 : 28; v.priceText = "$" + v.price; return v; }),
+    description: "Soft unisex tee with the rescue's rallying cry on the front. Printed on demand, every purchase funds flights home for survivors of the dog meat trade.",
+    info: [
+      { type: "SIZE_AND_FIT", title: "Size & fit", body: "True to size with a relaxed unisex cut.\nModel wears a size M." },
+      { type: "GUARANTEE_AND_RETURNS", title: "Guarantee & returns", body: "Printed just for you by Fourthwall. Damaged or misprinted items are replaced free within 30 days." },
+    ],
+    sizeGuide: null, url: SHOP_HOME,
+  },
+  {
+    id: "pv2", name: "Second Chance Hoodie", price: "$52+", priceMin: 52,
+    image: svgTile("HOODIE · PLUM", PV_PLUM.swatch),
+    images: [svgTile("HOODIE · PLUM", PV_PLUM.swatch), svgTile("HOODIE BACK", "#3a2a52")],
+    soldOut: false, colors: [PV_PLUM, PV_LAV], sizes: ["S", "M", "L", "XL"],
+    variants: pvVariants("hoodie", [PV_PLUM, PV_LAV], ["S", "M", "L", "XL"]).map(function (v) { v.price = 52; v.priceText = "$52"; return v; }),
+    description: "Heavyweight fleece hoodie for cold-morning walks with your own second-chance dog.",
+    info: [{ type: "GUARANTEE_AND_RETURNS", title: "Guarantee & returns", body: "Printed just for you by Fourthwall. Damaged or misprinted items are replaced free within 30 days." }],
+    sizeGuide: null, url: SHOP_HOME,
+  },
+  {
+    id: "pv3", name: "Beacon of Hope Tote", price: "$22", priceMin: 22,
+    image: svgTile("TOTE", PV_CREAM.swatch), images: [svgTile("TOTE", PV_CREAM.swatch)],
+    soldOut: false, colors: [PV_CREAM], sizes: [],
+    variants: pvVariants("tote", [PV_CREAM], []).map(function (v) { v.price = 22; v.priceText = "$22"; return v; }),
+    description: "Sturdy canvas tote that carries groceries and starts conversations.",
+    info: [], sizeGuide: null, url: SHOP_HOME,
+  },
+  {
+    id: "pv4", name: "Survivor Paw Mug", price: "$18", priceMin: 18,
+    image: svgTile("MUG", "#6d5a8e"), images: [svgTile("MUG", "#6d5a8e")],
+    soldOut: true, colors: [], sizes: [],
+    variants: [], description: "Ceramic mug with the survivor paw mark.",
+    info: [], sizeGuide: null, url: SHOP_HOME,
+  },
+  {
+    id: "pv5", name: "Freedom Flight Sticker Pack", price: "$8", priceMin: 8,
+    image: svgTile("STICKERS", PV_LAV.swatch), images: [svgTile("STICKERS", PV_LAV.swatch), svgTile("STICKERS ALT", "#8b6fc0")],
+    soldOut: false, colors: [], sizes: [],
+    variants: [{ id: "pv-stk-0-0", price: 8, priceText: "$8", color: null, size: null, inStock: true, image: null }],
+    description: "Five die-cut stickers for laptops, water bottles, and crates.",
+    info: [], sizeGuide: null, url: SHOP_HOME,
+  },
+  {
+    id: "pv6", name: "Rescue Runner Cap", price: "$26", priceMin: 26,
+    image: svgTile("CAP", "#3a2a52"), images: [svgTile("CAP", "#3a2a52")],
+    soldOut: false, colors: [PV_PLUM, PV_CREAM], sizes: [],
+    variants: pvVariants("cap", [PV_PLUM, PV_CREAM], []).map(function (v) { v.price = 26; v.priceText = "$26"; return v; }),
+    description: "Low-profile cap, embroidered paw, adjustable strap.",
+    info: [], sizeGuide: null, url: SHOP_HOME,
+  },
 ];
 
+/* ---------- Data ---------- */
 function useProducts() {
   const [state, setState] = useStateS({ loading: true, products: [] });
   useEffectS(() => {
     if (IS_PREVIEW) {
-      // Brief simulated load so the skeleton state is reviewable too.
       const t = setTimeout(() => setState({ loading: false, products: PREVIEW_PRODUCTS }), 900);
       return () => clearTimeout(t);
     }
@@ -163,7 +298,7 @@ function useProducts() {
   return state;
 }
 
-/* Small inline SVG icons (no emoji in UI) */
+/* ---------- Icons (inline SVG, no emoji) ---------- */
 function IconArrow() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -192,17 +327,22 @@ function IconPlane() {
     </svg>
   );
 }
-
-const TICKER_ITEMS = ["Run. Rescue. Repeat.", "Wear the cause", "Every purchase puts dogs on planes home", "Second chances look good on you"];
-function TaglineTicker() {
-  const row = TICKER_ITEMS.map((t, i) => <span key={i}>{t}</span>);
+function IconX() {
   return (
-    <div className="m-ticker" aria-hidden="true">
-      <div className="m-ticker-track">{row}{row}{row}{row}</div>
-    </div>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" aria-hidden="true">
+      <path d="M6 6l12 12M18 6L6 18" />
+    </svg>
+  );
+}
+function IconPlus() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
+      <path d="M12 5v14M5 12h14" />
+    </svg>
   );
 }
 
+/* ---------- Loading ---------- */
 function SkeletonGrid() {
   return (
     <div className="ways-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }} aria-hidden="true">
@@ -217,11 +357,14 @@ function SkeletonGrid() {
   );
 }
 
-function ProductCard({ p, index }) {
+/* ---------- Card ---------- */
+function ProductCard({ p, index, onOpen }) {
   const alt = p.images && p.images.length > 1 ? p.images[1] : null;
-  const label = `${p.name}, ${p.price}${p.soldOut ? ", sold out" : ""}. Opens on our Fourthwall shop.`;
+  const dots = (p.colors || []).slice(0, 5);
+  const extra = (p.colors || []).length - dots.length;
+  const label = `${p.name}, ${p.price}${p.soldOut ? ", sold out" : ""}${p.colors && p.colors.length > 1 ? `, ${p.colors.length} colors` : ""}. Opens details.`;
   return (
-    <a href={p.url} target="_blank" rel="noopener noreferrer" aria-label={label}
+    <button type="button" onClick={() => onOpen(p)} aria-label={label} aria-haspopup="dialog"
       className={"m-card" + (p.soldOut ? " sold" : "")}
       style={{ animationDelay: `${Math.min(index, 11) * 60}ms` }}>
       <div className="m-card-imgwrap">
@@ -234,7 +377,7 @@ function ProductCard({ p, index }) {
         {p.soldOut && (
           <span style={{ position: "absolute", top: 10, left: 10, fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 700, padding: "5px 10px", borderRadius: 999, background: "rgba(26,16,37,0.84)", color: "#fff" }}>Sold out</span>
         )}
-        <span className="m-view">{p.soldOut ? "See details" : "View product"} <IconArrow /></span>
+        <span className="m-view">Quick view <IconArrow /></span>
       </div>
       <div style={{ padding: "13px 15px 15px" }}>
         <div className="m-name display" style={{ fontSize: 16, color: "var(--ink)", lineHeight: 1.15 }}>{p.name}</div>
@@ -244,13 +387,203 @@ function ProductCard({ p, index }) {
             <span style={{ fontSize: 10, fontFamily: "var(--font-ui)", letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--ink-3)" }}>{p.sizes.length} sizes</span>
           )}
         </div>
+        {dots.length > 1 && (
+          <div className="m-dots" aria-hidden="true">
+            {dots.map((c) => <span key={c.name} className="m-dot" title={c.name} style={{ background: c.swatch }} />)}
+            {extra > 0 && <span className="m-dot-more">+{extra}</span>}
+          </div>
+        )}
       </div>
-    </a>
+    </button>
   );
 }
 
+/* ---------- Product detail modal ---------- */
+function ProductModal({ p, onClose }) {
+  const hasColors = (p.colors || []).length > 0;
+  const hasSizes = (p.sizes || []).length > 0;
+  const sizes = sortSizes(p.sizes || []);
+  const [color, setColor] = useStateS(hasColors ? p.colors[0].name : null);
+  const [size, setSize] = useStateS(hasSizes ? null : undefined); // null = must choose
+  const [qty, setQty] = useStateS(1);
+  const [imgIdx, setImgIdx] = useStateS(0);
+
+  // Gallery = product images + any variant images not already present.
+  const gallery = useMemoS(() => {
+    const seen = new Set();
+    const out = [];
+    (p.images || []).forEach((u) => { if (u && !seen.has(u)) { seen.add(u); out.push(u); } });
+    (p.variants || []).forEach((v) => { if (v.image && !seen.has(v.image)) { seen.add(v.image); out.push(v.image); } });
+    return out;
+  }, [p]);
+
+  // Which variant matches the current selection?
+  const variant = useMemoS(() => {
+    const list = p.variants || [];
+    return list.find((v) =>
+      (!hasColors || (v.color && v.color.name === color)) &&
+      (!hasSizes || (size != null && v.size === size))
+    ) || null;
+  }, [p, color, size]);
+
+  // A size is offered for the current color and in stock?
+  function sizeAvailable(s) {
+    return (p.variants || []).some((v) =>
+      v.size === s && v.inStock && (!hasColors || (v.color && v.color.name === color)));
+  }
+  function colorAvailable(cName) {
+    return (p.variants || []).some((v) => v.color && v.color.name === cName && v.inStock);
+  }
+
+  // Color change: jump the gallery to that color's variant image when it has one.
+  function pickColor(cName) {
+    setColor(cName);
+    const v = (p.variants || []).find((x) => x.color && x.color.name === cName && x.image);
+    if (v && v.image) {
+      const idx = gallery.indexOf(v.image);
+      if (idx !== -1) setImgIdx(idx);
+    }
+    if (hasSizes && size != null && !(p.variants || []).some((x) => x.color && x.color.name === cName && x.size === size && x.inStock)) {
+      setSize(null);
+    }
+  }
+
+  useEffectS(() => {
+    document.body.style.overflow = "hidden";
+    if (window.track) window.track("view_item", { item: p.name });
+    const onKey = (e) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    return () => { document.body.style.overflow = ""; window.removeEventListener("keydown", onKey); };
+  }, []);
+
+  const priceText = variant && variant.priceText ? variant.priceText : p.price;
+  const needsSize = hasSizes && size == null;
+  const canBuy = !p.soldOut && ((p.variants || []).length ? (variant && variant.inStock) : false);
+  const ctaDisabled = p.soldOut || needsSize || ((p.variants || []).length > 0 && !canBuy);
+  const ctaText = p.soldOut ? "Sold out" : needsSize ? "Select a size" : (variant && !variant.inStock) ? "Out of stock" : "Checkout Securely";
+
+  function checkout() {
+    if (ctaDisabled) return;
+    if (window.track) window.track("begin_checkout", { item: p.name, variant: variant ? variant.id : "" });
+    if (IS_PREVIEW) { window.open(SHOP_HOME, "_blank", "noopener"); return; }
+    if (variant) {
+      window.location.href = `${SHOP_HOME}/cart/checkout?products=${encodeURIComponent(variant.id)}:${qty}&currency=USD`;
+    } else {
+      window.open(p.url, "_blank", "noopener");
+    }
+  }
+
+  const mainImg = gallery[Math.min(imgIdx, Math.max(gallery.length - 1, 0))] || p.image;
+
+  return (
+    <div className="m-overlay" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+      <div className="m-modal" role="dialog" aria-modal="true" aria-label={p.name}>
+        <button type="button" className="m-close" onClick={onClose} aria-label="Close product details"><IconX /></button>
+        <div className="m-modal-grid">
+          <div className="m-gal">
+            <div className="m-gal-main">
+              {mainImg
+                ? <img src={mainImg} alt={p.name} />
+                : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <span className="display" style={{ fontSize: 54, color: "var(--purple-400)" }}>{(p.name || "?")[0]}</span>
+                  </div>}
+            </div>
+            {gallery.length > 1 && (
+              <div className="m-thumbs" role="group" aria-label="Product images">
+                {gallery.map((u, i) => (
+                  <button key={u} type="button" className={"m-thumb" + (i === Math.min(imgIdx, gallery.length - 1) ? " sel" : "")}
+                    onClick={() => setImgIdx(i)} aria-label={`Image ${i + 1} of ${gallery.length}`}>
+                    <img src={u} alt="" loading="lazy" />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="m-detail">
+            <div>
+              <h2 className="display" style={{ fontSize: "clamp(22px, 3vw, 30px)", margin: "0 0 6px", color: "var(--ink)", lineHeight: 1.1, paddingRight: 36 }}>{p.name}</h2>
+              <div style={{ fontSize: 19, fontWeight: 700, color: "var(--purple-600)" }}>{priceText}</div>
+            </div>
+
+            {p.description && (
+              <p style={{ fontSize: 14, lineHeight: 1.65, color: "var(--ink-2)", margin: 0, whiteSpace: "pre-line" }}>{p.description}</p>
+            )}
+
+            {hasColors && (
+              <div>
+                <div className="m-opt-label"><span>Color</span><b>{color}</b></div>
+                <div style={{ display: "flex", gap: 9, flexWrap: "wrap" }}>
+                  {p.colors.map((c) => (
+                    <button key={c.name} type="button"
+                      className={"m-swatchbtn" + (color === c.name ? " sel" : "")}
+                      style={{ background: c.swatch, opacity: colorAvailable(c.name) ? 1 : 0.35 }}
+                      onClick={() => pickColor(c.name)}
+                      aria-label={`Color: ${c.name}${colorAvailable(c.name) ? "" : ", out of stock"}`}
+                      aria-pressed={color === c.name} />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {hasSizes && (
+              <div>
+                <div className="m-opt-label">
+                  <span>Size</span>
+                  {p.sizeGuide && <a href={p.sizeGuide.url} target="_blank" rel="noopener noreferrer" style={{ color: "var(--purple-600)", letterSpacing: "0.06em" }}>Size guide</a>}
+                </div>
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }} role="group" aria-label="Select size">
+                  {sizes.map((s) => (
+                    <button key={s} type="button" className={"m-size" + (size === s ? " sel" : "")}
+                      disabled={!sizeAvailable(s)} onClick={() => setSize(s)} aria-pressed={size === s}>{s}</button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {!p.soldOut && (p.variants || []).length > 0 && (
+              <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+                <div className="m-opt-label" style={{ margin: 0 }}><span>Qty</span></div>
+                <div className="m-qty" role="group" aria-label="Quantity">
+                  <button type="button" onClick={() => setQty(Math.max(1, qty - 1))} disabled={qty <= 1} aria-label="Decrease quantity">−</button>
+                  <span aria-live="polite">{qty}</span>
+                  <button type="button" onClick={() => setQty(Math.min(10, qty + 1))} disabled={qty >= 10} aria-label="Increase quantity">+</button>
+                </div>
+              </div>
+            )}
+
+            <div>
+              <button type="button" onClick={checkout} disabled={ctaDisabled}
+                className="btn btn-accent" style={{ width: "100%", justifyContent: "center", opacity: ctaDisabled ? 0.55 : 1, cursor: ctaDisabled ? "not-allowed" : "pointer" }}>
+                {ctaText}
+              </button>
+              <p style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, fontSize: 11.5, color: "var(--ink-3)", margin: "10px 0 0" }}>
+                <span style={{ display: "inline-flex", width: 13, height: 13, color: "var(--purple-500)" }}><IconShield /></span>
+                Secure checkout and shipping handled by Fourthwall
+              </p>
+            </div>
+
+            {(p.info || []).length > 0 && (
+              <div style={{ marginTop: 2 }}>
+                {p.info.map((sec) => (
+                  <details key={sec.type} className="m-acc">
+                    <summary>{sec.title}<IconPlus /></summary>
+                    <div className="m-acc-body">{sec.body}</div>
+                  </details>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- Page ---------- */
 function MerchPage() {
   const { loading, products } = useProducts();
+  const [open, setOpen] = useStateS(null);
   const hasProducts = products.length > 0;
   const showShop = loading || hasProducts;
   return (
@@ -283,8 +616,6 @@ function MerchPage() {
         </div>
       </section>
 
-      {showShop && <TaglineTicker />}
-
       {showShop && (
         <section className="section-light" style={{ padding: "52px 0 40px" }}>
           <div className="wrap">
@@ -297,7 +628,7 @@ function MerchPage() {
               <SkeletonGrid />
             ) : (
               <div className="ways-grid" style={{ display: "grid", gridTemplateColumns: `repeat(${Math.min(products.length, 4)}, 1fr)`, gap: 16, maxWidth: products.length < 4 ? products.length * 280 : "none", margin: "0 auto" }}>
-                {products.map((p, i) => <ProductCard key={p.id} p={p} index={i} />)}
+                {products.map((p, i) => <ProductCard key={p.id} p={p} index={i} onOpen={setOpen} />)}
               </div>
             )}
             <p style={{ textAlign: "center", marginTop: 30, fontSize: 13, color: "var(--ink-3)", maxWidth: 520, marginLeft: "auto", marginRight: "auto", lineHeight: 1.6 }}>
@@ -325,6 +656,8 @@ function MerchPage() {
           </div>
         </section>
       )}
+
+      {open && <ProductModal p={open} onClose={() => setOpen(null)} />}
     </>
   );
 }

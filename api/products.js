@@ -77,7 +77,11 @@ async function fetchAllProducts(token) {
   return out;
 }
 
-/* ---- Normalization: Fourthwall ProductV1 -> the shape the Merch cards use */
+/* ---- Normalization: Fourthwall ProductV1 -> the shape the Merch page uses.
+   Variant UUIDs are essential: the direct-checkout handoff
+   (SHOP_URL/cart/checkout?products=<variantId>:<qty>) consumes them, which is
+   what lets the whole browse/select experience live on our site with
+   Fourthwall appearing only at the payment step. */
 
 function normalize(p) {
   if (!p || typeof p !== "object") return null;
@@ -85,10 +89,9 @@ function normalize(p) {
   const access = p.access && p.access.type;
   if (access && access !== "PUBLIC") return null;
 
-  const variants = Array.isArray(p.variants) ? p.variants : [];
-  const prices = variants
-    .map((v) => v && v.unitPrice && Number(v.unitPrice.value))
-    .filter((n) => Number.isFinite(n));
+  const rawVariants = Array.isArray(p.variants) ? p.variants : [];
+  const variants = rawVariants.map(normalizeVariant).filter(Boolean);
+  const prices = variants.map((v) => v.price).filter((n) => Number.isFinite(n));
   const minPrice = prices.length ? Math.min.apply(null, prices) : null;
   const maxPrice = prices.length ? Math.max.apply(null, prices) : null;
 
@@ -96,28 +99,67 @@ function normalize(p) {
     .map((im) => im && (im.transformedUrl || im.url))
     .filter(Boolean);
 
+  // Unique colors in first-seen order, keeping name + swatch hex together.
+  const colors = [];
+  const seenColor = new Set();
+  for (const v of variants) {
+    if (v.color && !seenColor.has(v.color.name)) {
+      seenColor.add(v.color.name);
+      colors.push(v.color);
+    }
+  }
+
+  const info = (Array.isArray(p.additionalInformation) ? p.additionalInformation : [])
+    .map((x) => x && { type: x.type, title: String(x.title || ""), body: cleanText(x.bodyHtml) })
+    .filter((x) => x && x.body);
+
   return {
     id: String(p.id || ""),
     name: String(p.name || "").trim(),
     slug: String(p.slug || ""),
     description: cleanText(p.description),
     image: images[0] || null,
-    images: images.slice(0, 4),
+    images: images.slice(0, 8),
     priceMin: minPrice,
     priceMax: maxPrice,
     price: formatPriceRange(minPrice, maxPrice),
     soldOut: !!(p.state && p.state.type === "SOLD_OUT"),
-    colors: uniq(variants.map((v) => v && v.attributes && v.attributes.color && v.attributes.color.swatch)),
-    sizes: uniq(variants.map((v) => v && v.attributes && v.attributes.size && v.attributes.size.name)),
-    // Buying happens on Fourthwall (link-out, same convention as donations).
+    colors,
+    sizes: uniq(variants.map((v) => v.size)),
+    variants,
+    info,
+    sizeGuide: p.sizeGuide && (p.sizeGuide.previewUrl || p.sizeGuide.fileUrl)
+      ? { url: p.sizeGuide.previewUrl || p.sizeGuide.fileUrl, description: cleanText(p.sizeGuide.description) }
+      : null,
+    // Fallback product page on Fourthwall (used only if a product has no variants).
     url: `${SHOP_URL}/products/${encodeURIComponent(p.slug || "")}`,
   };
 }
 
+function normalizeVariant(v) {
+  if (!v || !v.id) return null;
+  const price = v.unitPrice && Number(v.unitPrice.value);
+  const stock = v.stock || {};
+  return {
+    id: String(v.id),
+    price: Number.isFinite(price) ? price : null,
+    priceText: Number.isFinite(price) ? formatMoney(price) : "",
+    color: v.attributes && v.attributes.color
+      ? { name: String(v.attributes.color.name || ""), swatch: String(v.attributes.color.swatch || "") }
+      : null,
+    size: (v.attributes && v.attributes.size && v.attributes.size.name) || null,
+    inStock: stock.type === "UNLIMITED" || (Number(stock.inStock) > 0),
+    image: (Array.isArray(v.images) && v.images[0] && (v.images[0].transformedUrl || v.images[0].url)) || null,
+  };
+}
+
+function formatMoney(n) {
+  return "$" + (Number.isInteger(n) ? n : n.toFixed(2));
+}
+
 function formatPriceRange(min, max) {
   if (min == null) return "";
-  const f = (n) => "$" + (Number.isInteger(n) ? n : n.toFixed(2));
-  return max != null && max !== min ? `${f(min)}+` : f(min);
+  return max != null && max !== min ? `${formatMoney(min)}+` : formatMoney(min);
 }
 
 function uniq(arr) {
@@ -126,7 +168,9 @@ function uniq(arr) {
 
 function cleanText(s) {
   return String(s || "")
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/(p|div|li|h[1-6])>/gi, "\n")
     .replace(/<[^>]*>/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
+    .replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&#39;/g, "'").replace(/&quot;/g, '"')
+    .split("\n").map((line) => line.replace(/\s+/g, " ").trim()).filter(Boolean).join("\n");
 }
