@@ -66,9 +66,29 @@
    page shows the "coming soon" state; publishing products in Fourthwall makes
    the grid appear automatically. Buying links out to Fourthwall in a new tab,
    the same convention as donations (no embedded payment forms). */
+/* Team-only preview: /merch?preview=1 renders the grid with sample products
+   so the layout can be reviewed before anything is published in Fourthwall.
+   Normal visitors never see it, and the samples link to the real shop. */
+const IS_PREVIEW = new URLSearchParams(window.location.search).has("preview");
+const SHOP_HOME = "https://run2therescue-yeh-shop.fourthwall.com";
+function svgTile(label) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e6e0f4"/><stop offset="1" stop-color="#f3f0fb"/></linearGradient></defs><rect width="600" height="600" fill="url(#g)"/><text x="300" y="285" text-anchor="middle" font-family="Arial, sans-serif" font-size="44" font-weight="800" fill="#8b5cf6" letter-spacing="6">${label}</text><text x="300" y="340" text-anchor="middle" font-family="Arial, sans-serif" font-size="17" font-weight="600" fill="#6d5a8e" letter-spacing="3">SAMPLE PRODUCT</text></svg>`;
+  return "data:image/svg+xml," + encodeURIComponent(svg);
+}
+const PREVIEW_PRODUCTS = [
+  { id: "pv1", name: "RUN. RESCUE. REPEAT. Tee", price: "$28+", image: svgTile("TEE"), soldOut: false, sizes: ["S","M","L","XL","2XL"], url: SHOP_HOME },
+  { id: "pv2", name: "Second Chance Hoodie", price: "$52+", image: svgTile("HOODIE"), soldOut: false, sizes: ["S","M","L","XL"], url: SHOP_HOME },
+  { id: "pv3", name: "Beacon of Hope Tote", price: "$22", image: svgTile("TOTE"), soldOut: false, sizes: [], url: SHOP_HOME },
+  { id: "pv4", name: "Survivor Paw Mug", price: "$18", image: svgTile("MUG"), soldOut: true, sizes: [], url: SHOP_HOME },
+];
+
 function useProducts() {
   const [state, setState] = useStateS({ loading: true, products: [], shopUrl: null });
   useEffectS(() => {
+    if (IS_PREVIEW) {
+      setState({ loading: false, products: PREVIEW_PRODUCTS, shopUrl: SHOP_HOME });
+      return;
+    }
     let alive = true;
     fetch("/api/products")
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error("HTTP " + r.status))))
@@ -138,6 +158,11 @@ function MerchPage() {
       {hasProducts && (
         <section className="section-light" style={{ padding: "48px 0 72px" }}>
           <div className="wrap">
+            {IS_PREVIEW && (
+              <p style={{ textAlign: "center", margin: "0 0 24px", fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--purple-600)" }}>
+                Preview mode — sample products, not live listings
+              </p>
+            )}
             <div className="ways-grid" style={{ display: "grid", gridTemplateColumns: `repeat(${Math.min(products.length, 4)}, 1fr)`, gap: 16, maxWidth: products.length < 4 ? products.length * 280 : "none", margin: "0 auto" }}>
               {products.map((p) => <ProductCard key={p.id} p={p} />)}
             </div>
