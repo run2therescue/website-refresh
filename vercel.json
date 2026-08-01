@@ -3,70 +3,194 @@
   "cleanUrls": false,
   "trailingSlash": false,
   "images": {
-    "sizes": [320, 384, 480, 640, 750, 828, 1080, 1200, 1920],
-    "qualities": [75],
-    "formats": ["image/webp"],
+    "sizes": [
+      320,
+      384,
+      480,
+      640,
+      750,
+      828,
+      1080,
+      1200,
+      1920
+    ],
+    "qualities": [
+      75
+    ],
+    "formats": [
+      "image/webp"
+    ],
     "minimumCacheTTL": 86400,
     "remotePatterns": [
-      { "protocol": "https", "hostname": "new-s3.shelterluv.com" },
-      { "protocol": "https", "hostname": "*.shelterluv.com" }
+      {
+        "protocol": "https",
+        "hostname": "new-s3.shelterluv.com"
+      },
+      {
+        "protocol": "https",
+        "hostname": "*.shelterluv.com"
+      }
     ]
   },
   "rewrites": [
-    { "source": "/adopt", "destination": "/Adopt.html" },
-    { "source": "/adopt.html", "destination": "/Adopt.html" },
-    { "source": "/foster", "destination": "/Foster.html" },
-    { "source": "/foster.html", "destination": "/Foster.html" },
-    { "source": "/sponsor", "destination": "/Sponsor.html" },
-    { "source": "/sponsor.html", "destination": "/Sponsor.html" },
-    { "source": "/donate", "destination": "/Donate.html" },
-    { "source": "/donate.html", "destination": "/Donate.html" },
-    { "source": "/merch", "destination": "/Merch.html" },
-    { "source": "/merch.html", "destination": "/Merch.html" },
-    { "source": "/news", "destination": "/News.html" },
-    { "source": "/news.html", "destination": "/News.html" },
-    { "source": "/contact", "destination": "/Contact.html" },
-    { "source": "/contact.html", "destination": "/Contact.html" },
-    { "source": "/privacy", "destination": "/Privacy.html" },
-    { "source": "/privacy.html", "destination": "/Privacy.html" },
-    { "source": "/reality", "destination": "/Reality.html" },
-    { "source": "/reality.html", "destination": "/Reality.html" }
+    {
+      "source": "/adopt",
+      "destination": "/Adopt.html"
+    },
+    {
+      "source": "/adopt.html",
+      "destination": "/Adopt.html"
+    },
+    {
+      "source": "/foster",
+      "destination": "/Foster.html"
+    },
+    {
+      "source": "/foster.html",
+      "destination": "/Foster.html"
+    },
+    {
+      "source": "/sponsor",
+      "destination": "/Sponsor.html"
+    },
+    {
+      "source": "/sponsor.html",
+      "destination": "/Sponsor.html"
+    },
+    {
+      "source": "/donate",
+      "destination": "/Donate.html"
+    },
+    {
+      "source": "/donate.html",
+      "destination": "/Donate.html"
+    },
+    {
+      "source": "/merch",
+      "destination": "/Merch.html"
+    },
+    {
+      "source": "/merch.html",
+      "destination": "/Merch.html"
+    },
+    {
+      "source": "/news",
+      "destination": "/News.html"
+    },
+    {
+      "source": "/news.html",
+      "destination": "/News.html"
+    },
+    {
+      "source": "/contact",
+      "destination": "/Contact.html"
+    },
+    {
+      "source": "/contact.html",
+      "destination": "/Contact.html"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/Privacy.html"
+    },
+    {
+      "source": "/privacy.html",
+      "destination": "/Privacy.html"
+    },
+    {
+      "source": "/reality",
+      "destination": "/Reality.html"
+    },
+    {
+      "source": "/reality.html",
+      "destination": "/Reality.html"
+    }
   ],
   "headers": [
     {
       "source": "/(.*)",
-      "has": [{ "type": "host", "value": "run2-rescuedemo.vercel.app" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "run2-rescuedemo.vercel.app"
+        }
+      ],
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
       ]
     },
     {
       "source": "/((?!api/).*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" },
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" },
-        { "key": "X-Frame-Options", "value": "DENY" },
-        { "key": "Cross-Origin-Opener-Policy", "value": "same-origin" },
-        { "key": "Permissions-Policy", "value": "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=(), interest-cohort=()" },
-        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' https://unpkg.com https://www.googletagmanager.com 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob: https://new-s3.shelterluv.com https://*.shelterluv.com https://images.unsplash.com https://img.youtube.com https://i.ytimg.com https://www.google-analytics.com https://www.googletagmanager.com; media-src 'self'; connect-src 'self' https://api.web3forms.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com; object-src 'none'; base-uri 'self'; form-action 'self' https://api.web3forms.com; frame-ancestors 'none'; upgrade-insecure-requests" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains; preload"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=(), interest-cohort=()"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' https://unpkg.com https://www.googletagmanager.com 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob: https://*.fourthwall.com https://storage.googleapis.com https://new-s3.shelterluv.com https://*.shelterluv.com https://images.unsplash.com https://img.youtube.com https://i.ytimg.com https://www.google-analytics.com https://www.googletagmanager.com; media-src 'self'; connect-src 'self' https://api.web3forms.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com; object-src 'none'; base-uri 'self'; form-action 'self' https://api.web3forms.com; frame-ancestors 'none'; upgrade-insecure-requests"
+        }
       ]
     },
     {
       "source": "/assets/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
       ]
     },
     {
       "source": "/api/(.*)",
       "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" },
-        { "key": "X-Frame-Options", "value": "DENY" },
-        { "key": "Cross-Origin-Resource-Policy", "value": "same-origin" }
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains; preload"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Cross-Origin-Resource-Policy",
+          "value": "same-origin"
+        }
       ]
     }
   ]

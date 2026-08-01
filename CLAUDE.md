@@ -45,6 +45,21 @@ medical care, and rehoming survivors.
 - Proxy endpoint on the site: `/api/animals` (debug: `/api/animals?debug=1`)
 - Secret key: `SHELTERLUV_API_KEY` in Vercel project env vars (never in repo)
 
+**Merch (Fourthwall storefront)**
+- Admin dashboard: https://run2therescue-yeh-shop.fourthwall.com/admin/dashboard
+- Public shop (checkout host): https://run2therescue-yeh-shop.fourthwall.com
+  (`run2therescue-shop.fourthwall.com` is a stale alias — the `-yeh-` host is canonical)
+- Proxy endpoint on the site: `/api/products` (debug: `/api/products?debug=1`)
+- Storefront token: `FOURTHWALL_STOREFRONT_TOKEN` env var in Vercel (a public
+  `ptkn_*` token by Fourthwall's design, but GitHub push protection flags it,
+  so it stays out of the repo); get/rotate at Fourthwall → Settings → For
+  developers
+- Draft products don't appear in the API; publishing them in Fourthwall makes
+  the Merch page grid appear automatically (no deploy needed)
+- NEVER point the apex domain's DNS at Fourthwall — that takes the whole site
+  down (it happened once; see docs/ backup notes). If Fourthwall ever needs a
+  domain, give it a subdomain like `shop.run2therescue.org`.
+
 **Social (footer icons in `shared.jsx → FooterS`)**
 - Facebook: https://www.facebook.com/people/Run-2-The-Rescue/61564710401329/
 - Instagram: https://www.instagram.com/run2therescue
@@ -371,6 +386,7 @@ no rotation cost beyond pasting a new key.
 | Variable             | Used by          | Notes                                  |
 |----------------------|------------------|----------------------------------------|
 | `SHELTERLUV_API_KEY` | `api/animals.js` | Secret. Scope to the `website-refresh` project. |
+| `FOURTHWALL_STOREFRONT_TOKEN` | `api/products.js` | Public `ptkn_*` token; env var only because GitHub push protection pattern-matches it. |
 
 `.env*` files are git-ignored — never commit secrets. (The Web3Forms key
 *is* committed, intentionally — see Security.)

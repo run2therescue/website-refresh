@@ -6,19 +6,19 @@
 <link rel="icon" type="image/png" href="assets/r2r-logo.png?v=3" />
 <link rel="apple-touch-icon" href="assets/r2r-logo.png?v=3" />
 <title>Merch · Wear the Cause · Run 2 The Rescue</title>
-<meta name="description" content="Tees, hoodies, and totes that fund dog rescues from the East Asia dog meat trade. Coming soon — get notified at launch." />
+<meta name="description" content="Tees, hoodies, and totes that fund dog rescues from the East Asia dog meat trade. Every purchase puts dogs on planes home." />
 <link rel="canonical" href="https://run2therescue.org/merch" />
 <meta name="theme-color" content="#1a1025" />
 <script defer src="analytics.js?v=3"></script>
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Run 2 The Rescue" />
 <meta property="og:title" content="Merch · Wear the Cause · Run 2 The Rescue" />
-<meta property="og:description" content="Tees, hoodies, and totes that fund dog rescues from the East Asia dog meat trade. Coming soon — get notified at launch." />
+<meta property="og:description" content="Tees, hoodies, and totes that fund dog rescues from the East Asia dog meat trade. Every purchase puts dogs on planes home." />
 <meta property="og:url" content="https://run2therescue.org/merch" />
 <meta property="og:image" content="https://run2therescue.org/assets/og-image.png" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Merch · Wear the Cause · Run 2 The Rescue" />
-<meta name="twitter:description" content="Tees, hoodies, and totes that fund dog rescues from the East Asia dog meat trade. Coming soon — get notified at launch." />
+<meta name="twitter:description" content="Tees, hoodies, and totes that fund dog rescues from the East Asia dog meat trade. Every purchase puts dogs on planes home." />
 <meta name="twitter:image" content="https://run2therescue.org/assets/og-image.png" />
 <link rel="stylesheet" href="fonts.css?v=1" />
 <link rel="preload" href="assets/fonts/bricolage-latin.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
@@ -60,25 +60,94 @@
 <script type="text/babel" src="shared.jsx?v=22"></script>
 
 <script type="text/babel">
-function MerchPage() {
+/* Live storefront, powered by Fourthwall via the /api/products proxy
+   (mirrors how Adopt/Sponsor pull live dogs from /api/animals).
+   While every product is still a draft the API returns an empty list and the
+   page shows the "coming soon" state; publishing products in Fourthwall makes
+   the grid appear automatically. Buying links out to Fourthwall in a new tab,
+   the same convention as donations (no embedded payment forms). */
+function useProducts() {
+  const [state, setState] = useStateS({ loading: true, products: [], shopUrl: null });
+  useEffectS(() => {
+    let alive = true;
+    fetch("/api/products")
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error("HTTP " + r.status))))
+      .then((data) => { if (alive) setState({ loading: false, products: data.products || [], shopUrl: data.shopUrl || null }); })
+      .catch(() => { if (alive) setState({ loading: false, products: [], shopUrl: null }); });
+    return () => { alive = false; };
+  }, []);
+  return state;
+}
+
+function ProductCard({ p }) {
   return (
-    <section style={{ padding: "120px 0 160px", position: "relative", overflow: "hidden" }}>
-      <PawS className="paw" style={{ top: 80, left: "8%", width: 56, height: 56, color: "#fff", opacity: 0.1 }} />
-      <PawS className="paw" style={{ bottom: 60, right: "10%", width: 72, height: 72, color: "#fff", opacity: 0.1 }} />
-      <div className="wrap" style={{ maxWidth: 720, margin: "0 auto", textAlign: "center", position: "relative", zIndex: 1 }}>
-        <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 16 }}><PawGlyphS />Coming Soon</div>
-        <h1 className="display" style={{ fontSize: "clamp(48px, 7vw, 96px)", margin: "0 0 24px", color: "#fff", lineHeight: 0.98 }}>
-          Wear the <em>cause.</em>
-        </h1>
-        <p style={{ fontSize: 18, color: "var(--on-dark-2)", maxWidth: 540, margin: "0 auto 36px", lineHeight: 1.55 }}>
-          Tees, hoodies, totes, and more, designed to spark conversation and fund rescues from the East Asian dog meat trade. Every purchase puts dogs on planes home.
-        </p>
-        <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-          <a href="/contact" className="btn btn-accent">Get Notified at Launch</a>
-          <a href="/donate" className="btn btn-outline-light">Donate in the Meantime</a>
+    <a href={p.url} target="_blank" rel="noopener noreferrer"
+      style={{ display: "block", background: "#fff", borderRadius: 16, overflow: "hidden", border: "1px solid var(--lav-200)", transition: "transform .2s ease, box-shadow .2s ease" }}
+      onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "var(--shadow)"; }}
+      onMouseLeave={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}
+    >
+      <div style={{ aspectRatio: "1/1", overflow: "hidden", background: "var(--lav-100)", position: "relative" }}>
+        {p.image
+          ? <img src={p.image} alt={p.name} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+          : <div aria-hidden="true" style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(160deg, var(--lav-200), var(--lav-100))" }}>
+              <span className="display" style={{ fontSize: 40, color: "var(--purple-400)" }}>{(p.name || "?")[0]}</span>
+            </div>}
+        {p.soldOut && (
+          <span style={{ position: "absolute", top: 10, left: 10, fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 700, padding: "4px 9px", borderRadius: 999, background: "rgba(26,16,37,0.82)", color: "#fff" }}>Sold out</span>
+        )}
+      </div>
+      <div style={{ padding: "12px 14px 14px" }}>
+        <div className="display" style={{ fontSize: 16, color: "var(--ink)", lineHeight: 1.15 }}>{p.name}</div>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 6 }}>
+          <span style={{ fontSize: 14, fontWeight: 600, color: "var(--purple-600)" }}>{p.price}</span>
+          {p.sizes && p.sizes.length > 1 && (
+            <span style={{ fontSize: 10, fontFamily: "var(--font-ui)", letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--ink-3)" }}>{p.sizes.length} sizes</span>
+          )}
         </div>
       </div>
-    </section>
+    </a>
+  );
+}
+
+function MerchPage() {
+  const { loading, products } = useProducts();
+  const hasProducts = !loading && products.length > 0;
+  return (
+    <>
+      <section style={{ padding: hasProducts ? "88px 0 40px" : "120px 0 160px", position: "relative", overflow: "hidden" }}>
+        <PawS className="paw" style={{ top: 80, left: "8%", width: 56, height: 56, color: "#fff", opacity: 0.1 }} />
+        <PawS className="paw" style={{ bottom: 60, right: "10%", width: 72, height: 72, color: "#fff", opacity: 0.1 }} />
+        <div className="wrap" style={{ maxWidth: 720, margin: "0 auto", textAlign: "center", position: "relative", zIndex: 1 }}>
+          {!hasProducts && (
+            <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 16 }}><PawGlyphS />Coming Soon</div>
+          )}
+          <h1 className="display" style={{ fontSize: "clamp(48px, 7vw, 96px)", margin: "0 0 24px", color: "#fff", lineHeight: 0.98 }}>
+            Wear the <em>cause.</em>
+          </h1>
+          <p style={{ fontSize: 18, color: "var(--on-dark-2)", maxWidth: 540, margin: "0 auto 36px", lineHeight: 1.55 }}>
+            Tees, hoodies, totes, and more, designed to spark conversation and fund rescues from the East Asian dog meat trade. Every purchase puts dogs on planes home.
+          </p>
+          {!hasProducts && (
+            <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+              <a href="/contact" className="btn btn-accent">Get Notified at Launch</a>
+              <a href="/donate" className="btn btn-outline-light">Donate in the Meantime</a>
+            </div>
+          )}
+        </div>
+      </section>
+      {hasProducts && (
+        <section className="section-light" style={{ padding: "48px 0 72px" }}>
+          <div className="wrap">
+            <div className="ways-grid" style={{ display: "grid", gridTemplateColumns: `repeat(${Math.min(products.length, 4)}, 1fr)`, gap: 16, maxWidth: products.length < 4 ? products.length * 280 : "none", margin: "0 auto" }}>
+              {products.map((p) => <ProductCard key={p.id} p={p} />)}
+            </div>
+            <p style={{ textAlign: "center", marginTop: 28, fontSize: 13, color: "var(--ink-3)" }}>
+              Checkout is handled securely by Fourthwall. Every purchase funds rescue flights, medical care, and second chances.
+            </p>
+          </div>
+        </section>
+      )}
+    </>
   );
 }
 
