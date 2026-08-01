@@ -27,12 +27,6 @@
 <style>
 /* ---- Merch page styles (page-scoped; global tokens come from styles.css) ---- */
 
-/* Trust chips under the hero subline */
-.m-chip { display: inline-flex; align-items: center; gap: 7px; padding: 7px 14px; border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.16); color: var(--on-dark-2);
-  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; }
-.m-chip svg { width: 12px; height: 12px; color: var(--purple-400); flex-shrink: 0; }
-
 /* Skeleton loading state, shape-matched to the product cards */
 .m-skel { border-radius: 18px; overflow: hidden; border: 1px solid var(--lav-200); background: #fff; }
 .m-skel-img { aspect-ratio: 1/1; }
@@ -313,20 +307,6 @@ function IconShield() {
     </svg>
   );
 }
-function IconHeart() {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M12 21c-4.5-3.6-8-6.6-8-10a4.6 4.6 0 018-3.2A4.6 4.6 0 0120 11c0 3.4-3.5 6.4-8 10z" />
-    </svg>
-  );
-}
-function IconPlane() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M10.5 13.5L3 10l18-7-7 18-3.5-7.5z" />
-    </svg>
-  );
-}
 function IconX() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" aria-hidden="true">
@@ -601,13 +581,7 @@ function MerchPage() {
           <p style={{ fontSize: 18, color: "var(--on-dark-2)", maxWidth: 560, margin: "0 auto", lineHeight: 1.55 }}>
             Tees, hoodies, totes, and more, designed to spark conversation and fund rescues from the East Asian dog meat trade. Every purchase puts dogs on planes home.
           </p>
-          {showShop ? (
-            <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginTop: 26 }}>
-              <span className="m-chip"><IconShield />Secure checkout by Fourthwall</span>
-              <span className="m-chip"><IconHeart />Supports our 501(c)(3) rescue work</span>
-              <span className="m-chip"><IconPlane />Funds freedom flights home</span>
-            </div>
-          ) : (
+          {!showShop && (
             <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginTop: 36 }}>
               <a href="/contact" className="btn btn-accent">Get Notified at Launch</a>
               <a href="/donate" className="btn btn-outline-light">Donate in the Meantime</a>
