@@ -24,6 +24,61 @@
 <link rel="preload" href="assets/fonts/bricolage-latin.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
 <link rel="preload" href="assets/fonts/intertight-latin.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
 <link rel="stylesheet" href="styles.css?v=20" />
+<style>
+/* ---- Merch page styles (page-scoped; global tokens come from styles.css) ---- */
+
+/* Tagline ticker between hero and grid, echoes the homepage marquee */
+.m-ticker { overflow: clip; background: oklch(0.15 0.03 310); border-block: 1px solid rgba(255,255,255,0.07); }
+.m-ticker-track { display: inline-flex; gap: 56px; white-space: nowrap; padding: 13px 28px;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--purple-400); animation: mTicker 36s linear infinite; }
+.m-ticker:hover .m-ticker-track { animation-play-state: paused; }
+@keyframes mTicker { to { transform: translateX(-50%); } }
+
+/* Trust chips under the hero subline */
+.m-chip { display: inline-flex; align-items: center; gap: 7px; padding: 7px 14px; border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.16); color: var(--on-dark-2);
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; }
+.m-chip svg { width: 12px; height: 12px; color: var(--purple-400); flex-shrink: 0; }
+
+/* Skeleton loading state, shape-matched to the product cards */
+.m-skel { border-radius: 18px; overflow: hidden; border: 1px solid var(--lav-200); background: #fff; }
+.m-skel-img { aspect-ratio: 1/1; }
+.m-skel-line { height: 13px; border-radius: 7px; margin: 13px 14px; }
+.m-skel-line.short { width: 40%; margin-top: 0; }
+.m-shimmer { background: linear-gradient(100deg, var(--lav-100) 40%, var(--lav-50) 50%, var(--lav-100) 60%);
+  background-size: 200% 100%; animation: mShimmer 1.5s linear infinite; }
+@keyframes mShimmer { to { background-position: -200% 0; } }
+
+/* Product cards */
+.m-card { display: block; background: #fff; border-radius: 18px; overflow: hidden; border: 1px solid var(--lav-200);
+  animation: mPop .5s cubic-bezier(.16,1,.3,1) both;
+  transition: transform .25s cubic-bezier(.16,1,.3,1), box-shadow .25s ease, border-color .25s ease; }
+.m-card:hover { transform: translateY(-5px); border-color: var(--lav-300);
+  box-shadow: 0 2px 4px oklch(0.3 0.06 310 / 0.05), 0 10px 20px oklch(0.3 0.06 310 / 0.08), 0 24px 44px oklch(0.3 0.06 310 / 0.1); }
+@keyframes mPop { from { opacity: 0; transform: translateY(14px) scale(.985); } to { opacity: 1; transform: none; } }
+.m-card-imgwrap { aspect-ratio: 1/1; overflow: hidden; position: relative; background: var(--lav-100); }
+.m-card-img { width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform .5s cubic-bezier(.16,1,.3,1), opacity .35s ease; }
+.m-card:hover .m-card-img.solo { transform: scale(1.05); }
+.m-card-img.alt { position: absolute; inset: 0; opacity: 0; }
+.m-card:hover .m-card-img.alt, .m-card:focus-visible .m-card-img.alt { opacity: 1; }
+.m-card.sold .m-card-img { filter: grayscale(.4) brightness(.94); }
+.m-view { position: absolute; left: 10px; bottom: 10px; display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(26,16,37,0.86); color: #fff; font-family: var(--font-mono); font-size: 9px;
+  letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; padding: 7px 11px; border-radius: 999px;
+  opacity: 0; transform: translateY(6px); transition: opacity .25s ease, transform .25s cubic-bezier(.16,1,.3,1); }
+.m-view svg { width: 10px; height: 10px; }
+.m-card:hover .m-view, .m-card:focus-visible .m-view { opacity: 1; transform: none; }
+.m-name { transition: color .2s ease; }
+.m-card:hover .m-name { color: var(--purple-600); }
+
+@media (prefers-reduced-motion: reduce) {
+  .m-ticker-track, .m-shimmer { animation: none; }
+  .m-card { animation: none; }
+  .m-card, .m-card-img, .m-view { transition: none; }
+}
+</style>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -65,60 +120,125 @@
    While every product is still a draft the API returns an empty list and the
    page shows the "coming soon" state; publishing products in Fourthwall makes
    the grid appear automatically. Buying links out to Fourthwall in a new tab,
-   the same convention as donations (no embedded payment forms). */
-/* Team-only preview: /merch?preview=1 renders the grid with sample products
-   so the layout can be reviewed before anything is published in Fourthwall.
-   Normal visitors never see it, and the samples link to the real shop. */
+   the same convention as donations (no embedded payment forms).
+
+   Team-only preview: /merch?preview=1 renders the grid with sample products
+   so layout and interactions can be reviewed before launch. */
+
 const IS_PREVIEW = new URLSearchParams(window.location.search).has("preview");
 const SHOP_HOME = "https://run2therescue-yeh-shop.fourthwall.com";
-function svgTile(label) {
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e6e0f4"/><stop offset="1" stop-color="#f3f0fb"/></linearGradient></defs><rect width="600" height="600" fill="url(#g)"/><text x="300" y="285" text-anchor="middle" font-family="Arial, sans-serif" font-size="44" font-weight="800" fill="#8b5cf6" letter-spacing="6">${label}</text><text x="300" y="340" text-anchor="middle" font-family="Arial, sans-serif" font-size="17" font-weight="600" fill="#6d5a8e" letter-spacing="3">SAMPLE PRODUCT</text></svg>`;
+
+function svgTile(label, tone) {
+  const tones = {
+    a: ["#e6e0f4", "#f3f0fb"], b: ["#ddd4f0", "#ece6f8"],
+  };
+  const [c1, c2] = tones[tone] || tones.a;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient></defs><rect width="600" height="600" fill="url(#g)"/><text x="300" y="285" text-anchor="middle" font-family="Arial, sans-serif" font-size="44" font-weight="800" fill="#8b5cf6" letter-spacing="6">${label}</text><text x="300" y="340" text-anchor="middle" font-family="Arial, sans-serif" font-size="17" font-weight="600" fill="#6d5a8e" letter-spacing="3">SAMPLE PRODUCT</text></svg>`;
   return "data:image/svg+xml," + encodeURIComponent(svg);
 }
 const PREVIEW_PRODUCTS = [
-  { id: "pv1", name: "RUN. RESCUE. REPEAT. Tee", price: "$28+", image: svgTile("TEE"), soldOut: false, sizes: ["S","M","L","XL","2XL"], url: SHOP_HOME },
-  { id: "pv2", name: "Second Chance Hoodie", price: "$52+", image: svgTile("HOODIE"), soldOut: false, sizes: ["S","M","L","XL"], url: SHOP_HOME },
-  { id: "pv3", name: "Beacon of Hope Tote", price: "$22", image: svgTile("TOTE"), soldOut: false, sizes: [], url: SHOP_HOME },
-  { id: "pv4", name: "Survivor Paw Mug", price: "$18", image: svgTile("MUG"), soldOut: true, sizes: [], url: SHOP_HOME },
+  { id: "pv1", name: "RUN. RESCUE. REPEAT. Tee", price: "$28+", image: svgTile("TEE", "a"), images: [svgTile("TEE", "a"), svgTile("TEE BACK", "b")], soldOut: false, sizes: ["S","M","L","XL","2XL"], url: SHOP_HOME },
+  { id: "pv2", name: "Second Chance Hoodie", price: "$52+", image: svgTile("HOODIE", "a"), images: [svgTile("HOODIE", "a"), svgTile("HOODIE BACK", "b")], soldOut: false, sizes: ["S","M","L","XL"], url: SHOP_HOME },
+  { id: "pv3", name: "Beacon of Hope Tote", price: "$22", image: svgTile("TOTE", "a"), images: [svgTile("TOTE", "a")], soldOut: false, sizes: [], url: SHOP_HOME },
+  { id: "pv4", name: "Survivor Paw Mug", price: "$18", image: svgTile("MUG", "a"), images: [svgTile("MUG", "a")], soldOut: true, sizes: [], url: SHOP_HOME },
+  { id: "pv5", name: "Freedom Flight Sticker Pack", price: "$8", image: svgTile("STICKERS", "a"), images: [svgTile("STICKERS", "a"), svgTile("STICKERS ALT", "b")], soldOut: false, sizes: [], url: SHOP_HOME },
+  { id: "pv6", name: "Rescue Runner Cap", price: "$26", image: svgTile("CAP", "a"), images: [svgTile("CAP", "a")], soldOut: false, sizes: [], url: SHOP_HOME },
 ];
 
 function useProducts() {
-  const [state, setState] = useStateS({ loading: true, products: [], shopUrl: null });
+  const [state, setState] = useStateS({ loading: true, products: [] });
   useEffectS(() => {
     if (IS_PREVIEW) {
-      setState({ loading: false, products: PREVIEW_PRODUCTS, shopUrl: SHOP_HOME });
-      return;
+      // Brief simulated load so the skeleton state is reviewable too.
+      const t = setTimeout(() => setState({ loading: false, products: PREVIEW_PRODUCTS }), 900);
+      return () => clearTimeout(t);
     }
     let alive = true;
     fetch("/api/products")
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error("HTTP " + r.status))))
-      .then((data) => { if (alive) setState({ loading: false, products: data.products || [], shopUrl: data.shopUrl || null }); })
-      .catch(() => { if (alive) setState({ loading: false, products: [], shopUrl: null }); });
+      .then((data) => { if (alive) setState({ loading: false, products: data.products || [] }); })
+      .catch(() => { if (alive) setState({ loading: false, products: [] }); });
     return () => { alive = false; };
   }, []);
   return state;
 }
 
-function ProductCard({ p }) {
+/* Small inline SVG icons (no emoji in UI) */
+function IconArrow() {
   return (
-    <a href={p.url} target="_blank" rel="noopener noreferrer"
-      style={{ display: "block", background: "#fff", borderRadius: 16, overflow: "hidden", border: "1px solid var(--lav-200)", transition: "transform .2s ease, box-shadow .2s ease" }}
-      onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "var(--shadow)"; }}
-      onMouseLeave={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}
-    >
-      <div style={{ aspectRatio: "1/1", overflow: "hidden", background: "var(--lav-100)", position: "relative" }}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M7 17L17 7M9 7h8v8" />
+    </svg>
+  );
+}
+function IconShield() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6l7-3z" />
+    </svg>
+  );
+}
+function IconHeart() {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12 21c-4.5-3.6-8-6.6-8-10a4.6 4.6 0 018-3.2A4.6 4.6 0 0120 11c0 3.4-3.5 6.4-8 10z" />
+    </svg>
+  );
+}
+function IconPlane() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M10.5 13.5L3 10l18-7-7 18-3.5-7.5z" />
+    </svg>
+  );
+}
+
+const TICKER_ITEMS = ["Run. Rescue. Repeat.", "Wear the cause", "Every purchase puts dogs on planes home", "Second chances look good on you"];
+function TaglineTicker() {
+  const row = TICKER_ITEMS.map((t, i) => <span key={i}>{t}</span>);
+  return (
+    <div className="m-ticker" aria-hidden="true">
+      <div className="m-ticker-track">{row}{row}{row}{row}</div>
+    </div>
+  );
+}
+
+function SkeletonGrid() {
+  return (
+    <div className="ways-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }} aria-hidden="true">
+      {[0, 1, 2, 3].map((i) => (
+        <div key={i} className="m-skel">
+          <div className="m-skel-img m-shimmer" />
+          <div className="m-skel-line m-shimmer" />
+          <div className="m-skel-line short m-shimmer" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ProductCard({ p, index }) {
+  const alt = p.images && p.images.length > 1 ? p.images[1] : null;
+  const label = `${p.name}, ${p.price}${p.soldOut ? ", sold out" : ""}. Opens on our Fourthwall shop.`;
+  return (
+    <a href={p.url} target="_blank" rel="noopener noreferrer" aria-label={label}
+      className={"m-card" + (p.soldOut ? " sold" : "")}
+      style={{ animationDelay: `${Math.min(index, 11) * 60}ms` }}>
+      <div className="m-card-imgwrap">
         {p.image
-          ? <img src={p.image} alt={p.name} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+          ? <img className={"m-card-img" + (alt ? "" : " solo")} src={p.image} alt="" loading="lazy" />
           : <div aria-hidden="true" style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(160deg, var(--lav-200), var(--lav-100))" }}>
               <span className="display" style={{ fontSize: 40, color: "var(--purple-400)" }}>{(p.name || "?")[0]}</span>
             </div>}
+        {alt && <img className="m-card-img alt" src={alt} alt="" loading="lazy" />}
         {p.soldOut && (
-          <span style={{ position: "absolute", top: 10, left: 10, fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 700, padding: "4px 9px", borderRadius: 999, background: "rgba(26,16,37,0.82)", color: "#fff" }}>Sold out</span>
+          <span style={{ position: "absolute", top: 10, left: 10, fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 700, padding: "5px 10px", borderRadius: 999, background: "rgba(26,16,37,0.84)", color: "#fff" }}>Sold out</span>
         )}
+        <span className="m-view">{p.soldOut ? "See details" : "View product"} <IconArrow /></span>
       </div>
-      <div style={{ padding: "12px 14px 14px" }}>
-        <div className="display" style={{ fontSize: 16, color: "var(--ink)", lineHeight: 1.15 }}>{p.name}</div>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 6 }}>
+      <div style={{ padding: "13px 15px 15px" }}>
+        <div className="m-name display" style={{ fontSize: 16, color: "var(--ink)", lineHeight: 1.15 }}>{p.name}</div>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 7 }}>
           <span style={{ fontSize: 14, fontWeight: 600, color: "var(--purple-600)" }}>{p.price}</span>
           {p.sizes && p.sizes.length > 1 && (
             <span style={{ fontSize: 10, fontFamily: "var(--font-ui)", letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--ink-3)" }}>{p.sizes.length} sizes</span>
@@ -131,44 +251,77 @@ function ProductCard({ p }) {
 
 function MerchPage() {
   const { loading, products } = useProducts();
-  const hasProducts = !loading && products.length > 0;
+  const hasProducts = products.length > 0;
+  const showShop = loading || hasProducts;
   return (
     <>
-      <section style={{ padding: hasProducts ? "88px 0 40px" : "120px 0 160px", position: "relative", overflow: "hidden" }}>
-        <PawS className="paw" style={{ top: 80, left: "8%", width: 56, height: 56, color: "#fff", opacity: 0.1 }} />
-        <PawS className="paw" style={{ bottom: 60, right: "10%", width: 72, height: 72, color: "#fff", opacity: 0.1 }} />
-        <div className="wrap" style={{ maxWidth: 720, margin: "0 auto", textAlign: "center", position: "relative", zIndex: 1 }}>
-          {!hasProducts && (
+      <section style={{ padding: showShop ? "72px 0 56px" : "120px 0 160px", position: "relative", overflow: "hidden" }}>
+        <PawS className="paw" style={{ top: 60, left: "7%", width: 56, height: 56, color: "#fff", opacity: 0.1 }} />
+        <PawS className="paw" style={{ bottom: 40, right: "9%", width: 72, height: 72, color: "#fff", opacity: 0.1 }} />
+        <div className="wrap" style={{ maxWidth: 760, margin: "0 auto", textAlign: "center", position: "relative", zIndex: 1 }}>
+          {!showShop && (
             <div className="eyebrow" style={{ color: "var(--purple-400)", marginBottom: 16 }}><PawGlyphS />Coming Soon</div>
           )}
-          <h1 className="display" style={{ fontSize: "clamp(48px, 7vw, 96px)", margin: "0 0 24px", color: "#fff", lineHeight: 0.98 }}>
+          <h1 className="display" style={{ fontSize: showShop ? "clamp(42px, 6vw, 76px)" : "clamp(48px, 7vw, 96px)", margin: "0 0 20px", color: "#fff", lineHeight: 0.98 }}>
             Wear the <em>cause.</em>
           </h1>
-          <p style={{ fontSize: 18, color: "var(--on-dark-2)", maxWidth: 540, margin: "0 auto 36px", lineHeight: 1.55 }}>
+          <p style={{ fontSize: 18, color: "var(--on-dark-2)", maxWidth: 560, margin: "0 auto", lineHeight: 1.55 }}>
             Tees, hoodies, totes, and more, designed to spark conversation and fund rescues from the East Asian dog meat trade. Every purchase puts dogs on planes home.
           </p>
-          {!hasProducts && (
-            <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+          {showShop ? (
+            <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginTop: 26 }}>
+              <span className="m-chip"><IconShield />Secure checkout by Fourthwall</span>
+              <span className="m-chip"><IconHeart />Supports our 501(c)(3) rescue work</span>
+              <span className="m-chip"><IconPlane />Funds freedom flights home</span>
+            </div>
+          ) : (
+            <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginTop: 36 }}>
               <a href="/contact" className="btn btn-accent">Get Notified at Launch</a>
               <a href="/donate" className="btn btn-outline-light">Donate in the Meantime</a>
             </div>
           )}
         </div>
       </section>
-      {hasProducts && (
-        <section className="section-light" style={{ padding: "48px 0 72px" }}>
+
+      {showShop && <TaglineTicker />}
+
+      {showShop && (
+        <section className="section-light" style={{ padding: "52px 0 40px" }}>
           <div className="wrap">
-            {IS_PREVIEW && (
-              <p style={{ textAlign: "center", margin: "0 0 24px", fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--purple-600)" }}>
-                Preview mode — sample products, not live listings
+            {IS_PREVIEW && !loading && (
+              <p style={{ textAlign: "center", margin: "0 0 26px", fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--purple-600)" }}>
+                Preview mode, sample products only. Real listings replace these the moment they publish.
               </p>
             )}
-            <div className="ways-grid" style={{ display: "grid", gridTemplateColumns: `repeat(${Math.min(products.length, 4)}, 1fr)`, gap: 16, maxWidth: products.length < 4 ? products.length * 280 : "none", margin: "0 auto" }}>
-              {products.map((p) => <ProductCard key={p.id} p={p} />)}
-            </div>
-            <p style={{ textAlign: "center", marginTop: 28, fontSize: 13, color: "var(--ink-3)" }}>
-              Checkout is handled securely by Fourthwall. Every purchase funds rescue flights, medical care, and second chances.
+            {loading ? (
+              <SkeletonGrid />
+            ) : (
+              <div className="ways-grid" style={{ display: "grid", gridTemplateColumns: `repeat(${Math.min(products.length, 4)}, 1fr)`, gap: 16, maxWidth: products.length < 4 ? products.length * 280 : "none", margin: "0 auto" }}>
+                {products.map((p, i) => <ProductCard key={p.id} p={p} index={i} />)}
+              </div>
+            )}
+            <p style={{ textAlign: "center", marginTop: 30, fontSize: 13, color: "var(--ink-3)", maxWidth: 520, marginLeft: "auto", marginRight: "auto", lineHeight: 1.6 }}>
+              Checkout, shipping, and returns are handled securely by Fourthwall. Proceeds fund rescue flights, medical care, and second chances.
             </p>
+          </div>
+        </section>
+      )}
+
+      {showShop && (
+        <section className="section-light" style={{ padding: "16px 0 88px" }}>
+          <div className="wrap" style={{ maxWidth: 720, textAlign: "center" }}>
+            <div style={{ background: "#fff", border: "1px solid var(--lav-200)", borderRadius: 22, padding: "40px 28px" }}>
+              <h2 className="display" style={{ fontSize: "clamp(24px, 3.4vw, 34px)", margin: "0 0 10px", color: "var(--ink)" }}>
+                More ways to run to the rescue
+              </h2>
+              <p style={{ fontSize: 15, color: "var(--ink-2)", maxWidth: 460, margin: "0 auto 24px", lineHeight: 1.6 }}>
+                Merch is one door. A sponsorship keeps a survivor fed and healthy while they wait for their family.
+              </p>
+              <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+                <a href="/sponsor" className="btn btn-accent">Sponsor a Survivor</a>
+                <a href="/donate" className="btn btn-outline-soft">Give Once</a>
+              </div>
+            </div>
           </div>
         </section>
       )}
