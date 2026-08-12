@@ -48,7 +48,7 @@
 .m-card-img { width: 100%; height: 100%; object-fit: cover; display: block;
   transition: transform .5s cubic-bezier(.16,1,.3,1), opacity .35s ease; }
 .m-card:hover .m-card-img.solo { transform: scale(1.05); }
-.m-card-img.alt { position: absolute; inset: 0; opacity: 0; }
+.m-card-img.alt { position: absolute; inset: 0; opacity: 0; background: var(--lav-100); }
 .m-card:hover .m-card-img.alt, .m-card:focus-visible .m-card-img.alt { opacity: 1; }
 .m-card.sold .m-card-img { filter: grayscale(.4) brightness(.94); }
 .m-view { position: absolute; left: 10px; bottom: 10px; display: inline-flex; align-items: center; gap: 6px;
@@ -111,10 +111,10 @@
 
 .m-qty { display: inline-flex; align-items: center; border: 1.5px solid var(--lav-300); border-radius: 999px; }
 .m-qty button { width: 36px; height: 36px; border: none; background: none; cursor: pointer; font-size: 17px;
-  color: var(--ink-2); transition: color .15s ease; border-radius: 50%; }
+  color: var(--ink); font-weight: 600; transition: color .15s ease; border-radius: 50%; }
 .m-qty button:hover { color: var(--purple-600); }
-.m-qty button:disabled { opacity: .35; cursor: not-allowed; }
-.m-qty span { min-width: 28px; text-align: center; font-weight: 600; font-size: 14px; }
+.m-qty button:disabled { opacity: .55; cursor: not-allowed; }
+.m-qty span { min-width: 28px; text-align: center; font-weight: 700; font-size: 15px; color: var(--ink); }
 
 .m-acc { border-top: 1px solid var(--lav-200); }
 .m-acc summary { cursor: pointer; padding: 13px 2px; font-weight: 600; font-size: 14px; color: var(--ink);

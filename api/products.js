@@ -172,5 +172,6 @@ function cleanText(s) {
     .replace(/<\/(p|div|li|h[1-6])>/gi, "\n")
     .replace(/<[^>]*>/g, " ")
     .replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&#39;/g, "'").replace(/&quot;/g, '"')
+    .replace(/&nbsp;/gi, " ").replace(/&#(\d+);/g, function(m,n){ return String.fromCharCode(Number(n)); }).replace(/&#x([0-9a-f]+);/gi, function(m,h){ return String.fromCharCode(parseInt(h,16)); })
     .split("\n").map((line) => line.replace(/\s+/g, " ").trim()).filter(Boolean).join("\n");
 }
