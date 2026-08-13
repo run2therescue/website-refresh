@@ -565,7 +565,7 @@ function MerchPage() {
   const { loading, products } = useProducts();
   const [open, setOpen] = useStateS(null);
   const hasProducts = products.length > 0;
-  const showShop = loading || hasProducts;
+  const showShop = loading || hasProducts || failed;
   return (
     <>
       <section style={{ padding: showShop ? "72px 0 56px" : "120px 0 160px", position: "relative", overflow: "hidden" }}>
