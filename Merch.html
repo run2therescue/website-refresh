@@ -109,8 +109,25 @@
 .m-navbtn.next { right: 12px; }
 .m-count { position: absolute; right: 12px; bottom: 12px; background: rgba(26,16,37,0.7); color: #fff;
   font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; padding: 4px 9px; border-radius: 999px; }
-.m-thumbs { display: flex; gap: 8px; padding: 10px 12px 12px; overflow-x: auto; scrollbar-width: thin;
-  min-width: 0; max-width: 100%; }
+/* Thumbnail strip. It scrolls horizontally, so it needs to LOOK scrollable:
+   macOS hides overlay scrollbars until you are already scrolling, which made
+   the strip read as simply cut off. Persistent slim scrollbar + a fade at the
+   trailing edge + snap points. */
+.m-thumbs { display: flex; gap: 8px; padding: 10px 12px 14px; overflow-x: auto; overflow-y: hidden;
+  min-width: 0; max-width: 100%;
+  scroll-snap-type: x proximity; scroll-behavior: smooth; overscroll-behavior-x: contain;
+  scrollbar-width: thin; scrollbar-color: var(--lav-300) transparent; }
+.m-thumbs::-webkit-scrollbar { height: 6px; }
+.m-thumbs::-webkit-scrollbar-track { background: transparent; }
+.m-thumbs::-webkit-scrollbar-thumb { background: var(--lav-300); border-radius: 999px; }
+.m-thumbs::-webkit-scrollbar-thumb:hover { background: var(--purple-400); }
+.m-thumbs > * { scroll-snap-align: start; }
+/* Fade the trailing edge so there is an obvious "more this way" cue. */
+.m-thumbwrap { position: relative; }
+.m-thumbwrap::after { content: ""; position: absolute; right: 0; top: 0; bottom: 0; width: 34px;
+  pointer-events: none; opacity: 0; transition: opacity .2s ease;
+  background: linear-gradient(to right, transparent, var(--lav-100)); }
+.m-thumbwrap.more::after { opacity: 1; }
 .m-thumb { width: 54px; height: 54px; flex-shrink: 0; border-radius: 10px; overflow: hidden; padding: 0;
   border: 2px solid transparent; cursor: pointer; background: #fff; transition: border-color .15s ease; }
 .m-thumb img { width: 100%; height: 100%; object-fit: contain; display: block; }
@@ -163,6 +180,7 @@
   .m-gal-main { height: 42dvh; }
   .m-detail { padding: 20px 18px calc(28px + env(safe-area-inset-bottom)); gap: 14px; }
   .m-thumb { width: 46px; height: 46px; }
+  .m-thumbs { padding-bottom: 12px; }
   .m-navbtn { width: 34px; height: 34px; }
   /* Close stays reachable while the content scrolls under it */
   .m-close { position: fixed; top: calc(10px + env(safe-area-inset-top)); right: 12px; }
@@ -483,6 +501,48 @@ function ProductModal({ p, onClose }) {
     }
   }
 
+  const thumbsRef = useRefS(null);
+  const wrapRef = useRefS(null);
+
+  // Show the trailing fade only while there is more strip to reveal.
+  function syncFade() {
+    const el = thumbsRef.current, wrap = wrapRef.current;
+    if (!el || !wrap) return;
+    const more = el.scrollLeft + el.clientWidth < el.scrollWidth - 2;
+    wrap.classList.toggle("more", more);
+  }
+
+  // A trackpad/mouse wheel is usually vertical; map it onto the strip so the
+  // thumbnails can be scrolled without a horizontal gesture.
+  useEffectS(() => {
+    const el = thumbsRef.current;
+    if (!el) return;
+    const onWheel = (e) => {
+      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+      const before = el.scrollLeft;
+      el.scrollLeft += e.deltaY;
+      if (el.scrollLeft !== before) e.preventDefault();
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    el.addEventListener("scroll", syncFade, { passive: true });
+    syncFade();
+    window.addEventListener("resize", syncFade);
+    return () => {
+      el.removeEventListener("wheel", onWheel);
+      el.removeEventListener("scroll", syncFade);
+      window.removeEventListener("resize", syncFade);
+    };
+  }, [gallery.length]);
+
+  // Paging with the arrows or arrow keys should bring the matching thumb along.
+  useEffectS(() => {
+    const el = thumbsRef.current;
+    if (!el) return;
+    const btn = el.children[imgIdx];
+    if (btn && btn.scrollIntoView) btn.scrollIntoView({ behavior: "smooth", inline: "nearest", block: "nearest" });
+    syncFade();
+  }, [imgIdx]);
+
   // Wrap-around paging, shared by the arrows and the arrow keys.
   function step(d) {
     if (!gallery.length) return;
@@ -541,13 +601,16 @@ function ProductModal({ p, onClose }) {
               )}
             </div>
             {gallery.length > 1 && (
-              <div className="m-thumbs" role="group" aria-label="Product images">
-                {gallery.map((u, i) => (
-                  <button key={u} type="button" className={"m-thumb" + (i === imgIdx ? " sel" : "")}
-                    onClick={() => setImgIdx(i)} aria-label={`Image ${i + 1} of ${gallery.length}`}>
-                    <img src={u} alt="" loading="lazy" />
-                  </button>
-                ))}
+              <div className="m-thumbwrap" ref={wrapRef}>
+                <div className="m-thumbs" ref={thumbsRef} role="group" aria-label="Product images">
+                  {gallery.map((u, i) => (
+                    <button key={u} type="button" className={"m-thumb" + (i === imgIdx ? " sel" : "")}
+                      onClick={() => setImgIdx(i)} aria-label={`Image ${i + 1} of ${gallery.length}`}
+                      aria-current={i === imgIdx ? "true" : undefined}>
+                      <img src={u} alt="" loading="lazy" />
+                    </button>
+                  ))}
+                </div>
               </div>
             )}
           </div>
