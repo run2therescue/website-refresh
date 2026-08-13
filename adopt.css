@@ -218,10 +218,19 @@
   .dog-grid { column-count: 2; }
   .filter-btn { margin-left: 0; width: 100%; justify-content: center; }
 }
-/* Keep dogs 2-up on phones — single column made each portrait photo huge. */
+/* Keep dogs 2-up on phones — single column made each portrait photo huge.
+   Drop CSS multi-column masonry here: on narrow screens a tall card lands on
+   a column break and gets visually clipped. A real grid never splits a card,
+   and 2 equal tracks read cleanly on a phone. */
 @media (max-width: 600px) {
-  .dog-grid { column-count: 2; column-gap: 14px; }
-  .dog-card { margin-bottom: 14px; }
+  .dog-grid {
+    column-count: initial;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    align-items: start;
+  }
+  .dog-card { margin-bottom: 0; }
 }
 .dog-card {
   break-inside: avoid;

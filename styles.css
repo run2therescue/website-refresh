@@ -638,3 +638,26 @@ Add r2r-run-italicize animation styles
   .surv-marquee { overflow-x: auto; }
   .surv-track { animation: none; }
 }
+
+/* ---- "Different isn't bad" strip (Adopt / Sponsor) ----------------------
+   Editorial two-column layout: intro copy on the left, alumni cards on the
+   right. Replaces an older single-row grid whose heading and blurb sat in a
+   space-between flex, which stranded the blurb far right at a small size and
+   left a lopsided void beside a short card list. */
+.dd-wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 44px;
+  align-items: center;
+}
+.dd-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+}
+@media (max-width: 900px) {
+  .dd-wrap { grid-template-columns: minmax(0, 1fr); gap: 26px; }
+}
+@media (max-width: 560px) {
+  .dd-grid { gap: 12px; }
+}

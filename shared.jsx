@@ -460,17 +460,19 @@ function DifferentDogsS() {
     { name: "Honey", img: "assets/honey-after-portrait.webp", status: "home" },
   ];
   return (
-    <section className="section-light" style={{ padding: "44px 0 28px" }}>
-      <div className="wrap">
-        <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", flexWrap: "wrap", gap: "6px 16px", marginBottom: 20 }}>
-          <h2 className="display" style={{ fontSize: "clamp(22px, 3vw, 34px)", margin: 0, color: "var(--ink)" }}>
+    <section className="section-light" style={{ padding: "56px 0 44px" }}>
+      <div className="wrap dd-wrap">
+        {/* Heading and blurb stack in one column with a readable measure.
+            The old side-by-side flex stranded the blurb far right at 13px. */}
+        <div className="dd-intro">
+          <h2 className="display" style={{ fontSize: "clamp(26px, 3.4vw, 40px)", margin: 0, color: "var(--ink)", lineHeight: 1.08, letterSpacing: "-0.02em" }}>
             Different isn't bad. It's just different.
           </h2>
-          <span style={{ fontSize: 13, color: "var(--ink-2)", maxWidth: 460 }}>We at Run 2 The Rescue know different doesn't mean bad. We celebrate the dogs with differences. Our seniors and special-needs survivors all deserve a loving home.</span>
+          <p style={{ fontSize: 16, lineHeight: 1.65, color: "var(--ink-2)", margin: "14px 0 0", maxWidth: "58ch" }}>
+            We at Run 2 The Rescue know different doesn't mean bad. We celebrate the dogs with differences. Our seniors and special-needs survivors all deserve a loving home.
+          </p>
         </div>
-        {/* Cap the track count at 4 so a short list keeps card-sized cards
-            instead of stretching each one across the full row. */}
-        <div className="ways-grid" style={{ display: "grid", gridTemplateColumns: `repeat(${Math.min(cards.length, 4)}, 1fr)`, gap: 14, maxWidth: cards.length < 4 ? 560 : "none" }}>
+        <div className="dd-grid">
           {cards.map(c => {
             const looking = c.status === "looking";
             const img = c.img || (c.live && c.live.cover) || null;
