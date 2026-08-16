@@ -579,8 +579,8 @@ function DogCard({ dog, fav, onFav, onOpen }) {
         </span>
       </div>
       <div style={{ padding: 18 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8, marginBottom: 4 }}>
-          <div className="display" style={{ fontSize: 22, color: "var(--ink)", lineHeight: 1.15 }}>{dog.name}</div>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 8, marginBottom: 4 }}>
+          <div className="display" style={{ fontSize: 22, color: "var(--ink)", lineHeight: 1.15, minWidth: 0, overflowWrap: "anywhere" }}>{dog.name}</div>
           {dog.isNew && <span className="tag tag-new" style={{ flexShrink: 0, marginTop: 3 }}>Just arrived</span>}
         </div>
         <div style={{ fontFamily: "var(--font-ui)", fontSize: 11, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--purple-600)", fontWeight: 600, marginBottom: 12 }}>
