@@ -578,9 +578,9 @@ function DogCard({ dog, fav, onFav, onOpen }) {
           {fav ? "♥" : "♡"}
         </span>
       </div>
-      <div className="dog-card-body" style={{ padding: 18 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 8, marginBottom: 4 }}>
-          <div className="display" style={{ fontSize: 22, color: "var(--ink)", lineHeight: 1.15, minWidth: 0, overflowWrap: "anywhere" }}>{dog.name}</div>
+      <div style={{ padding: 18 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8, marginBottom: 4 }}>
+          <div className="display" style={{ fontSize: 22, color: "var(--ink)", lineHeight: 1.15 }}>{dog.name}</div>
           {dog.isNew && <span className="tag tag-new" style={{ flexShrink: 0, marginTop: 3 }}>Just arrived</span>}
         </div>
         <div style={{ fontFamily: "var(--font-ui)", fontSize: 11, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--purple-600)", fontWeight: 600, marginBottom: 12 }}>
@@ -638,7 +638,7 @@ function ProfileModal({ dog, fav, onFav, onClose }) {
       <div className="profile-modal" onClick={(e) => e.stopPropagation()}>
         <div className="gallery">
           <ImgS src={gallery[photoIdx] || dog.img} alt={dog.name} imgWidth={1080} />
-          <button onClick={onClose} className="profile-close" style={{ position: "absolute", top: 16, right: 16, width: 36, height: 36, borderRadius: "50%", background: "rgba(255,255,255,0.95)", color: "var(--ink)", display: "grid", placeItems: "center", fontSize: 16 }} aria-label="Close">✕</button>
+          <button onClick={onClose} style={{ position: "absolute", top: 16, right: 16, width: 36, height: 36, borderRadius: "50%", background: "rgba(255,255,255,0.95)", color: "var(--ink)", display: "grid", placeItems: "center", fontSize: 16 }} aria-label="Close">✕</button>
           {gallery.length > 1 && (
             <div className="thumb-row">
               {gallery.map((g, i) => (
