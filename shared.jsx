@@ -503,6 +503,7 @@ function DifferentDogsS() {
             );
           })}
         </div>
+        </div>
       </div>
     </section>
   );

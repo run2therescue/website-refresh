@@ -661,3 +661,10 @@ Add r2r-run-italicize animation styles
 @media (max-width: 560px) {
   .dd-grid { gap: 12px; }
 }
+
+.diff-strip { display: grid; grid-template-columns: minmax(240px, 340px) 1fr; gap: 40px; align-items: start; }
+.diff-strip-copy p { font-size: 15px; line-height: 1.65; color: var(--ink-2); margin: 12px 0 0; max-width: 44ch; }
+@media (max-width: 900px) {
+  .diff-strip { grid-template-columns: 1fr; gap: 18px; }
+  .diff-strip-copy p { max-width: 62ch; }
+}
