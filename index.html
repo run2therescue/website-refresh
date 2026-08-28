@@ -10,6 +10,14 @@
 <link rel="canonical" href="https://run2therescue.org/" />
 <meta name="theme-color" content="#1a1025" />
 <script defer src="analytics.js?v=3"></script>
+<!-- Vercel Web Analytics + Speed Insights (static-site install; no npm package
+     needed). Both endpoints are same-origin under /_vercel/, so the existing
+     CSP ('self' in script-src and connect-src) already allows them. They no-op
+     until each product is enabled in the Vercel dashboard. -->
+<script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+<script defer src="/_vercel/insights/script.js"></script>
+<script>window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };</script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Run 2 The Rescue" />
 <meta property="og:title" content="Run 2 The Rescue · Adopt a Survivor of the Dog Meat Trade" />
@@ -20,6 +28,9 @@
 <meta name="twitter:title" content="Run 2 The Rescue · Adopt a Survivor of the Dog Meat Trade" />
 <meta name="twitter:description" content="Run 2 The Rescue is a 501(c)(3) nonprofit rescuing dogs from the East Asia dog meat trade, providing medical care, and placing survivors in loving forever homes." />
 <meta name="twitter:image" content="https://run2therescue.org/assets/og-image.png" />
+<!-- unpkg serves the three render-blocking scripts at the top of <body>.
+     Warming DNS/TCP/TLS here saves ~100-300ms on mobile before they can start. -->
+<link rel="preconnect" href="https://unpkg.com" crossorigin />
 <link rel="preconnect" href="https://new-s3.shelterluv.com" crossorigin />
 <link rel="preload" href="/api/animals" as="fetch" crossorigin="anonymous" />
 <link rel="stylesheet" href="fonts.css?v=1" />
