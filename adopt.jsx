@@ -578,7 +578,7 @@ function DogCard({ dog, fav, onFav, onOpen }) {
           {fav ? "♥" : "♡"}
         </span>
       </div>
-      <div style={{ padding: 18 }}>
+      <div className="dog-card-body" style={{ padding: 18 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 8, marginBottom: 4 }}>
           <div className="display" style={{ fontSize: 22, color: "var(--ink)", lineHeight: 1.15, minWidth: 0, overflowWrap: "anywhere" }}>{dog.name}</div>
           {dog.isNew && <span className="tag tag-new" style={{ flexShrink: 0, marginTop: 3 }}>Just arrived</span>}
@@ -613,10 +613,12 @@ function ProfileModal({ dog, fav, onFav, onClose }) {
   }, []);
 
   const [sending, setSending] = uS(false);
+  const [sendFailed, setSendFailed] = uS(false);
   const submit = async (e) => {
     e.preventDefault();
     setSending(true);
-    await submitForm(
+    setSendFailed(false);
+    const result = await submitForm(
       {
         dog_name: dog.name,
         dog_id: dog.id || "",
@@ -629,7 +631,14 @@ function ProfileModal({ dog, fav, onFav, onClose }) {
       "Adoption Application"
     );
     setSending(false);
-    setStep("sent");
+    // Previously this always advanced to "sent" regardless of the result, so a
+    // dropped connection or a Web3Forms outage showed "Application received!"
+    // to someone whose application never arrived anywhere — worse than losing
+    // them at the form, because neither they nor R2TR would ever know. Now a
+    // real failure surfaces inline with a retry, matching how the Share Your
+    // Story form already handles this.
+    if (result.ok) setStep("sent");
+    else setSendFailed(true);
   };
   const gallery = dog.gallery.length ? dog.gallery : [dog.img];
 
@@ -638,7 +647,7 @@ function ProfileModal({ dog, fav, onFav, onClose }) {
       <div className="profile-modal" onClick={(e) => e.stopPropagation()}>
         <div className="gallery">
           <ImgS src={gallery[photoIdx] || dog.img} alt={dog.name} imgWidth={1080} />
-          <button onClick={onClose} style={{ position: "absolute", top: 16, right: 16, width: 36, height: 36, borderRadius: "50%", background: "rgba(255,255,255,0.95)", color: "var(--ink)", display: "grid", placeItems: "center", fontSize: 16 }} aria-label="Close">✕</button>
+          <button onClick={onClose} className="profile-close" style={{ position: "absolute", top: 16, right: 16, width: 36, height: 36, borderRadius: "50%", background: "rgba(255,255,255,0.95)", color: "var(--ink)", display: "grid", placeItems: "center", fontSize: 16 }} aria-label="Close">✕</button>
           {gallery.length > 1 && (
             <div className="thumb-row">
               {gallery.map((g, i) => (
@@ -730,6 +739,11 @@ function ProfileModal({ dog, fav, onFav, onClose }) {
 
               <FormField label={`Tell us why ${dog.name} would be a great fit`} textarea value={form.why} onChange={(v) => setForm({ ...form, why: v })} />
 
+              {sendFailed && (
+                <p role="alert" style={{ margin: "0 0 12px", padding: "10px 14px", background: "oklch(0.96 0.03 25)", color: "oklch(0.4 0.15 25)", borderRadius: 10, fontSize: 13, lineHeight: 1.5 }}>
+                  Something went wrong sending this — your application was not received. Please try again, or email us directly at info@run2therescue.org.
+                </p>
+              )}
               <button type="submit" className="btn btn-accent" style={{ width: "100%", justifyContent: "center", marginTop: 8 }} disabled={sending}>{sending ? "Sending..." : "Submit application →"}</button>
             </form>
           )}
