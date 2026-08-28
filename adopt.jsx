@@ -4,6 +4,18 @@
 
 const { useState: uS, useEffect: uE, useRef: uR, useMemo: uM } = React;
 
+/* Must exactly match slugify() in api/dog.js — used to build each dog's
+   /adopt/<slug> URL in structured data, and to match a deep-linked slug
+   (window.__R2R_DEEPLINK_SLUG__, set by api/dog.js) back to a loaded dog. */
+function slugify(name) {
+  return String(name || "")
+    .toLowerCase()
+    .trim()
+    .replace(/['\u2019]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 /* Filter options — only dimensions Shelterluv actually provides data for.
    (No "energy" or location filter: Shelterluv has no field behind them.) */
 const FILTER_OPTS = {
@@ -194,6 +206,21 @@ function AdoptDirectory() {
     return () => window.removeEventListener("r2r-open-dog", open);
   }, []);
 
+  // Deep link from /adopt/<slug> (api/dog.js sets this global before the app
+  // scripts run). Runs once, after the live Shelterluv list has loaded, so
+  // the matching dog's profile opens automatically. A ref guards it from
+  // re-firing if the visitor closes the modal — that's a deliberate choice
+  // to close, not a stale deep link reopening itself.
+  const deepLinkedRef = uR(false);
+  uE(() => {
+    if (deepLinkedRef.current || status !== "ready") return;
+    deepLinkedRef.current = true;
+    const slug = window.__R2R_DEEPLINK_SLUG__;
+    if (!slug) return;
+    const match = dogs.find((d) => !isHiddenDog(d) && slugify(d.name) === slug);
+    if (match) setSelectedId(match.id);
+  }, [status, dogs]);
+
   // Behavior signal: someone opened a dog's profile — the top-of-funnel
   // adoption-intent event. Fires for every open path (card, match, deep link).
   uE(() => {
@@ -237,7 +264,7 @@ function AdoptDirectory() {
             "price": "0",
             "priceCurrency": "USD",
             "availability": "https://schema.org/InStock",
-            "url": "https://run2therescue.org/adopt",
+            "url": `https://run2therescue.org/adopt/${slugify(d.name)}`,
           },
         },
       })),
