@@ -219,8 +219,15 @@ function HeroVideoBG() {
   //  1) React sets `muted` as a DOM *property*, so the attribute never reaches
   //     the markup — and iOS/Android only autoplay videos they can see are
   //     muted. Set the attribute by hand.
-  //  2) `preload="auto"` on the element below forces the video to load on
-  //     page entry instead of waiting for the first scroll.
+  //  2) preload is "metadata", not "auto": "auto" forced the full 1.95MB file
+  //     to download before a visitor had decided to stay, which is real cost
+  //     on mobile data and directly measurable in bounce rate. "metadata" only
+  //     fetches enough to know duration/dimensions, and it's safe specifically
+  //     BECAUSE of point 3 below — the retry chain (loadeddata/canplay
+  //     listeners, IntersectionObserver, every gesture) already exists to
+  //     handle "the video isn't ready yet," so it now does double duty
+  //     covering the slightly later start too. The poster frame covers the
+  //     gap either way.
   //  3) Initial play() can be silently rejected (Low Power Mode, slow first
   //     paint). Retry on every plausible signal: data ready, viewport entry,
   //     first user gesture (touch/scroll/pointer/key), and tab visibility.
@@ -273,7 +280,7 @@ function HeroVideoBG() {
     }}>
       <video
         ref={vidRef}
-        autoPlay muted loop playsInline preload="auto"
+        autoPlay muted loop playsInline preload="metadata"
         poster="assets/hero-meadow-poster.jpg"
         style={{
           position: "absolute", inset: 0, width: "100%", height: "100%",
