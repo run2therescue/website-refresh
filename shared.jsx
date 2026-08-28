@@ -423,6 +423,10 @@ function autoplayFixS(v) {
 
 async function submitForm(fields, formName) {
   if (botcheckTrippedS()) return { ok: true };
+  // Attempt signal only — fires whether or not the request ever reaches the
+  // server. Kept for continuity with existing GA4 history, but it is NOT a
+  // trustworthy conversion signal on its own (this is exactly the same flaw
+  // as adopt_application_start: it measures intent, not outcome).
   if (window.track) window.track("form_submit", { form: formName });
   if (!WEB3FORMS_KEY || WEB3FORMS_KEY === "PASTE_KEY_HERE") {
     console.log("[submitForm] Demo mode (no Web3Forms key set). Form:", formName, fields);
@@ -440,7 +444,14 @@ async function submitForm(fields, formName) {
       }),
     });
     const data = await res.json();
-    return { ok: data.success === true };
+    const ok = data.success === true;
+    // The only trustworthy "this actually happened" signal on the site: fires
+    // exclusively when Web3Forms confirms receipt. This — not form_submit and
+    // not adopt_application_start — is the one to mark as a GA4 key event
+    // (Admin > Events > mark as key event; that step has to happen in the
+    // GA4 dashboard, it can't be done from code).
+    if (ok && window.track) window.track("form_submitted", { form: formName });
+    return { ok };
   } catch (e) {
     console.warn("[submitForm] network error:", e);
     return { ok: false, error: e.message };
