@@ -42,6 +42,10 @@
       "destination": "/Adopt.html"
     },
     {
+      "source": "/adopt/:slug",
+      "destination": "/api/dog?slug=:slug"
+    },
+    {
       "source": "/foster",
       "destination": "/Foster.html"
     },
