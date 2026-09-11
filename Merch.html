@@ -168,6 +168,83 @@
 .m-acc[open] summary svg { transform: rotate(45deg); }
 .m-acc-body { padding: 0 2px 14px; font-size: 13.5px; line-height: 1.65; color: var(--ink-2); white-space: pre-line; }
 
+/* ---- Cart ---- */
+/* "Added" confirmation inside the product modal */
+.m-added { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; padding: 12px 14px;
+  border-radius: 14px; background: var(--lav-50); border: 1px solid var(--lav-200);
+  animation: mRise .3s cubic-bezier(.16,1,.3,1) both; }
+.m-added-msg { display: flex; align-items: center; gap: 9px; font-size: 14px; font-weight: 600; color: var(--ink); }
+.m-added-msg small { font-size: 12.5px; font-weight: 500; color: var(--ink-3); margin-left: 4px; }
+.m-check { flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%; background: var(--purple-500); color: #fff;
+  display: inline-flex; align-items: center; justify-content: center; }
+.m-check svg { width: 11px; height: 11px; }
+.m-added-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.m-added-actions .btn { flex: 1 1 140px; justify-content: center; height: 44px; padding: 0 14px; font-size: 14px; }
+@keyframes mRise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* Floating cart button: only rendered once the cart has something in it */
+.m-fab { position: fixed; right: 18px; bottom: calc(18px + env(safe-area-inset-bottom)); z-index: 85;
+  display: inline-flex; align-items: center; gap: 10px; height: 52px; padding: 0 20px 0 17px;
+  border: none; border-radius: 999px; cursor: pointer; font: inherit; font-size: 15px; font-weight: 600;
+  background: #1a1025; color: #fff;
+  box-shadow: 0 6px 16px oklch(0.15 0.03 310 / 0.22), 0 18px 40px oklch(0.15 0.03 310 / 0.24);
+  animation: mPop .45s cubic-bezier(.16,1,.3,1) backwards; transition: background .2s ease, transform .16s ease; }
+.m-fab:hover { background: var(--purple-600); transform: translateY(-2px); }
+.m-fab:active { transform: scale(.96); }
+.m-fab svg { width: 20px; height: 20px; }
+.m-fab-count { min-width: 22px; height: 22px; padding: 0 6px; border-radius: 999px; background: var(--purple-500);
+  color: #fff; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;
+  transition: background .2s ease, color .2s ease; }
+.m-fab:hover .m-fab-count { background: #fff; color: var(--purple-600); }
+.m-fab-total { font-size: 14px; font-weight: 500; color: var(--on-dark-2); }
+.m-fab:hover .m-fab-total { color: #fff; }
+.m-fab.bump { animation: mBump .5s cubic-bezier(.16,1,.3,1); }
+@keyframes mBump { 0% { transform: scale(1); } 35% { transform: scale(1.09); } 100% { transform: scale(1); } }
+
+/* Cart drawer */
+.m-cart-overlay { position: fixed; inset: 0; z-index: 95; background: oklch(0.15 0.03 310 / 0.6);
+  backdrop-filter: blur(6px); display: flex; justify-content: flex-end; animation: fade .25s ease both; }
+.m-cart { background: #fff; width: min(440px, 100%); height: 100vh; height: 100dvh; display: flex; flex-direction: column;
+  box-shadow: -12px 0 40px oklch(0.15 0.03 310 / 0.3); animation: mSlide .35s cubic-bezier(.16,1,.3,1) both; }
+@keyframes mSlide { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: none; } }
+.m-cart-head { display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: calc(18px + env(safe-area-inset-top)) 22px 16px; border-bottom: 1px solid var(--lav-200); }
+.m-cart-head h2 { margin: 0; font-size: 24px; line-height: 1; color: var(--ink); }
+.m-cart-head h2 span { margin-left: 8px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--ink-3); vertical-align: middle; }
+.m-cart-x { width: 38px; height: 38px; flex-shrink: 0; border-radius: 50%; border: none; cursor: pointer;
+  background: var(--lav-100); color: var(--ink); display: flex; align-items: center; justify-content: center;
+  transition: background .2s ease; }
+.m-cart-x:hover { background: var(--lav-200); }
+.m-cart-x svg { width: 16px; height: 16px; }
+.m-cart-body { flex: 1; overflow-y: auto; padding: 4px 22px; overscroll-behavior: contain; }
+.m-lines { list-style: none; margin: 0; padding: 0; }
+.m-line { display: grid; grid-template-columns: 72px minmax(0, 1fr) auto; gap: 14px; padding: 16px 0;
+  border-bottom: 1px solid var(--lav-200); }
+.m-line:last-child { border-bottom: none; }
+.m-line-img { width: 72px; height: 72px; border-radius: 12px; overflow: hidden; background: var(--lav-100);
+  display: flex; align-items: center; justify-content: center; }
+.m-line-img img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.m-line-name { margin: 0 0 3px; font-size: 15px; line-height: 1.2; color: var(--ink); overflow-wrap: anywhere; }
+.m-line-var { margin: 0 0 10px; font-size: 12.5px; color: var(--ink-3); }
+.m-line-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.m-qty.sm button { width: 32px; height: 32px; font-size: 15px; }
+.m-qty.sm span { min-width: 22px; font-size: 14px; }
+.m-remove { border: none; background: none; padding: 4px 0; cursor: pointer; font: inherit; font-size: 12.5px;
+  color: var(--ink-3); text-decoration: underline; text-underline-offset: 3px; }
+.m-remove:hover { color: var(--purple-600); }
+.m-line-price { font-size: 14.5px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+.m-cart-notice { margin: 14px 0 2px; padding: 10px 12px; border-radius: 12px; font-size: 13px; line-height: 1.5;
+  background: oklch(0.96 0.035 70); color: oklch(0.38 0.08 55); border: 1px solid oklch(0.88 0.06 70); }
+.m-cart-restored { margin: 14px 0 2px; padding: 10px 12px; border-radius: 12px; font-size: 13px; line-height: 1.5;
+  background: var(--lav-50); color: var(--ink-2); border: 1px solid var(--lav-200); }
+.m-cart-restored .m-remove { font-size: 13px; color: var(--purple-600); font-weight: 600; }
+.m-cart-empty { text-align: center; padding: 56px 8px; color: var(--ink-2); }
+.m-cart-foot { border-top: 1px solid var(--lav-200); padding: 16px 22px calc(18px + env(safe-area-inset-bottom)); }
+.m-cart-sub { display: flex; justify-content: space-between; align-items: baseline; font-size: 15px; font-weight: 600; color: var(--ink); }
+.m-cart-sub b { font-size: 20px; }
+.m-cart-fine { margin: 4px 0 14px; font-size: 12px; color: var(--ink-3); }
+
 /* Mobile: full-screen product view. Placed last so these override the base
    rules above. The earlier bottom sheet capped at 94vh, so on a tall product
    the top of the gallery was pushed off-screen; filling the viewport and
@@ -188,12 +265,17 @@
   .m-size { min-width: 52px; padding: 11px 14px; }
   .m-swatchbtn { width: 34px; height: 34px; }
   .m-qty button { width: 42px; height: 42px; }
+  .m-qty.sm button { width: 38px; height: 38px; }
+  .m-fab { right: 14px; bottom: calc(14px + env(safe-area-inset-bottom)); }
+  .m-cart-head, .m-cart-body, .m-cart-foot { padding-left: 18px; padding-right: 18px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .m-shimmer { animation: none; }
   .m-card, .m-overlay, .m-modal { animation: none; }
   .m-card, .m-card-img, .m-view, .m-swatchbtn, .m-size { transition: none; }
+  .m-added, .m-fab, .m-fab.bump, .m-cart-overlay, .m-cart { animation: none; }
+  .m-fab { transition: none; }
 }
 </style>
 <script type="application/ld+json">
@@ -236,16 +318,18 @@
    (mirrors how Adopt/Sponsor pull live dogs from /api/animals).
 
    The full shopping experience lives on THIS page: browse, open a product,
-   pick color/size/quantity. Only the final payment step hands off, via
-   Fourthwall's direct-checkout endpoint
-   (SHOP/cart/checkout?products=<variantId>:<qty>), so the buyer never sees
-   Fourthwall's separately-themed shop pages.
+   pick color/size/quantity, add as many items as you like to the cart. Only
+   the final payment step hands off, via Fourthwall's direct-checkout endpoint,
+   which takes every cart line in one link
+   (SHOP/cart/checkout?products=<variantId>:<qty>,<variantId>:<qty>), so the
+   buyer never sees Fourthwall's separately-themed shop pages.
 
    While every product is still a draft the API returns an empty list and the
    page shows the "coming soon" state. Team preview: /merch?preview=1. */
 
 const IS_PREVIEW = new URLSearchParams(window.location.search).has("preview");
 const SHOP_HOME = "https://run2therescue-yeh-shop.fourthwall.com";
+const PRERENDERING = typeof navigator !== "undefined" && navigator.webdriver === true;
 const SIZE_ORDER = ["XXS", "XS", "S", "M", "L", "XL", "2XL", "XXL", "3XL", "4XL", "5XL"];
 
 function sortSizes(sizes) {
@@ -342,20 +426,188 @@ const PREVIEW_PRODUCTS = [
 
 /* ---------- Data ---------- */
 function useProducts() {
-  const [state, setState] = useStateS({ loading: true, products: [] });
+  const [state, setState] = useStateS({ loading: true, failed: false, products: [] });
   useEffectS(() => {
     if (IS_PREVIEW) {
-      const t = setTimeout(() => setState({ loading: false, products: PREVIEW_PRODUCTS }), 900);
+      const t = setTimeout(() => setState({ loading: false, failed: false, products: PREVIEW_PRODUCTS }), 900);
       return () => clearTimeout(t);
     }
     let alive = true;
     fetch("/api/products")
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error("HTTP " + r.status))))
-      .then((data) => { if (alive) setState({ loading: false, products: data.products || [] }); })
-      .catch(() => { if (alive) setState({ loading: false, products: [] }); });
+      .then((data) => { if (alive) setState({ loading: false, failed: false, products: data.products || [] }); })
+      .catch(() => { if (alive) setState({ loading: false, failed: true, products: [] }); });
     return () => { alive = false; };
   }, []);
   return state;
+}
+
+/* ---------- Cart ----------
+   Kept in the browser (localStorage), so it survives reloads and syncs across
+   tabs. Checkout hands every line to Fourthwall in ONE direct-checkout link.
+   Fourthwall silently discards the WHOLE list if any variant ID is unknown, so
+   lines are reconciled against the live product feed on load and again right
+   before handoff. Going to checkout empties the cart; coming back from the
+   checkout within the hour (Back button, or Fourthwall's logo link, which
+   points at /merch) puts it back. If Fourthwall bounces the shopper straight
+   back (it redirects to /merch when it can't build a checkout), the cart is
+   restored and opened with an explanation instead of silently disappearing. */
+const CART_KEY = "r2r_merch_cart_v1" + (IS_PREVIEW ? "_preview" : "");
+const PENDING_KEY = CART_KEY + "_pending";
+const CART_TTL = 30 * 24 * 60 * 60 * 1000;
+const RESTORE_TTL = 60 * 60 * 1000;
+const BOUNCE_MS = 20 * 1000; // back from the shop this fast = checkout never opened
+const MAX_QTY = 10;
+
+function readStore(key) {
+  try { const raw = window.localStorage.getItem(key); return raw ? JSON.parse(raw) : null; } catch (e) { return null; }
+}
+function writeStore(key, val) {
+  try {
+    if (val == null) window.localStorage.removeItem(key);
+    else window.localStorage.setItem(key, JSON.stringify(val));
+  } catch (e) { /* private mode / storage full: the cart still works for this visit */ }
+}
+function cleanLines(list) {
+  return (Array.isArray(list) ? list : [])
+    .filter((l) => l && typeof l.variantId === "string" && l.variantId && Number.isFinite(l.qty) && l.qty > 0)
+    .map((l) => Object.assign({}, l, { qty: Math.min(MAX_QTY, Math.floor(l.qty)) }));
+}
+function loadCart() {
+  const saved = readStore(CART_KEY);
+  return saved && Date.now() - (saved.at || 0) < CART_TTL ? cleanLines(saved.items) : [];
+}
+function money(n) { return "$" + (Number(n) || 0).toFixed(2); }
+function variantLabel(l) { return [l.color, l.size].filter(Boolean).join(" / "); }
+function cartCount(items) { return items.reduce((n, l) => n + l.qty, 0); }
+function cartTotal(items) { return items.reduce((s, l) => s + (Number.isFinite(l.price) ? l.price * l.qty : 0), 0); }
+function itemsWord(n) { return n + (n === 1 ? " item" : " items"); }
+function gaItems(lines) {
+  return lines.map((l) => ({ item_id: l.variantId, item_name: l.name, item_variant: variantLabel(l), price: l.price, quantity: l.qty }));
+}
+
+/* Drop lines that are discontinued or out of stock; refresh name/price/image
+   from the live feed (the source of truth). */
+function reconcileCart(items, products) {
+  const byVariant = new Map();
+  products.forEach((p) => (p.variants || []).forEach((v) => byVariant.set(v.id, { p, v })));
+  const kept = [], dropped = [];
+  items.forEach((l) => {
+    const hit = byVariant.get(l.variantId);
+    if (!hit || hit.p.soldOut || !hit.v.inStock) { dropped.push(l); return; }
+    kept.push(Object.assign({}, l, {
+      name: hit.p.name,
+      price: Number.isFinite(hit.v.price) ? hit.v.price : l.price,
+      priceText: hit.v.priceText || l.priceText,
+      image: hit.v.image || hit.p.image || l.image,
+    }));
+  });
+  return { kept, dropped };
+}
+function droppedNotice(dropped) {
+  const names = dropped.map((l) => l.name + (variantLabel(l) ? ` (${variantLabel(l)})` : "")).join(", ");
+  return dropped.length === 1
+    ? `${names} is no longer available, so it was removed from your cart.`
+    : `${names} are no longer available, so they were removed from your cart.`;
+}
+
+function useCart(products) {
+  const [items, setItems] = useStateS(loadCart);
+  const [notice, setNotice] = useStateS("");
+  const [leaving, setLeaving] = useStateS(false);
+  const [restored, setRestored] = useStateS(false); // cart came back from checkout (order may or may not be placed)
+  const [bounced, setBounced] = useStateS(false);   // Fourthwall refused the checkout and sent the shopper back
+  const itemsRef = useRefS(items);
+  itemsRef.current = items;
+
+  // Persist every change (an empty cart removes the key).
+  useEffectS(() => {
+    writeStore(CART_KEY, items.length ? { items, at: Date.now() } : null);
+  }, [items]);
+
+  // Cross-tab sync, plus restoring the cart when the shopper comes Back from checkout.
+  useEffectS(() => {
+    const restore = (viaLink) => {
+      const pending = readStore(PENDING_KEY);
+      writeStore(PENDING_KEY, null);
+      const lines = pending && Date.now() - (pending.at || 0) < RESTORE_TTL ? cleanLines(pending.items) : [];
+      if (!lines.length) return;
+      setItems(lines);
+      if (viaLink && Date.now() - pending.at < BOUNCE_MS) setBounced(true);
+      else if (viaLink) setRestored(true);
+    };
+    let fromShop = false;
+    try { fromShop = !!document.referrer && new URL(document.referrer).origin === new URL(SHOP_HOME).origin; } catch (e) {}
+    const nav = performance.getEntriesByType ? performance.getEntriesByType("navigation")[0] : null;
+    if (nav && nav.type === "back_forward") restore(false);
+    else if (fromShop) restore(true);   // same link is used after a completed order, so the drawer offers "Clear cart"
+    else writeStore(PENDING_KEY, null);
+
+    const onShow = (e) => { if (e.persisted) { setLeaving(false); restore(false); } };
+    const onStorage = (e) => {
+      if (e.key !== CART_KEY) return;
+      const next = loadCart();
+      if (JSON.stringify(next) !== JSON.stringify(itemsRef.current)) setItems(next);
+    };
+    window.addEventListener("pageshow", onShow);
+    window.addEventListener("storage", onStorage);
+    return () => { window.removeEventListener("pageshow", onShow); window.removeEventListener("storage", onStorage); };
+  }, []);
+
+  // Once the live feed arrives, check the saved cart against it.
+  useEffectS(() => {
+    if (!products.length || !itemsRef.current.length) return;
+    const { kept, dropped } = reconcileCart(itemsRef.current, products);
+    if (dropped.length) setNotice(droppedNotice(dropped));
+    setItems(kept);
+  }, [products]);
+
+  function add(line, qty) {
+    setNotice("");
+    setRestored(false);
+    setBounced(false);
+    setItems((cur) => {
+      const i = cur.findIndex((l) => l.variantId === line.variantId);
+      if (i === -1) return cur.concat([Object.assign({}, line, { qty: Math.min(MAX_QTY, qty) })]);
+      const next = cur.slice();
+      next[i] = Object.assign({}, cur[i], line, { qty: Math.min(MAX_QTY, cur[i].qty + qty) });
+      return next;
+    });
+  }
+  function setQty(variantId, qty) {
+    setItems((cur) => cur.map((l) => (l.variantId === variantId ? Object.assign({}, l, { qty: Math.max(1, Math.min(MAX_QTY, qty)) }) : l)));
+  }
+  function remove(variantId) {
+    const line = itemsRef.current.find((l) => l.variantId === variantId);
+    if (line && window.track) window.track("remove_from_cart", { currency: "USD", value: (line.price || 0) * line.qty, items: gaItems([line]) });
+    setItems((cur) => cur.filter((l) => l.variantId !== variantId));
+  }
+
+  // Returns "ok" (redirecting), "dropped" (cart changed, let the shopper review), or "empty".
+  function checkout() {
+    let lines = itemsRef.current;
+    if (products.length) {
+      const { kept, dropped } = reconcileCart(lines, products);
+      if (dropped.length) { setItems(kept); setNotice(droppedNotice(dropped)); return "dropped"; }
+      lines = kept;
+    }
+    if (!lines.length) return "empty";
+    if (window.track) window.track("begin_checkout", {
+      currency: "USD", value: cartTotal(lines), items: gaItems(lines),
+      item: lines.map((l) => l.name).join(", "), variant: lines.map((l) => l.variantId).join(","),
+    });
+    if (IS_PREVIEW) { window.open(SHOP_HOME, "_blank", "noopener"); return "ok"; }
+    const param = lines.map((l) => `${encodeURIComponent(l.variantId)}:${l.qty}`).join(",");
+    writeStore(PENDING_KEY, { items: lines, at: Date.now() });
+    writeStore(CART_KEY, null);
+    setLeaving(true);
+    window.location.href = `${SHOP_HOME}/cart/checkout?products=${param}&currency=USD`;
+    return "ok";
+  }
+
+  function clear() { setItems([]); setRestored(false); setBounced(false); setNotice(""); }
+
+  return { items, notice, leaving, restored, bounced, add, setQty, remove, clear, checkout };
 }
 
 /* ---------- Icons (inline SVG, no emoji) ---------- */
@@ -384,6 +636,20 @@ function IconX() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" aria-hidden="true">
       <path d="M6 6l12 12M18 6L6 18" />
+    </svg>
+  );
+}
+function IconBag() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M6 8h12l-1 12H7L6 8z" /><path d="M9 8V6a3 3 0 0 1 6 0v2" />
+    </svg>
+  );
+}
+function IconCheck() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M5 12.5l4.5 4.5L19 7.5" />
     </svg>
   );
 }
@@ -452,14 +718,16 @@ function ProductCard({ p, index, onOpen }) {
 }
 
 /* ---------- Product detail modal ---------- */
-function ProductModal({ p, onClose }) {
+function ProductModal({ p, onClose, cartItems, onAdd, onCheckout, leaving }) {
   const hasColors = (p.colors || []).length > 0;
   const hasSizes = (p.sizes || []).length > 0;
   const sizes = sortSizes(p.sizes || []);
   const [color, setColor] = useStateS(hasColors ? p.colors[0].name : null);
-  const [size, setSize] = useStateS(hasSizes ? null : undefined); // null = must choose
+  const [size, setSize] = useStateS(hasSizes ? (p.sizes.length === 1 ? p.sizes[0] : null) : undefined); // null = must choose; a lone size is preselected
   const [qty, setQty] = useStateS(1);
   const [imgIdx, setImgIdx] = useStateS(0);
+  const [added, setAdded] = useStateS(null);   // last add, drives the confirmation panel
+  const [flash, setFlash] = useStateS(false);  // brief "Added" state on the button
 
   // Gallery = product images + any variant images not already present.
   const gallery = useMemoS(() => {
@@ -563,19 +831,36 @@ function ProductModal({ p, onClose }) {
 
   const priceText = variant && variant.priceText ? variant.priceText : p.price;
   const needsSize = hasSizes && size == null;
-  const canBuy = !p.soldOut && ((p.variants || []).length ? (variant && variant.inStock) : false);
-  const ctaDisabled = p.soldOut || needsSize || ((p.variants || []).length > 0 && !canBuy);
-  const ctaText = p.soldOut ? "Sold out" : needsSize ? "Select a size" : (variant && !variant.inStock) ? "Out of stock" : "Checkout Securely";
+  const hasVariants = (p.variants || []).length > 0;
+  const canBuy = !p.soldOut && (hasVariants ? (variant && variant.inStock) : false);
+  // Per-variant cap of MAX_QTY counts what is already in the cart.
+  const inCart = variant ? ((cartItems.find((l) => l.variantId === variant.id) || {}).qty || 0) : 0;
+  const room = MAX_QTY - inCart;
+  const addQty = Math.max(1, Math.min(qty, room));
+  const atMax = hasVariants && canBuy && room <= 0;
+  const ctaDisabled = p.soldOut || needsSize || (hasVariants && !canBuy) || atMax;
+  const ctaText = p.soldOut ? "Sold out" : needsSize ? "Select a size" : (variant && !variant.inStock) ? "Out of stock"
+    : atMax ? `Max ${MAX_QTY} in cart` : !hasVariants ? "View in shop" : flash ? "Added to cart" : "Add to Cart";
+  const count = cartCount(cartItems);
 
-  function checkout() {
+  useEffectS(() => {
+    if (!flash) return;
+    const t = setTimeout(() => setFlash(false), 1400);
+    return () => clearTimeout(t);
+  }, [flash]);
+
+  function addToCart() {
     if (ctaDisabled) return;
-    if (window.track) window.track("begin_checkout", { item: p.name, variant: variant ? variant.id : "" });
-    if (IS_PREVIEW) { window.open(SHOP_HOME, "_blank", "noopener"); return; }
-    if (variant) {
-      window.location.href = `${SHOP_HOME}/cart/checkout?products=${encodeURIComponent(variant.id)}:${qty}&currency=USD`;
-    } else {
-      window.open(p.url, "_blank", "noopener");
-    }
+    if (!variant) { window.open(p.url, "_blank", "noopener"); return; }
+    const line = {
+      variantId: variant.id, productId: p.id, name: p.name,
+      color: variant.color ? variant.color.name : null, size: variant.size || null,
+      price: variant.price, priceText: variant.priceText, image: variant.image || p.image || null,
+    };
+    onAdd(line, addQty);
+    setAdded({ label: variantLabel(line), qty: addQty, n: Date.now() });
+    setFlash(true);
+    setQty(1);
   }
 
   const mainImg = gallery[imgIdx] || p.image;
@@ -660,18 +945,33 @@ function ProductModal({ p, onClose }) {
               <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
                 <div className="m-opt-label" style={{ margin: 0 }}><span>Qty</span></div>
                 <div className="m-qty" role="group" aria-label="Quantity">
-                  <button type="button" onClick={() => setQty(Math.max(1, qty - 1))} disabled={qty <= 1} aria-label="Decrease quantity">−</button>
-                  <span aria-live="polite">{qty}</span>
-                  <button type="button" onClick={() => setQty(Math.min(10, qty + 1))} disabled={qty >= 10} aria-label="Increase quantity">+</button>
+                  <button type="button" onClick={() => setQty(Math.max(1, addQty - 1))} disabled={addQty <= 1} aria-label="Decrease quantity">−</button>
+                  <span aria-live="polite">{addQty}</span>
+                  <button type="button" onClick={() => setQty(Math.min(Math.max(1, room), addQty + 1))} disabled={addQty >= Math.max(1, room)} aria-label="Increase quantity">+</button>
                 </div>
               </div>
             )}
 
             <div>
-              <button type="button" onClick={checkout} disabled={ctaDisabled}
+              <button type="button" onClick={addToCart} disabled={ctaDisabled}
                 className="btn btn-accent" style={{ width: "100%", justifyContent: "center", opacity: ctaDisabled ? 0.55 : 1, cursor: ctaDisabled ? "not-allowed" : "pointer" }}>
+                {flash && !ctaDisabled && <span className="m-check" style={{ background: "#fff", color: "var(--purple-600)" }}><IconCheck /></span>}
                 {ctaText}
               </button>
+              {added && count > 0 && (
+                <div className="m-added" key={added.n} role="status" aria-live="polite">
+                  <div className="m-added-msg">
+                    <span className="m-check"><IconCheck /></span>
+                    <span>Added to cart<small>{added.label ? `${added.label} · ` : ""}Qty {added.qty}</small></span>
+                  </div>
+                  <div className="m-added-actions">
+                    <button type="button" className="btn btn-outline-soft" onClick={onClose}>Keep shopping</button>
+                    <button type="button" className="btn btn-accent" onClick={onCheckout} disabled={leaving}>
+                      {leaving ? "Opening checkout…" : `Checkout · ${itemsWord(count)}`}
+                    </button>
+                  </div>
+                </div>
+              )}
               <p style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, fontSize: 11.5, color: "var(--ink-3)", margin: "10px 0 0" }}>
                 <span style={{ display: "inline-flex", width: 13, height: 13, color: "var(--purple-500)" }}><IconShield /></span>
                 Secure checkout and shipping handled by Fourthwall
@@ -695,11 +995,125 @@ function ProductModal({ p, onClose }) {
   );
 }
 
+/* ---------- Cart drawer ---------- */
+function CartDrawer({ items, notice, leaving, restored, bounced, onClose, onQty, onRemove, onClear, onCheckout }) {
+  const count = cartCount(items);
+  const total = cartTotal(items);
+  const closeRef = useRefS(null);
+
+  useEffectS(() => {
+    const prevFocus = document.activeElement;
+    document.body.style.overflow = "hidden";
+    if (closeRef.current) closeRef.current.focus();
+    if (window.track) window.track("view_cart", { currency: "USD", value: total, items: gaItems(items) });
+    const onKey = (e) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
+      if (prevFocus && prevFocus.isConnected && prevFocus.focus) prevFocus.focus();
+    };
+  }, []);
+
+  return (
+    <div className="m-cart-overlay" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+      <div className="m-cart" role="dialog" aria-modal="true" aria-labelledby="m-cart-title">
+        <div className="m-cart-head">
+          <h2 id="m-cart-title" className="display">Your cart{count > 0 && <span>{itemsWord(count)}</span>}</h2>
+          <button type="button" ref={closeRef} className="m-cart-x" onClick={onClose} aria-label="Close cart"><IconX /></button>
+        </div>
+
+        <div className="m-cart-body">
+          {notice && <p className="m-cart-notice" role="status">{notice}</p>}
+          {bounced && items.length > 0 && (
+            <p className="m-cart-notice" role="alert">
+              Checkout couldn't open with these items, so we kept your cart. One item may be temporarily unavailable:
+              try removing the most recently added item, or <a href="/contact" style={{ color: "inherit", fontWeight: 600 }}>contact us</a> and we'll help.
+            </p>
+          )}
+          {restored && items.length > 0 && (
+            <p className="m-cart-restored">
+              We saved your cart from checkout. Already placed your order?{" "}
+              <button type="button" className="m-remove" onClick={onClear}>Clear cart</button>
+            </p>
+          )}
+          {items.length === 0 ? (
+            <div className="m-cart-empty">
+              <p className="display" style={{ fontSize: 22, color: "var(--ink)", margin: "0 0 6px" }}>Your cart is empty</p>
+              <p style={{ fontSize: 14, margin: "0 0 22px", lineHeight: 1.6 }}>Every tee, tote, and sticker helps put a dog on a plane home.</p>
+              <button type="button" className="btn btn-accent" onClick={onClose}>Browse merch</button>
+            </div>
+          ) : (
+            <ul className="m-lines">
+              {items.map((l) => (
+                <li key={l.variantId} className="m-line">
+                  <div className="m-line-img">
+                    {l.image
+                      ? <img src={l.image} alt="" loading="lazy" />
+                      : <span className="display" style={{ fontSize: 26, color: "var(--purple-400)" }}>{(l.name || "?")[0]}</span>}
+                  </div>
+                  <div style={{ minWidth: 0 }}>
+                    <p className="m-line-name display">{l.name}</p>
+                    <p className="m-line-var">{[variantLabel(l), l.priceText].filter(Boolean).join(" · ")}</p>
+                    <div className="m-line-row">
+                      <div className="m-qty sm" role="group" aria-label={`Quantity for ${l.name}`}>
+                        <button type="button" onClick={() => onQty(l.variantId, l.qty - 1)} disabled={l.qty <= 1} aria-label="Decrease quantity">−</button>
+                        <span aria-live="polite">{l.qty}</span>
+                        <button type="button" onClick={() => onQty(l.variantId, l.qty + 1)} disabled={l.qty >= MAX_QTY} aria-label="Increase quantity">+</button>
+                      </div>
+                      <button type="button" className="m-remove" onClick={() => onRemove(l.variantId)} aria-label={`Remove ${l.name} from cart`}>Remove</button>
+                    </div>
+                  </div>
+                  <div className="m-line-price">{Number.isFinite(l.price) ? money(l.price * l.qty) : ""}</div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        {items.length > 0 && (
+          <div className="m-cart-foot">
+            <div className="m-cart-sub"><span>Subtotal</span><b>{money(total)}</b></div>
+            <p className="m-cart-fine">Shipping and any taxes are calculated at checkout.</p>
+            <button type="button" onClick={onCheckout} disabled={leaving}
+              className="btn btn-accent" style={{ width: "100%", justifyContent: "center", opacity: leaving ? 0.7 : 1 }}>
+              {leaving ? "Opening secure checkout…" : "Checkout Securely"}
+            </button>
+            <p style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, fontSize: 11.5, color: "var(--ink-3)", margin: "10px 0 0" }}>
+              <span style={{ display: "inline-flex", width: 13, height: 13, color: "var(--purple-500)" }}><IconShield /></span>
+              Secure checkout and shipping handled by Fourthwall
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 /* ---------- Page ---------- */
 function MerchPage() {
-  const { loading, products } = useProducts();
+  const { loading, failed, products } = useProducts();
   const [open, setOpen] = useStateS(null);
+  const [cartOpen, setCartOpen] = useStateS(false);
+  const [bump, setBump] = useStateS(0);
+  const cart = useCart(products);
+  const count = cartCount(cart.items);
+  const total = cartTotal(cart.items);
   const hasProducts = products.length > 0;
+
+  function handleAdd(line, qty) {
+    cart.add(line, qty);
+    setBump((b) => b + 1);
+    if (window.track) window.track("add_to_cart", {
+      currency: "USD", value: (line.price || 0) * qty, items: gaItems([Object.assign({}, line, { qty })]), item: line.name,
+    });
+  }
+  function handleCheckout() {
+    // If reconciliation removed something, show the shopper their updated cart instead of redirecting.
+    if (cart.checkout() === "dropped") { setOpen(null); setCartOpen(true); }
+  }
+  // Fourthwall bounced the checkout: show the kept cart and the explanation right away.
+  useEffectS(() => { if (cart.bounced) { setOpen(null); setCartOpen(true); } }, [cart.bounced]);
   const showShop = loading || hasProducts || failed;
   return (
     <>
@@ -735,6 +1149,13 @@ function MerchPage() {
             )}
             {loading ? (
               <SkeletonGrid />
+            ) : failed && !hasProducts ? (
+              !PRERENDERING && (
+                <div style={{ textAlign: "center", padding: "36px 20px", background: "#fff", border: "1px solid var(--lav-200)", borderRadius: 18, maxWidth: 520, margin: "0 auto" }}>
+                  <p style={{ fontSize: 15, color: "var(--ink-2)", margin: "0 0 18px", lineHeight: 1.6 }}>We couldn't load the shop just now. Please try again in a moment.</p>
+                  <button type="button" className="btn btn-outline-soft" onClick={() => window.location.reload()}>Try again</button>
+                </div>
+              )
             ) : (
               <div className="ways-grid" style={{ display: "grid", gridTemplateColumns: `repeat(${Math.min(products.length, 4)}, 1fr)`, gap: 16, maxWidth: products.length < 4 ? products.length * 280 : "none", margin: "0 auto" }}>
                 {products.map((p, i) => <ProductCard key={p.id} p={p} index={i} onOpen={setOpen} />)}
@@ -766,7 +1187,25 @@ function MerchPage() {
         </section>
       )}
 
-      {open && <ProductModal p={open} onClose={() => setOpen(null)} />}
+      {open && (
+        <ProductModal p={open} onClose={() => setOpen(null)}
+          cartItems={cart.items} onAdd={handleAdd} onCheckout={handleCheckout} leaving={cart.leaving} />
+      )}
+
+      {count > 0 && (
+        <button key={bump} type="button" className={"m-fab" + (bump ? " bump" : "")} onClick={() => setCartOpen(true)}
+          aria-haspopup="dialog" aria-label={`Open cart: ${itemsWord(count)}, subtotal ${money(total)}`}>
+          <IconBag />
+          <span>Cart</span>
+          <span className="m-fab-count">{count}</span>
+          <span className="m-fab-total">{money(total)}</span>
+        </button>
+      )}
+
+      {cartOpen && (
+        <CartDrawer items={cart.items} notice={cart.notice} leaving={cart.leaving} restored={cart.restored} bounced={cart.bounced}
+          onClose={() => setCartOpen(false)} onQty={cart.setQty} onRemove={cart.remove} onClear={cart.clear} onCheckout={handleCheckout} />
+      )}
     </>
   );
 }
