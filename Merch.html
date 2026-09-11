@@ -1027,8 +1027,8 @@ function CartDrawer({ items, notice, leaving, restored, bounced, onClose, onQty,
           {notice && <p className="m-cart-notice" role="status">{notice}</p>}
           {bounced && items.length > 0 && (
             <p className="m-cart-notice" role="alert">
-              Checkout couldn't open with these items, so we kept your cart. One item may be temporarily unavailable:
-              try removing the most recently added item, or <a href="/contact" style={{ color: "inherit", fontWeight: 600 }}>contact us</a> and we'll help.
+              Checkout couldn't open with these items, so we kept your cart. One of them may be temporarily unavailable:
+              try removing items one at a time, or <a href="/contact" style={{ color: "inherit", fontWeight: 600 }}>contact us</a> and we'll help.
             </p>
           )}
           {restored && items.length > 0 && (
