@@ -19,9 +19,70 @@ function DonatePage() {
   return (
     <>
       <DonateHero />
+      <MickeyUrgent />
       <DirectedGiving />
       <DonateFAQ />
     </>
+  );
+}
+
+/* Urgent campaign card — "Help Save Mickey".
+   Sits directly under the giving options, so a donor who has already decided
+   to give sees the one dog the money is needed for right now. The photo comes
+   from the Zeffy campaign through Vercel's image optimizer (res.cloudinary.com
+   is allow-listed in vercel.json), so it is same-origin and cached.
+   Clicks are measured by analytics.js (donate_outbound; utm_content arrives as
+   `dog`), which is what separates donate-page clicks from the site-wide banner
+   and the homepage block.
+   WHEN MICKEY IS HOME: remove <MickeyUrgent /> from DonatePage above and
+   delete this component. */
+const MICKEY_PHOTO = "https://res.cloudinary.com/hxn9dbuhd/image/upload/f_jpg,c_limit,w_1000,q_auto/v1789314535/organizations/2/1/0/2/210276f5-bea9-43f5-88d4-7b17e935a6ca/d0087642-e5ec-4732-90d2-136873dfec23.png";
+const MICKEY_URL = "https://www.zeffy.com/en-US/donation-form/helpsave-mickey?utm_source=r2tr_site&utm_medium=donate_page&utm_campaign=mickey&utm_content=mickey-donate_page";
+
+function MickeyUrgent() {
+  return (
+    <section className="mickey-urgent" aria-labelledby="mickey-urgent-title">
+      <style>{`
+        .mickey-urgent { background: var(--lav-50); padding: 44px 0 8px; }
+        .mickey-urgent-card { max-width: 900px; margin: 0 auto; background: #fff; border: 1px solid var(--lav-200);
+          border-left: 4px solid var(--purple-500); border-radius: 22px; padding: 26px 30px;
+          display: grid; grid-template-columns: 168px minmax(0, 1fr); gap: 26px; align-items: center; }
+        .mickey-urgent-photo { width: 168px; height: 168px; border-radius: 16px; overflow: hidden; background: var(--lav-100); }
+        .mickey-urgent-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .mickey-urgent-tag { display: inline-flex; align-items: center; gap: 7px; font-family: var(--font-mono);
+          font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700;
+          color: var(--purple-700); background: oklch(0.94 0.04 305); border: 1px solid var(--purple-400);
+          padding: 5px 11px; border-radius: 999px; margin-bottom: 12px; }
+        .mickey-urgent-tag span { width: 7px; height: 7px; border-radius: 50%; background: var(--purple-500); }
+        .mickey-urgent-goal { font-size: 13px; color: var(--ink-3); margin: 0 0 18px; }
+        .mickey-urgent-goal b { color: var(--ink); font-weight: 600; }
+        @media (max-width: 680px) {
+          .mickey-urgent-card { grid-template-columns: 1fr; text-align: center; justify-items: center; padding: 24px 20px; gap: 18px; }
+          .mickey-urgent-photo { width: 100%; max-width: 260px; height: auto; aspect-ratio: 1 / 1; }
+        }
+      `}</style>
+      <div className="wrap">
+        <div className="mickey-urgent-card">
+          <div className="mickey-urgent-photo">
+            <img src={"/_vercel/image?url=" + encodeURIComponent(MICKEY_PHOTO) + "&w=384&q=75"}
+              alt="Mickey, a 13-year-old golden retriever, looking up at the camera" width="384" height="384" loading="lazy" />
+          </div>
+          <div>
+            <span className="mickey-urgent-tag"><span aria-hidden="true" />Needed right now</span>
+            <h2 id="mickey-urgent-title" className="display" style={{ fontSize: "clamp(24px, 3vw, 32px)", margin: "0 0 10px", color: "var(--ink)", lineHeight: 1.12 }}>
+              Help save Mickey
+            </h2>
+            <p style={{ fontSize: 15, color: "var(--ink-2)", lineHeight: 1.6, margin: "0 0 12px", maxWidth: 520 }}>
+              Mickey survived the dog meat trade. At 13, he is in hospital being treated for Leishmaniasis, and he is recovering. Every dollar keeps him tested, fed, and cared for until he is well enough to go home.
+            </p>
+            <p className="mickey-urgent-goal"><b>$5,000 goal</b> · 100% of your gift reaches Mickey. Zeffy charges no fees.</p>
+            <a href={MICKEY_URL} target="_blank" rel="noopener noreferrer" className="btn btn-accent">
+              Give to Mickey <span className="arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
