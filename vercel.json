@@ -29,6 +29,10 @@
       {
         "protocol": "https",
         "hostname": "*.shelterluv.com"
+      },
+      {
+        "protocol": "https",
+        "hostname": "res.cloudinary.com"
       }
     ]
   },
