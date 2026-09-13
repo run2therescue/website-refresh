@@ -36,11 +36,6 @@ function MickeyStory() {
         .mickey-photo { width: 280px; height: 280px; border-radius: 20px; overflow: hidden; background: oklch(0.26 0.05 310);
           box-shadow: 0 18px 44px oklch(0.10 0.03 310 / 0.55); }
         .mickey-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .mickey-eyebrow { display: inline-flex; align-items: center; gap: 7px; font-family: var(--font-mono);
-          font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700; color: #fff;
-          background: oklch(0.5 0.15 305 / 0.35); border: 1px solid var(--purple-500); padding: 5px 12px;
-          border-radius: 999px; margin-bottom: 14px; }
-        .mickey-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--purple-400); }
         .mickey-goal { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 13px;
           color: var(--on-dark-2); margin: 0 0 22px; }
         .mickey-goal b { color: #fff; font-weight: 600; }
@@ -57,7 +52,6 @@ function MickeyStory() {
             <img src={mickeyPhoto(640)} alt="Mickey, a 13-year-old golden retriever, looking up at the camera" width="640" height="640" loading="lazy" />
           </div>
           <div>
-            <span className="mickey-eyebrow"><span className="mickey-dot" aria-hidden="true" />Urgent · Medical fund</span>
             <h2 id="mickey-title" className="display" style={{ fontSize: "clamp(28px, 3.6vw, 44px)", margin: "0 0 14px", color: "#fff", lineHeight: 1.1 }}>
               Mickey is 13. He survived the meat trade. <em>Now he needs one more rescue.</em>
             </h2>
