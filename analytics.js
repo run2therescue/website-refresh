@@ -110,4 +110,14 @@
       if (cta) window.track("cta_click", { cta: cta, label: label });
     } catch (_) { /* swallow — never break the page */ }
   }, true);
+
+  // ---- Site-wide campaign bar ------------------------------------------------
+  // analytics.js is the only script every page already loads, so the campaign
+  // bar rides along here instead of being pasted into ten HTML files.
+  // TO END THE CAMPAIGN: delete these three lines. (Wording and link live in
+  // campaign-mickey.js.)
+  var campaign = document.createElement("script");
+  campaign.src = "/campaign-mickey.js?v=1";
+  campaign.defer = true;
+  document.head.appendChild(campaign);
 })();
