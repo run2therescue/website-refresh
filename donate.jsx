@@ -49,11 +49,6 @@ function MickeyUrgent() {
           display: grid; grid-template-columns: 168px minmax(0, 1fr); gap: 26px; align-items: center; }
         .mickey-urgent-photo { width: 168px; height: 168px; border-radius: 16px; overflow: hidden; background: var(--lav-100); }
         .mickey-urgent-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .mickey-urgent-tag { display: inline-flex; align-items: center; gap: 7px; font-family: var(--font-mono);
-          font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700;
-          color: var(--purple-700); background: oklch(0.94 0.04 305); border: 1px solid var(--purple-400);
-          padding: 5px 11px; border-radius: 999px; margin-bottom: 12px; }
-        .mickey-urgent-tag span { width: 7px; height: 7px; border-radius: 50%; background: var(--purple-500); }
         .mickey-urgent-goal { font-size: 13px; color: var(--ink-3); margin: 0 0 18px; }
         .mickey-urgent-goal b { color: var(--ink); font-weight: 600; }
         @media (max-width: 680px) {
@@ -68,7 +63,6 @@ function MickeyUrgent() {
               alt="Mickey, a 13-year-old golden retriever, looking up at the camera" width="384" height="384" loading="lazy" />
           </div>
           <div>
-            <span className="mickey-urgent-tag"><span aria-hidden="true" />Needed right now</span>
             <h2 id="mickey-urgent-title" className="display" style={{ fontSize: "clamp(24px, 3vw, 32px)", margin: "0 0 10px", color: "var(--ink)", lineHeight: 1.12 }}>
               Help save Mickey
             </h2>
