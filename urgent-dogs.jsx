@@ -17,11 +17,11 @@
  * cached 5 min) for how much that dog has raised, and shows:
  *   • goal met        → full bar, the dog's `metGoal` copy, button still live
  *                       (extra gifts still reach him)
- *   • 15%+ of goal    → a progress bar in place of the goal line
- *   • under 15%       → the plain goal line. A nearly empty bar reads as
- *                       "nobody is giving" and costs donations; the bar
- *                       appears on its own once there is momentum to show.
+ *   • otherwise       → a live progress bar in place of the goal line
  *   • API unreachable → the plain goal line. The card never breaks.
+ * URGENT_BAR_MIN_PCT can hide the bar until a dog reaches a share of its goal
+ * (a nearly empty bar can read as "nobody is giving"). It is 0 by choice: the
+ * bar always shows.
  * `metGoal` holds a dog's copy for the goal-met state. That state switches on
  * by itself when the live total reaches the goal, or by hand with
  * `goalMet: true` (a safety net, so it holds even if Zeffy is unreachable).
@@ -67,7 +67,7 @@ const DOGS = [
   },
 ];
 
-const URGENT_BAR_MIN_PCT = 15;
+const URGENT_BAR_MIN_PCT = 0;
 
 /* Vercel image optimizer: same-origin URL, cached for a day (vercel.json). */
 function urgentPhoto(src, w) {
