@@ -8,13 +8,26 @@
  * first dog is the one most people will act on, so put the most urgent first.
  * Keep it to TWO. A third card turns this into a directory and the urgency
  * goes flat; if a third dog needs help, replace the one closest to funded.
+ * A new dog also needs an entry in api/campaigns.js so its progress bar works.
  *
  * TO REMOVE THE SECTION ENTIRELY: delete <UrgentDogs .../> from index.html and
  * from DonatePage in donate.jsx. Nothing else references this file.
  *
- * DON'T PUT A DOLLAR FIGURE RAISED-SO-FAR IN `meta`. It goes stale the moment
- * someone donates and nobody remembers to update it. State the goal, or say
- * "nearly funded" — both stay true on their own.
+ * LIVE TOTALS: each card asks /api/campaigns (a server-side proxy to Zeffy,
+ * cached 5 min) for how much that dog has raised, and shows:
+ *   • goal met        → full bar, the dog's `metGoal` copy, button still live
+ *                       (extra gifts still reach him)
+ *   • 15%+ of goal    → a progress bar in place of the goal line
+ *   • under 15%       → the plain goal line. A nearly empty bar reads as
+ *                       "nobody is giving" and costs donations; the bar
+ *                       appears on its own once there is momentum to show.
+ *   • API unreachable → the plain goal line. The card never breaks.
+ * `metGoal` holds a dog's copy for the goal-met state. That state switches on
+ * by itself when the live total reaches the goal, or by hand with
+ * `goalMet: true` (a safety net, so it holds even if Zeffy is unreachable).
+ *
+ * DON'T HARD-CODE A RAISED-SO-FAR FIGURE anywhere in here. It goes stale the
+ * moment someone donates; the live total handles it.
  *
  * Photos come from the Zeffy campaigns and are served through Vercel's image
  * optimizer (res.cloudinary.com is allow-listed in vercel.json), so they are
@@ -27,25 +40,34 @@
 const DOGS = [
   {
     id: "beethoven",
+    name: "Beethoven",
     url: "https://www.zeffy.com/en-US/donation-form/help-save-beethoven",
     photo: "https://res.cloudinary.com/hxn9dbuhd/image/upload/f_jpg,c_limit,w_1000,q_auto/v1790604774/organizations/2/1/0/2/210276f5-bea9-43f5-88d4-7b17e935a6ca/8f66a9b9-de8f-443f-9a58-d942daf66b5b.png",
     alt: "Beethoven, an eight-month-old golden retriever puppy, resting on a blanket with a hand on his head",
     headline: "Beethoven needs brain surgery",
     body: "He is eight months old. He was dumped outside the shelter in the middle of massive seizures, and an MRI showed swelling pressing on the nerves in his brain, caused by a blow to the head. It has left him blind and deaf. Surgery to relieve that pressure is his chance.",
-    meta: "$10,000 goal",
+    goal: 10000,
     cta: "Help Save Beethoven",
   },
   {
     id: "mickey",
+    name: "Mickey",
     url: "https://www.zeffy.com/en-US/donation-form/helpsave-mickey",
     photo: "https://res.cloudinary.com/hxn9dbuhd/image/upload/f_jpg,c_limit,w_1000,q_auto/v1789314535/organizations/2/1/0/2/210276f5-bea9-43f5-88d4-7b17e935a6ca/d0087642-e5ec-4732-90d2-136873dfec23.png",
     alt: "Mickey, a 13-year-old golden retriever, looking up at the camera",
     headline: "Mickey is almost through it",
-    body: "Mickey survived the dog meat trade, and at 13 he has spent months in hospital being treated for Leishmaniasis. He is recovering. His fund is nearly complete, and what is left covers the testing and care that get him the rest of the way home.",
-    meta: "Nearly funded",
-    cta: "Finish Mickey's fund",
+    body: "Mickey survived the dog meat trade, and at 13 he has spent months in hospital being treated for Leishmaniasis. He is recovering, and his fund covers the testing and care that get him the rest of the way home.",
+    goal: 5000,
+    cta: "Give to Mickey",
+    goalMet: true,
+    metGoal: {
+      headline: "Mickey's goal is met",
+      body: "His treatment is covered, and he is recovering. Thank you to everyone who gave. Gifts still go to his ongoing care, and our work continues for Beethoven.",
+    },
   },
 ];
+
+const URGENT_BAR_MIN_PCT = 15;
 
 /* Vercel image optimizer: same-origin URL, cached for a day (vercel.json). */
 function urgentPhoto(src, w) {
@@ -59,9 +81,46 @@ function urgentLink(dog, placement) {
     "&utm_campaign=" + dog.id + "&utm_content=" + dog.id + "-" + placement;
 }
 
+function urgentMoney(n) {
+  return "$" + Math.round(n).toLocaleString("en-US");
+}
+
+/* One request per page view; the CDN answers from cache. Any failure leaves
+   `totals` null and every card falls back to its static goal line. */
+function useUrgentTotals() {
+  const [totals, setTotals] = React.useState(null);
+  React.useEffect(() => {
+    let live = true;
+    fetch("/api/campaigns")
+      .then(r => (r.ok ? r.json() : null))
+      .then(j => { if (live && j && j.campaigns) setTotals(j.campaigns); })
+      .catch(() => {});
+    return () => { live = false; };
+  }, []);
+  return totals;
+}
+
+function UrgentBar({ dog, raised, goal, met }) {
+  const pct = met ? 100 : Math.max(0, Math.min(100, Math.round((raised / goal) * 100)));
+  return (
+    <div className="udogs-progress">
+      <div className="udogs-progress-label">
+        <span><b>{urgentMoney(raised)} raised</b>{met ? " · Goal met" : " of " + urgentMoney(goal)}</span>
+        {!met && <span className="udogs-progress-pct">{pct}%</span>}
+      </div>
+      <div className="udogs-track" role="progressbar" aria-label={dog.name + " fund progress"}
+        aria-valuemin={0} aria-valuemax={goal} aria-valuenow={Math.min(raised, goal)}
+        aria-valuetext={urgentMoney(raised) + " raised of " + urgentMoney(goal)}>
+        <div className="udogs-fill" style={{ width: pct + "%" }} />
+      </div>
+    </div>
+  );
+}
+
 function UrgentDogs({ variant }) {
   const dark = variant === "dark";
   const placement = dark ? "homepage" : "donate_page";
+  const totals = useUrgentTotals();
   return (
     <section className="udogs" data-variant={dark ? "dark" : "light"} aria-labelledby="udogs-title">
       <style>{`
@@ -94,6 +153,24 @@ function UrgentDogs({ variant }) {
         .udogs-meta b { font-weight: 600; }
         .udogs[data-variant="dark"] .udogs-meta b { color: #fff; }
         .udogs[data-variant="light"] .udogs-meta b { color: var(--ink); }
+        .udogs-progress { margin: 0 0 20px; }
+        .udogs-progress-label { display: flex; justify-content: space-between; align-items: baseline;
+          gap: 12px; font-size: 13px; margin: 0 0 8px; }
+        .udogs[data-variant="dark"] .udogs-progress-label { color: var(--on-dark-3); }
+        .udogs[data-variant="light"] .udogs-progress-label { color: var(--ink-3); }
+        .udogs-progress-label b { font-weight: 600; }
+        .udogs[data-variant="dark"] .udogs-progress-label b { color: #fff; }
+        .udogs[data-variant="light"] .udogs-progress-label b { color: var(--ink); }
+        .udogs-progress-pct { font-variant-numeric: tabular-nums; }
+        .udogs-track { height: 8px; border-radius: 999px; overflow: hidden; }
+        .udogs[data-variant="dark"] .udogs-track { background: oklch(0.32 0.05 310); }
+        .udogs[data-variant="light"] .udogs-track { background: var(--lav-100); }
+        .udogs-fill { height: 100%; border-radius: 999px; transform-origin: left center;
+          animation: udogs-grow 900ms cubic-bezier(.2,.7,.2,1) both; }
+        .udogs[data-variant="dark"] .udogs-fill { background: var(--purple-400); }
+        .udogs[data-variant="light"] .udogs-fill { background: var(--purple-500); }
+        @keyframes udogs-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+        @media (prefers-reduced-motion: reduce) { .udogs-fill { animation: none; } }
         .udogs-cta { margin-top: auto; align-self: flex-start; }
         .udogs-foot { text-align: center; font-size: 12.5px; margin: 24px 0 0; }
         .udogs[data-variant="dark"] .udogs-foot { color: var(--on-dark-3); }
@@ -113,28 +190,38 @@ function UrgentDogs({ variant }) {
         </div>
 
         <div className="udogs-grid">
-          {DOGS.map(dog => (
-            <article key={dog.id} className="udogs-card">
-              <div className="udogs-photo">
-                {/* NOT loading="lazy". These cards are rendered by React after the
-                    page's load event, and Chrome then never re-evaluates the lazy
-                    images on scroll — they stayed blank all the way down the page
-                    in testing. Two ~50KB photos below the fold are cheap; a blank
-                    photo on the main appeal is not. decoding="async" keeps them
-                    off the critical path. */}
-                <img src={urgentPhoto(dog.photo, 640)} alt={dog.alt} width="640" height="480" decoding="async" />
-              </div>
-              <div className="udogs-body">
-                <h3>{dog.headline}</h3>
-                <p className="udogs-text">{dog.body}</p>
-                <p className="udogs-meta"><b>{dog.meta}</b> · 100% of your gift reaches him. Zeffy charges no fees.</p>
-                <a href={urgentLink(dog, placement)} target="_blank" rel="noopener noreferrer"
-                  className="btn btn-accent udogs-cta">
-                  {dog.cta} <span className="arrow" aria-hidden="true">→</span>
-                </a>
-              </div>
-            </article>
-          ))}
+          {DOGS.map(dog => {
+            const t = totals && totals[dog.id];
+            const goal = (t && t.goal) || dog.goal;
+            const raised = t ? t.raised : null;
+            const met = !!dog.goalMet || (raised != null && goal > 0 && raised >= goal);
+            const copy = met && dog.metGoal ? dog.metGoal : dog;
+            const showBar = met || (raised != null && goal > 0 && (raised / goal) * 100 >= URGENT_BAR_MIN_PCT);
+            return (
+              <article key={dog.id} className="udogs-card" data-goal-met={met ? "true" : undefined}>
+                <div className="udogs-photo">
+                  {/* NOT loading="lazy". These cards are rendered by React after the
+                      page's load event, and Chrome then never re-evaluates the lazy
+                      images on scroll — they stayed blank all the way down the page
+                      in testing. Two ~50KB photos below the fold are cheap; a blank
+                      photo on the main appeal is not. decoding="async" keeps them
+                      off the critical path. */}
+                  <img src={urgentPhoto(dog.photo, 640)} alt={dog.alt} width="640" height="480" decoding="async" />
+                </div>
+                <div className="udogs-body">
+                  <h3>{copy.headline}</h3>
+                  <p className="udogs-text">{copy.body}</p>
+                  {showBar
+                    ? <UrgentBar dog={dog} raised={raised != null ? raised : goal} goal={goal} met={met} />
+                    : <p className="udogs-meta"><b>{urgentMoney(goal)} goal</b> · 100% of your gift reaches him. Zeffy charges no fees.</p>}
+                  <a href={urgentLink(dog, placement)} target="_blank" rel="noopener noreferrer"
+                    className="btn btn-accent udogs-cta">
+                    {dog.cta} <span className="arrow" aria-hidden="true">→</span>
+                  </a>
+                </div>
+              </article>
+            );
+          })}
         </div>
 
         <p className="udogs-foot">Run 2 The Rescue is a 501(c)(3) nonprofit. Every gift is tax deductible.</p>
