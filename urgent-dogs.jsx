@@ -18,7 +18,12 @@
  *   • goal met        → full bar, the dog's `metGoal` copy, button still live
  *                       (extra gifts still reach him)
  *   • otherwise       → a live progress bar in place of the goal line
+ *   • still loading   → the bar's empty frame with the goal, so the fill just
+ *                       grows in when the total arrives (no text swap)
  *   • API unreachable → the plain goal line. The card never breaks.
+ * The request starts early: index.html and Donate.html <link rel="preload">
+ * /api/campaigns, so it runs while Babel is still compiling the page instead
+ * of after. Keep that preload tag if you rename or move the endpoint.
  * URGENT_BAR_MIN_PCT can hide the bar until a dog reaches a share of its goal
  * (a nearly empty bar can read as "nobody is giving"). It is 0 by choice: the
  * bar always shows.
@@ -85,33 +90,52 @@ function urgentMoney(n) {
   return "$" + Math.round(n).toLocaleString("en-US");
 }
 
-/* One request per page view; the CDN answers from cache. Any failure leaves
-   `totals` null and every card falls back to its static goal line. */
+/* One request per page view, answered by the preload started in the page
+   <head> (so it is usually already done by the time React renders), and by
+   the CDN cache behind that. status: "loading" → "ok" | "error".
+
+   PRERENDER: at deploy time scripts/prerender.mjs snapshots each page in
+   headless Chrome, and that snapshot is what visitors see until the page's
+   scripts finish loading. /api isn't running during the snapshot, so a fetch
+   would fail and bake in the "unreachable" goal line — which then visibly
+   swapped to the bar a few seconds later. So while prerendering we don't fetch
+   at all and stay "loading": the snapshot holds the bar's empty frame, and the
+   fill simply grows in once the live page takes over. Same navigator.webdriver
+   check the rest of the site uses to detect the prerenderer. */
 function useUrgentTotals() {
-  const [totals, setTotals] = React.useState(null);
+  const [state, setState] = React.useState({ status: "loading", totals: null });
   React.useEffect(() => {
+    if (typeof navigator !== "undefined" && navigator.webdriver === true) return;
     let live = true;
     fetch("/api/campaigns")
       .then(r => (r.ok ? r.json() : null))
-      .then(j => { if (live && j && j.campaigns) setTotals(j.campaigns); })
-      .catch(() => {});
+      .then(j => {
+        if (!live) return;
+        setState(j && j.campaigns ? { status: "ok", totals: j.campaigns } : { status: "error", totals: null });
+      })
+      .catch(() => { if (live) setState({ status: "error", totals: null }); });
     return () => { live = false; };
   }, []);
-  return totals;
+  return state;
 }
 
-function UrgentBar({ dog, raised, goal, met }) {
-  const pct = met ? 100 : Math.max(0, Math.min(100, Math.round((raised / goal) * 100)));
+/* `pending` = live total not back yet: same size and position as the real
+   bar (goal on the left, empty track), so nothing jumps when it arrives. */
+function UrgentBar({ dog, raised, goal, met, pending }) {
+  const pct = met ? 100 : pending ? 0 : Math.max(0, Math.min(100, Math.round((raised / goal) * 100)));
   return (
-    <div className="udogs-progress">
+    <div className="udogs-progress" aria-busy={pending ? "true" : undefined}>
       <div className="udogs-progress-label">
-        <span><b>{urgentMoney(raised)} raised</b>{met ? " · Goal met" : " of " + urgentMoney(goal)}</span>
-        {!met && <span className="udogs-progress-pct">{pct}%</span>}
+        {pending
+          ? <span><b>{urgentMoney(goal)} goal</b></span>
+          : <span><b>{urgentMoney(raised)} raised</b>{met ? " · Goal met" : " of " + urgentMoney(goal)}</span>}
+        {!met && !pending && <span className="udogs-progress-pct">{pct}%</span>}
       </div>
       <div className="udogs-track" role="progressbar" aria-label={dog.name + " fund progress"}
-        aria-valuemin={0} aria-valuemax={goal} aria-valuenow={Math.min(raised, goal)}
-        aria-valuetext={urgentMoney(raised) + " raised of " + urgentMoney(goal)}>
-        <div className="udogs-fill" style={{ width: pct + "%" }} />
+        aria-valuemin={0} aria-valuemax={goal}
+        aria-valuenow={pending ? undefined : Math.min(raised, goal)}
+        aria-valuetext={pending ? "Loading" : urgentMoney(raised) + " raised of " + urgentMoney(goal)}>
+        {!pending && <div className="udogs-fill" style={{ width: pct + "%" }} />}
       </div>
     </div>
   );
@@ -120,7 +144,7 @@ function UrgentBar({ dog, raised, goal, met }) {
 function UrgentDogs({ variant }) {
   const dark = variant === "dark";
   const placement = dark ? "homepage" : "donate_page";
-  const totals = useUrgentTotals();
+  const { status, totals } = useUrgentTotals();
   return (
     <section className="udogs" data-variant={dark ? "dark" : "light"} aria-labelledby="udogs-title">
       <style>{`
@@ -197,6 +221,7 @@ function UrgentDogs({ variant }) {
             const met = !!dog.goalMet || (raised != null && goal > 0 && raised >= goal);
             const copy = met && dog.metGoal ? dog.metGoal : dog;
             const showBar = met || (raised != null && goal > 0 && (raised / goal) * 100 >= URGENT_BAR_MIN_PCT);
+            const pending = !met && status === "loading" && URGENT_BAR_MIN_PCT === 0;
             return (
               <article key={dog.id} className="udogs-card" data-goal-met={met ? "true" : undefined}>
                 <div className="udogs-photo">
@@ -211,8 +236,8 @@ function UrgentDogs({ variant }) {
                 <div className="udogs-body">
                   <h3>{copy.headline}</h3>
                   <p className="udogs-text">{copy.body}</p>
-                  {showBar
-                    ? <UrgentBar dog={dog} raised={raised != null ? raised : goal} goal={goal} met={met} />
+                  {showBar || pending
+                    ? <UrgentBar dog={dog} raised={raised != null ? raised : goal} goal={goal} met={met} pending={pending} />
                     : <p className="udogs-meta"><b>{urgentMoney(goal)} goal</b> · 100% of your gift reaches him. Zeffy charges no fees.</p>}
                   <a href={urgentLink(dog, placement)} target="_blank" rel="noopener noreferrer"
                     className="btn btn-accent udogs-cta">
